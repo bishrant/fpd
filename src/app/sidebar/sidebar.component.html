@@ -1,0 +1,37 @@
+<link rel="stylesheet" href="assets/scss/ng2-select.scss">
+<ngb-accordion [closeOthers]="true" activeIds="export" id='sidebar'>
+  <ngb-panel id="searchAttributes" title="Search by attributes">
+    <ng-template ngbPanelContent>
+      Search by Company: <br/>
+      <ng-select [allowClear]="true" [items]="companies" (data)="refreshValue($event)" (selected)="selected($event, 'company')"
+       placeholder="Select a company name.." class="otherCls">
+      </ng-select>
+      <hr/> Search by County: <br>
+      <ng-select [allowClear]="true" [items]="counties"  (data)="refreshValue($event)" (selected)="selected($event, 'County')"
+         placeholder="Select an county.." class="otherCls">
+      </ng-select>
+
+      <hr> Search by Industry Type <br>
+      <ng-select [allowClear]="true" [items]="industrytype" (data)="refreshValue($event)" (selected)="selected($event, 'Industry_t')"
+         placeholder="Select an industry type.." class="otherCls">
+      </ng-select>
+
+      <button (click)= "resetData()" class="btn">Clear Search</button>
+
+    </ng-template>
+  </ngb-panel>
+  <ngb-panel id="searchMap">
+    <ng-template ngbPanelTitle>
+      <span>Search on Map</span>
+    </ng-template>
+    <ng-template ngbPanelContent>
+      <button (click)="activateSpatialControl('buffer')" class="btn">Buffer</button>
+     <!-- <app-spatialsearch></app-spatialsearch> -->
+    </ng-template>
+  </ngb-panel>
+  <ngb-panel id="export" title="Export" >
+    <ng-template ngbPanelContent>
+      <button type="button" (click)="printMapPDF()" #exportmap>Export Map</button>
+    </ng-template>
+  </ngb-panel>
+</ngb-accordion>

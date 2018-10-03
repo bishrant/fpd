@@ -4,7 +4,7 @@ import { IndustriesGeojson } from '../services/industries-geojson.service';
 import { MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/material';
 import { AngularDraggableModule } from 'angular2-draggable';
 import { HttpClient } from '@angular/common/http';
-// import { WindowService } from '../services/window.service';
+import { WindowService } from '../services/window.service';
 import { ExcelService } from '../services/excel.service';
 
 @NgModule({
@@ -56,8 +56,8 @@ export class FeaturetableComponent implements OnInit {
   }
   public openUrl(url: any) {
     console.log(233);
-    // const _x = this.winRef.getNativeWindow();
-    // _x.open(url);
+    const _x = this.winRef.getNativeWindow();
+    _x.open(url);
   }
 
 
@@ -104,9 +104,9 @@ export class FeaturetableComponent implements OnInit {
     //  console.log(d.filter(ff => ff.id > 445 && ff.properties.Id < 40 && re.test(ff.properties.ARC_Street)));
   }
   constructor(private _data: IndustriesGeojson, private http: HttpClient,
-    private _excelService: ExcelService,
+    private _excelService: ExcelService, private winRef: WindowService
   ) {
-    // this.nativeWindow = winRef.getNativeWindow();
+    this.nativeWindow = winRef.getNativeWindow();
   }
   ngOnInit() {
     this._data.currentData.subscribe(d => {

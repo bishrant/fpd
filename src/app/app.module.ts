@@ -10,16 +10,22 @@ import { AngularDraggableModule } from 'angular2-draggable';
 import { HttpClient} from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { SpatialsearchComponent } from './spatialsearch/spatialsearch.component';
+import { SelectModule } from 'ng2-select';
+
 @NgModule({
   declarations: [
     AppComponent,
     EsrimapComponent,
     HeaderComponent,
-    FeaturetableComponent
+    FeaturetableComponent,
+    SidebarComponent,
+    SpatialsearchComponent
   ],
   imports: [
     BrowserModule, NgbModule, MatTableModule, AngularDraggableModule,
-    HttpClientModule, AngularFontAwesomeModule
+    HttpClientModule, AngularFontAwesomeModule, SelectModule
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent]
