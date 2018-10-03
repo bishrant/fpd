@@ -1,0 +1,146 @@
+@import url('http://js.arcgis.com/4.9/esri/css/main.css');
+#mapViewNode{
+width: 100%;
+height: 100%;
+z-index: 0;
+position: fixed;
+}
+html,
+body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.container,
+.row {
+    height: 100%;
+}
+
+.flex-row,
+.flex-row>div[class*='col-'] {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex: 0 auto;
+    height: 100%;
+}
+
+.flex-col {
+    display: flex;
+    display: -webkit-flex;
+    flex: 1;
+    flex-flow: column nowrap;
+}
+
+.flex-grow {
+    display: flex;
+    -webkit-flex: 2;
+    flex: 2;
+    flex-direction: row;
+    flex-wrap: nowrap
+}
+
+#side1 {
+    background-color: purple;
+}
+.slideOut {
+    transform: translateX(-100%);
+    -webkit-transition: all 1s;
+    /* Safari */
+    transition: all 1s;
+}
+
+.slideIn {
+    transform: translate(0%);
+    -webkit-transition: all 1s;
+    /* Safari */
+    transition: all 1s;
+}
+
+#slideBtn {
+    transition: all 4s;
+    height: 1.5em;
+    position: absolute; // left: 30%;
+    right: -0.75em;
+    z-index: 30;
+    font-size: 35px;
+    cursor: pointer;
+    background-color: #44993b;
+    width: 1.5em;
+    text-align: right;
+    line-height: 1.5em;
+    color: white; // border-radius: 1.5em;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.16), 5px 5px 10px rgba(0, 0, 0, 0.12);
+    top: 50%;
+    z-index: 10;
+}
+
+#slideBtnActive {
+    height: 1.5em;
+    position: absolute;
+    right: -0.75em;
+    z-index: 30;
+    font-size: 35px;
+    cursor: pointer;
+    background-color: #44993b;
+    width: 1.5em;
+    text-align: center;
+    line-height: 1.5em;
+    color: white; // border-radius: 1.5em;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.16), 5px 5px 10px rgba(0, 0, 0, 0.12);
+    top: 50%;
+    z-index: 9;
+}
+
+.sideNav {
+    height: 100%;
+    display: inline-flex;
+    width: 30%;
+    max-width: 300px;
+}
+
+@media (max-width: 768px) {
+    .sideNav {
+        height: 100%;
+        display: inline-flex;
+        width: 90%;
+        max-width: 90%;
+    }
+}
+
+#slide1 {
+    box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.16), 5px 0px 10px rgba(0, 0, 0, 0.12);
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: 20;
+    position: fixed;
+    left:0;
+}
+.fullwidth {
+    width: 100%;
+}
+.ui-select-choices.dropdown-menu {
+    display: block;
+    }
+
+.otherClass{
+    display: block;
+}
+.open > .dropdown-menu { display: block; }
+.btn-secondary {
+    color: black;
+    background-color: transparent;
+    border-color: #6c757d;
+}
+.btn-secondary:hover {
+    color: black;
+    background-color: transparent;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.16), 5px 5px 10px rgba(0, 0, 0, 0.12);
+    // border-color: red;
+    // border-width: 3px;
+}
