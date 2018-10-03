@@ -1,29 +1,38 @@
-<div class="container-fluid" style=" height: 100vh; display:flex; flex:1; flex-direction: column">
-  <div class="row flex-row" >
+<div class="container-fluid" id="appDiv" #mybb style=" height: 100vh; display:flex; flex:1; flex-direction: column">
+  <div class="row flex-row">
 
-      <div class="flex-col">
-          <div class="panel panel-default flex-col">
-              <div class="panel-heading">
+    <div class="flex-col">
+      <div class="panel panel-default flex-col">
+        <div class="panel-heading">
 
-                <app-header></app-header>
-              </div>
+          <app-header></app-header>
+        </div>
 
-              <div class="panel-body flex-grow grey" style=" width:100%">
-                  <!-- <div style="height:100%; display:none; width:100%" id="sideBar"> -->
-                          
-                  <!-- </div> -->
-                  <!-- <div class="sideNav {{slidestatus}}" id="slide1">
+        <div class="panel-body flex-grow grey" style=" width:100%">
+          <!-- <div style="height:100%; display:none; width:100%" id="sideBar"> -->
+
+          <!-- </div> -->
+          <!-- <div class="sideNav {{slidestatus}}" id="slide1">
                   <app-sidebar style="width:100%; overflow-y:auto" (exportButtonClicked)="exportMap()" ></app-sidebar>
                   <i id="slideBtn" class="fa fa-chevron-right {{displayslidebtn}}" (click)="onShowHideSideNav()" ></i>
                        <i id="slideBtnActive" class="fa {{sc}}" (click)="onShowHideSideNav()"></i>
                   </div> -->
-                  <app-esrimap class="fullpageMap"></app-esrimap>
-              </div>
-              
-            
-          </div>
+          <app-esrimap class="fullpageMap"></app-esrimap>
+        </div>
+
+
       </div>
+    </div>
 
   </div>
- 
+  <div id='featureTable' 
+     ngResizable rzHandles="all" ngDraggable class="drag-block" [bounds]="mybb" [inBounds]="true">
+    <app-featuretable></app-featuretable>
+  </div>
+  <!-- <app-featuretable style="height:100px" (selectedRow)="somefn($event)" ngDraggable class="drag-block" [bounds]="mybb" [inBounds]="true"></app-featuretable>
+  <div  style=" position:absolute; z-index:100; 
+  background-color: white; display: none;" >
+    <canvas id='canvasPrimaryLegend' appPrintLegend></canvas>    
+    <canvas id='canvasSecondayLegend' appPrintLegend></canvas>  
+  </div> -->
 </div>

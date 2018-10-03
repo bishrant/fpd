@@ -1,0 +1,80 @@
+.unselectable {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+.data-table {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 10000;
+    // margin: 5px;
+    background-color: white;
+}
+
+.card-header {
+    background-color: gray;
+    height: 40px;
+    position: sticky;
+    position: -webkit-sticky; // required for Safari
+    width: 100%;
+    /* z-index: 100000; */
+    top: 0;
+}
+
+.mat-cell {
+    font-size: 14px;
+    min-height: 48px;
+    text-align: center;
+    border-right: 1px solid rgb(224, 224, 224);
+}
+
+.mat-header-cell {
+    font-weight: bold;
+    font-size: 16px;
+    border-right: 1px solid rgb(224, 224, 224);
+    padding-left: 10px;
+}
+
+.highlight {
+    background: green;
+}
+
+.highlight>.mat-cell {
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .data-table {
+        width: 95%;
+        margin: 0 auto;
+    }
+    .card-header {
+        width: 100%;
+        margin: 0 auto;
+    }
+}
+
+.dialogPopup {
+    height: 200px;
+    width: 300px;
+    margin: auto;
+    background-color: white;
+    position: fixed;
+    top: 50px;
+    left: 50%;
+    z-index: 100000;
+    border-radius: .5em;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.16), 5px 5px 10px rgba(0, 0, 0, 0.12);
+}

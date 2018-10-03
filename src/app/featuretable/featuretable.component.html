@@ -1,0 +1,46 @@
+<div class="dialogPopup {{popupVisibility}} unselectable" style="display:none">
+  Sorry, Popups are disabled in your browser. Click <a href='{{reportUrl}}' target="_blank">here</a> to view and
+  download your report
+  <i class="fa fa-times pull-right btn" style="margin-right:10px; font-size: 25px;"> </i>
+</div>
+<div class="mat-elevation-z8 data-table card">
+  <div #DemoHandle class="card-header"> Table <button (click)="export($event)"> Export</button>
+    <button (click)="exportToExcel($event)"> XLS</button>
+  </div>
+  <table mat-table #table [dataSource]="featuredataSource" matSort aria-label="Elements">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+          <td mat-cell *matCellDef="let element; let i = index;"> {{i+1}} </td>
+        </ng-container>
+    
+         <ng-container matColumnDef="Company">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Company</th>
+          <td mat-cell *matCellDef="let row">{{row.properties.Company}}</td>
+        </ng-container>
+    
+        <ng-container matColumnDef="County">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>County</th>
+            <td mat-cell *matCellDef="let row">{{row.properties.County}}</td>
+          </ng-container>
+    
+          <ng-container matColumnDef="Prim_secon">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Main Industry</th>
+              <td mat-cell *matCellDef="let row">{{row.properties.Prim_secon}}</td>
+            </ng-container>
+    
+            <ng-container matColumnDef="Industry_t">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Specific Industry</th>
+                <td mat-cell *matCellDef="let row">{{row.properties.Industry_t}}</td>
+              </ng-container>
+          
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectRow(row)" (dblclick)="doubleClick($event, row)" [ngClass]="{'highlight': selectedRowIndex == row.id}"></tr>
+      </table>
+  <!-- <mat-paginator #paginator
+        [length]="dataSource.data.length"
+        [pageIndex]="0"
+        [pageSize]="50"
+        [pageSizeOptions]="[2,25, 50, 100, 250]">
+      </mat-paginator> -->
+  
+</div>
