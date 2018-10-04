@@ -26,6 +26,8 @@ export class SidebarComponent implements OnInit {
   public _disabledV = '0';
   public disabled = false;
   public tableData;
+  public linkToPDFReport = '';
+  public printStatus = '';
   // @Output() messageEvent = new EventEmitter<string>();
   @Output() exportButtonClicked = new EventEmitter<string>();
   @Output() spatialControlClicked = new EventEmitter<string>();

@@ -29,10 +29,14 @@
      ngResizable rzHandles="all" ngDraggable class="drag-block" [bounds]="mybb" [inBounds]="true">
     <app-featuretable></app-featuretable>
   </div>
+  <div id='legendOverlay' style="height: 200px; width:200px; z-index:1000">
+      <canvas id='canvasPrimaryLegend' appPrintLegend style="height: inherit; width: auto"></canvas>    
+      <canvas id='canvasSecondayLegend' appPrintLegend style="height: inherit; width: auto"></canvas>  
+  </div>
+  
   <!-- <app-featuretable style="height:100px" (selectedRow)="somefn($event)" ngDraggable class="drag-block" [bounds]="mybb" [inBounds]="true"></app-featuretable>
   <div  style=" position:absolute; z-index:100; 
   background-color: white; display: none;" >
-    <canvas id='canvasPrimaryLegend' appPrintLegend></canvas>    
-    <canvas id='canvasSecondayLegend' appPrintLegend></canvas>  
+    
   </div> -->
 </div>

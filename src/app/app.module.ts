@@ -13,6 +13,8 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { SpatialsearchComponent } from './spatialsearch/spatialsearch.component';
 import { SelectModule } from 'ng2-select';
+import { PrintLegendDirective } from './directives/print-legend.directive';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -21,11 +23,12 @@ import { SelectModule } from 'ng2-select';
     HeaderComponent,
     FeaturetableComponent,
     SidebarComponent,
-    SpatialsearchComponent
+    SpatialsearchComponent,
+    PrintLegendDirective
   ],
   imports: [
     BrowserModule, NgbModule, MatTableModule, AngularDraggableModule,
-    HttpClientModule, AngularFontAwesomeModule, SelectModule
+    HttpClientModule, AngularFontAwesomeModule, SelectModule, MatProgressSpinnerModule
   ],
   providers: [HttpClient],
   bootstrap: [AppComponent]

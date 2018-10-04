@@ -1,8 +1,8 @@
 <link rel="stylesheet" href="assets/scss/ng2-select.scss">
 <ngb-accordion [closeOthers]="true" activeIds="export" id='sidebar'>
-  <ngb-panel id="searchAttributes" title="Search by attributes">
+  <ngb-panel id="searchAttributes" title='Search by attributes'>
     <ng-template ngbPanelContent>
-      Search by Company: <br/>
+         Search by Company: <br/>
       <ng-select [allowClear]="true" [items]="companies" (data)="refreshValue($event)" (selected)="selected($event, 'company')"
        placeholder="Select a company name.." class="otherCls">
       </ng-select>
@@ -32,6 +32,9 @@
   <ngb-panel id="export" title="Export" >
     <ng-template ngbPanelContent>
       <button type="button" (click)="printMapPDF()" #exportmap>Export Map</button>
+      <mat-spinner [diameter]=35 *ngIf="printStatus === 'running'">Printing...</mat-spinner>
+      <p class="text-danger" *ngIf="printStatus === 'error'">Error while printing. Please try again</p>
+      <p *ngIf="linkToPDFReport !== ''"><a href="{{linkToPDFReport}}" target="_blank">Untitled.pdf</a></p>
     </ng-template>
   </ngb-panel>
 </ngb-accordion>

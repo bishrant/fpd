@@ -7,11 +7,14 @@ import * as vars from './variables';
 import * as fn from './utilityFunctions';
 import esri = __esri;
 import { IndustriesGeojson } from '../services/industries-geojson.service';
+import { PrintLegendDirective } from '../directives/print-legend.directive';
 
 @Component({
   selector: 'app-esrimap',
   templateUrl: './esrimap.component.html',
-  styleUrls: ['./esrimap.component.scss']
+  styleUrls: ['./esrimap.component.scss'],
+  providers: [PrintLegendDirective]
+
 })
 
 export class EsrimapComponent implements OnInit {
@@ -28,6 +31,9 @@ export class EsrimapComponent implements OnInit {
   public allIndustries: any = [];
   public mapLoaded = new EventEmitter<boolean>();
   public __mapViewStatus = new ReplaySubject<boolean>();
+  public printTask: esri.PrintTask;
+  public printParams: esri.PrintParameters;
+  public printTemplate: esri.PrintTemplate;
 
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
@@ -39,6 +45,22 @@ export class EsrimapComponent implements OnInit {
     this.__mapViewStatus.subscribe(_mapStatus => {
       if (_mapStatus) {
         console.log('print this map');
+        this.sideBar.printStatus = '';
+        const _legendBase64 = this._legendDirective.prepareLegend();
+        console.log(_legendBase64);
+        this.printParams.extraParameters = {Primary_Legend: _legendBase64.primaryLegend, Secondary_Legend: _legendBase64.secondaryLegend};
+        this.printParams.set('Primary_Legend', _legendBase64.primaryLegend);
+        const printTaskExecuted = this.printTask.execute(this.printParams);
+        this.sideBar.printStatus = 'running';
+        printTaskExecuted.then((result) => {
+          this.sideBar.printStatus = 'completed';
+          console.log(result['url']);
+          this.sideBar.linkToPDFReport = result['url'];
+
+        }, (error) => {
+          this.sideBar.printStatus = 'error';
+          console.log(error);
+        });
       }
     });
   }
@@ -49,7 +71,7 @@ export class EsrimapComponent implements OnInit {
       }
     });
   }
-  constructor(private _data: IndustriesGeojson) { }
+  constructor(private _data: IndustriesGeojson, private _legendDirective: PrintLegendDirective) { }
 
   public ngOnInit() {
     setTimeout(() => {
@@ -105,6 +127,18 @@ export class EsrimapComponent implements OnInit {
           };
           this.mapView = new EsriMapView(_mapViewProperties);
           this.mapView.ui.move('zoom', 'top-right');
+          this.printTask = new PrintTask({
+            url: 'http://128.194.232.177/arcgis/rest/services/FPD/ExportToPDF/GPServer/ExportToPDF'
+          });
+          this.printTemplate = new PrintTemplate({
+            format: 'pdf',
+            exportOptions: {dpi: 300},
+            layout: 'a4-portrait'
+          });
+          this.printParams = new PrintParameters({
+            view: this.mapView,
+            template: this.printTemplate
+          });
           this.mapView.when(() => {
             this.__mapViewStatus.next(true);
             this.addGraphicsToMap();
