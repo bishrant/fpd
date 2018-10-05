@@ -46,6 +46,7 @@ export class EsrimapComponent implements OnInit {
       if (_mapStatus) {
         console.log('print this map');
         this.sideBar.printStatus = '';
+        this.sideBar.linkToPDFReport = '';
         const _legendBase64 = this._legendDirective.prepareLegend();
         console.log(_legendBase64);
         this.printParams.extraParameters = {Primary_Legend: _legendBase64.primaryLegend, Secondary_Legend: _legendBase64.secondaryLegend};
