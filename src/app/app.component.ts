@@ -6,5 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'fpd';
+  title = 'Directory of Forest Products Industries';
+  featureTableStatus = 'featureTableMinimized';
+  public showHideFeatureTable(evt) {
+    this.featureTableStatus = this.featureTableStatus === 'featureTableMaximized' ? 'featureTableMinimized' : 'featureTableMaximized';
+    evt.preventDefault();
+    evt.stopPropagation();
+  }
 }

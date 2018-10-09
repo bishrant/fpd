@@ -2,7 +2,7 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 html, body { height: 100%; }
-body { margin: 0; font-family: 'Roboto', sans-serif; overflow-x: hidden}
+body { margin: 0; font-family: 'Roboto', sans-serif; overflow: hidden}
 
 ui-select-choices.dropdown-menu{
     display: block;

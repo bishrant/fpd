@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 import { SelectModule } from 'ng2-select';
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Rest, SidebarService } from './sidebar.service';
-import { IndustriesGeojson} from '../services/industries-geojson.service';
+import { Injectable } from '@angular/core';
+import { Rest, SidebarService } from './sidebar.service';
+import { IndustriesGeojson } from '../services/industries-geojson.service';
 import { _CdkTextareaAutosize } from '@angular/material';
 import { SpatialsearchComponent } from '../spatialsearch/spatialsearch.component';
-import { Subject, ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
@@ -31,14 +30,17 @@ export class SidebarComponent implements OnInit {
   // @Output() messageEvent = new EventEmitter<string>();
   @Output() exportButtonClicked = new EventEmitter<string>();
   @Output() spatialControlClicked = new EventEmitter<string>();
+  @Output() performSpatialQuery = new EventEmitter<any>();
   public _exportPDFSubject = new ReplaySubject<any>(1);
   public _exportPDFEvent = this._exportPDFSubject.asObservable();
+  public activeControl: String;
+  public activatedSpatialControl = false;
   // sendMessage() {
   //   this.messageEvent.emit('btn clicked');
   // }
   getData() {
     this.sidebarService.getInitialRestData()
-    .subscribe((data: Rest ) => console.log(data));
+      .subscribe((data: Rest) => console.log(data));
   }
   public get disabledV(): string {
     return this._disabledV;
@@ -86,15 +88,21 @@ export class SidebarComponent implements OnInit {
     this.exportButtonClicked.emit('clickedExport');
     console.log('here');
     this._exportPDFSubject.next('clicked');
-  //  this._esrimap.executePrint();
+    //  this._esrimap.executePrint();
     // this._legend.prepareLegend();
   }
   public activateSpatialControl(control: string) {
+    this.activeControl = control;
     this.spatialControlClicked.emit(control);
+  }
+  public clickedSpatialQuery(evt) {
+    console.log('active control to do qyuery', this.activeControl);
+    this.performSpatialQuery.emit(this.activeControl);
+    // this.spatialControlClicked.emit(this.activeControl);
   }
 
   constructor(private sidebarService: SidebarService, private _data: IndustriesGeojson,
-    ) { }
+  ) { }
 
   ngOnInit() {
     this._data.currentData.subscribe(d => {
@@ -103,14 +111,14 @@ export class SidebarComponent implements OnInit {
     this._data.currentCountyList.subscribe(d => {
       console.log('got distinct ');
       this.counties = d;
-      });
+    });
 
-      this._data.currentCompanyList.subscribe(d => {
-        this.companies = d;
-        });
+    this._data.currentCompanyList.subscribe(d => {
+      this.companies = d;
+    });
 
-        this._data.currentIndustryTypeList.subscribe(d => {
-          this.industrytype = d;
-          });
+    this._data.currentIndustryTypeList.subscribe(d => {
+      this.industrytype = d;
+    });
   }
 }

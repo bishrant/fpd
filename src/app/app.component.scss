@@ -2,6 +2,7 @@
 html,
 body {
     height: 100%;
+    overflow: hidden !important;
 }
 
 body {
@@ -81,3 +82,48 @@ body {
     position: fixed;
 }
 
+.slideFeatureTableActive{
+    position: absolute;
+    width: 65px;
+    height: 35px;
+    z-index: 100000;
+    border-radius: 10px 10px 0 0;
+    top: -32px;
+    right: 0%;
+    background-color: gray;
+    color: white;
+    font-size: 25px;
+    vertical-align: middle;
+    margin: auto;
+    padding: 5px;
+    text-align: center;
+}
+.openFeatureTableButton {
+    z-index: 100;
+    margin: auto;
+    width: 50px;
+    background-color: gray;
+    height: 50px;
+    text-align: center;
+    margin: auto;
+    padding: 2px;
+    font-size: 24pt;
+    color: white;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.16), 5px 5px 10px rgba(0, 0, 0, 0.12);
+}
+.featureTableMaximized {
+    transform: translateY(0%) !important;
+    margin-bottom: 5px;
+    -webkit-transition: all 1s;
+    /* Safari */
+    transition: all 1s;
+}
+
+.featureTableMinimized {
+    transform: translateY(140%) !important;
+    margin-bottom: 0;
+    -webkit-transition: all 1s;
+    /* Safari */
+    transition: all 1s;
+}

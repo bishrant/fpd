@@ -1,0 +1,10 @@
+@import url("./ng2-select.scss");
+.open.dropdown .dropdown-menu { display: block; transform: none; }
+.btn-secondary {
+    background-color: white;
+    border-color: #6c757d;
+    color: black;
+}
+.btn-secondary:hover{
+    background-color: lightgray;
+}

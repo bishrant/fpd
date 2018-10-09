@@ -78,3 +78,21 @@
     border-radius: .5em;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.16), 5px 5px 10px rgba(0, 0, 0, 0.12);
 }
+
+tr.mat-row{
+    height: 35px;
+}
+.mat-cell{
+    min-height: 35px;
+    text-align: left;
+    padding: 3px;
+}
+tr.mat-header-row{
+    height: 45px;
+}
+.mat-header-cell{
+    padding-left: 3px;
+}
+td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type, th.mat-header-cell:first-of-type {
+    padding-left: 3px;
+}
