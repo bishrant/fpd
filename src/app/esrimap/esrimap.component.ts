@@ -8,6 +8,7 @@ import * as fn from './utilityFunctions';
 import esri = __esri;
 import { IndustriesGeojson } from '../services/industries-geojson.service';
 import { PrintLegendDirective } from '../directives/print-legend.directive';
+import { PointincountyService } from '../services/pointincounty.service';
 
 @Component({
   selector: 'app-esrimap',
@@ -39,7 +40,13 @@ export class EsrimapComponent implements OnInit {
   public selectFeaturesByGeom;
   public performSpatialQuery;
   public buffer;
+  public addVertices;
+  public action;
+  public createGraphic;
+  public createCircle;
+  public drawLine;
   public editGraphic;
+  public labelBufferDist;
   public sketchViewModel: esri.SketchViewModel;
   public setupSketchViewModel;
   public bufferLineGraphicLayer: esri.GraphicsLayer;
@@ -47,8 +54,13 @@ export class EsrimapComponent implements OnInit {
   public graphicsLayer: esri.GraphicsLayer;
   public bufferGraphicsLayer: esri.GraphicsLayer;
   public tempGraphicsLayer: esri.GraphicsLayer;
+  public circleGraphicsLayer: esri.GraphicsLayer;
   public addGraphic;
+  public clearDrawGraphics;
+  public draw: esri.Draw;
   public updateGraphic;
+  public completeGraphicsForCircle;
+  public updateGraphicTemp;
   public setupClickHandler;
   public touchEnabledDisplay = 'ontouchstart' in document.documentElement;
   // this is needed to be able to create the MapView at the DOM element in this component
@@ -88,9 +100,7 @@ export class EsrimapComponent implements OnInit {
     });
   }
 
-  // public addGraphic(evt) {
-  //   console.log('add this graphic ', evt);
-  // }
+
   public activateBuffer() {
     const that = this;
     console.log('This is a touch screen device: ', this.touchEnabledDisplay);
@@ -123,71 +133,90 @@ export class EsrimapComponent implements OnInit {
     });
   }
 
+  public drawBuffer() {
+    // function to draw buffer using native draw action
+    const disableViewDragEvt = this.mapView.on('drag', (viewEvt) => {    // prevents panning with the mouse drag event
+      viewEvt.stopPropagation();
+    });
+    this.action = this.draw.create('polyline', { mode: 'click' });
+    // focus the view to activate keyboard shortcuts for drawing polygons
+    this.mapView.focus();
+    this.action.on('vertex-add', this.addVertices);
+    this.action.on('cursor-update', this.drawLine);
+    this.action.on('vertex-remove', this.drawLine);
+    this.action.on('draw-complete', () => {
+      this.sketchViewModel.complete();
+      console.log('draw complete');
+      disableViewDragEvt.remove();
+    });
+
+  }
   public activateSpatialControl(control: any) {
     this.__mapViewStatus.subscribe(_mapStatus => {
       if (_mapStatus) {
-        console.log('activate this control', control);
+        this.clearDrawGraphics();
         if (control === 'buffer') {
-          this.activateBuffer();
-          const that = this;
-          this.mapView.on('key-down', function (evt) {
-            console.log('key-down', evt);
-            if (evt.key === 'Escape') {
-              that.mapView.on('click', function (ee) { ee.stopPropagation(); });
-              that.mapView.on('pointer-move', function (eee) { eee.stopPropagation(); });
-              if (typeof (that.bufferGraphicsLayer) !== 'undefined') {
-                that.bufferGraphicsLayer.removeAll();
-                that.bufferLineGraphicLayer.removeAll();
-                that.tempGraphicsLayer.removeAll();
-              }
-              that.sideBar.activatedSpatialControl = false;
+          this.drawBuffer();
+          // this.activateBuffer();
+          // const that = this;
+          // this.mapView.on('key-down', function (evt) {
+          //   console.log('key-down', evt);
+          //   if (evt.key === 'Escape') {
+          //     that.mapView.on('click', function (ee) { ee.stopPropagation(); });
+          //     that.mapView.on('pointer-move', function (eee) { eee.stopPropagation(); });
+          //     if (typeof (that.bufferGraphicsLayer) !== 'undefined') {
+          //       that.bufferGraphicsLayer.removeAll();
+          //       that.bufferLineGraphicLayer.removeAll();
+          //       that.tempGraphicsLayer.removeAll();
+          //     }
+          //     that.sideBar.activatedSpatialControl = false;
 
-            }
-          });
+          //   }
+          // });
         } else if (control === 'polygon') {
-          console.log(322);
-          // this.sketchViewModel.create('polygon');
           this.__sketchStatus.subscribe(_sketchStatus => {
-            console.log(_sketchStatus);
             if (_sketchStatus) {
-              console.log('2323');
-              this.graphicsLayer.removeAll();
               this.sketchViewModel.create('polygon');
             }
           });
         } else if (control === 'point') {
-          // this.sketchViewModel.create('point');
           this.__sketchStatus.subscribe(_sketchStatus => {
             if (_sketchStatus) {
-              console.log('2323');
-              this.graphicsLayer.removeAll();
               this.sketchViewModel.create('multipoint');
+            }
+          });
+        } else if (control === 'rectangle') {
+          this.__sketchStatus.subscribe(_sketchStatus => {
+            if (_sketchStatus) {
+              this.sketchViewModel.create('rectangle');
             }
           });
         }
       }
     });
   }
-  constructor(private _data: IndustriesGeojson, private _legendDirective: PrintLegendDirective) { }
+  constructor(private _data: IndustriesGeojson, private _legendDirective: PrintLegendDirective,
+    private pointInCountyService: PointincountyService) { }
 
   public ngOnInit() {
     setTimeout(() => {
       return loadModules([
         'esri/Map', 'esri/views/MapView', 'esri/layers/FeatureLayer',
         'esri/geometry/geometryEngine', 'esri/views/ui/DefaultUI',
-        'esri/layers/MapImageLayer',
-        'esri/widgets/Sketch/SketchViewModel',
+        'esri/layers/MapImageLayer', 'esri/views/2d/draw/Draw', 'esri/geometry/Circle',
+        'esri/widgets/Sketch/SketchViewModel', 'esri/geometry/Polyline',
         'esri/Graphic', 'esri/layers/GraphicsLayer', 'esri/geometry/Point', 'esri/tasks/PrintTask',
         'esri/tasks/support/PrintTemplate', 'esri/tasks/support/PrintParameters',
         'esri/widgets/BasemapToggle', 'dojo/domReady!'
       ])
-        .then(([EsriMap, EsriMapView, FeatureLayer, geometryEngine, DefaultUI, MapImageLayer,
-          SketchViewModel, Graphic, GraphicsLayer, Point, PrintTask, PrintTemplate, PrintParameters, BasemapToggle]) => {
+        .then(([EsriMap, EsriMapView, FeatureLayer, geometryEngine, DefaultUI, MapImageLayer, Draw, Circle,
+          SketchViewModel, Polyline, Graphic, GraphicsLayer, Point, PrintTask, PrintTemplate, PrintParameters, BasemapToggle]) => {
           // create a boilerplate graphics layer for adding industries points later on
           this.industriesGraphicsLayer = new GraphicsLayer();
-          this.graphicsLayer = new GraphicsLayer({
-            id: 'tempGraphics'
-          });
+
+          this.graphicsLayer = new GraphicsLayer({ id: 'userGraphicsLayer' });
+          this.circleGraphicsLayer = new GraphicsLayer({ id: 'circleGraphicsLayer' });
+          this.tempGraphicsLayer = new GraphicsLayer({ id: 'tempGraphicsLayer' });
           this.map = new EsriMap({
             basemap: vars._basemap,
             layers: [this.industriesGraphicsLayer, this.graphicsLayer]
@@ -218,14 +247,22 @@ export class EsrimapComponent implements OnInit {
               });
               // add them to the map
               this.industriesGraphicsLayer.addMany(graphicsArray);
-              if (typeof (this.buffer) !== 'undefined') {
-                this.mapView.goTo(this.buffer).then(function () {
-                  console.log(this.mapView.scale);
-                  this.mapView.scale = this.mapView.scale * 0.5;
-                });
+              if (typeof (this.graphicsLayer) !== 'undefined' || typeof (this.circleGraphicsLayer) !== 'undefined') {
+                  if (this.circleGraphicsLayer.graphics.length > 0) {
+                    console.log('from cicle extent');
+                    this.mapView.goTo(this.circleGraphicsLayer.graphics).then(() => {this.mapView.scale = this.mapView.scale * 0.5; });
+                  } else if (this.graphicsLayer.graphics.length > 0) {
+                    console.log('from others extent');
+                    console.log(this.graphicsLayer.graphics.getItemAt(0).geometry.extent);
+                    this.mapView.goTo(this.graphicsLayer.graphics).then(() => {this.mapView.scale = this.mapView.scale * 0.2; });
+                  } else {
+                    console.log('from default extent');
+                    this.mapView.goTo(graphicsArray).then(function () {
+                      this.mapView.scale = this.mapView.scale * 0.5;
+                    });
+                  }
               } else {
                 this.mapView.goTo(graphicsArray).then(function () {
-                  console.log(this.mapView.scale);
                   this.mapView.scale = this.mapView.scale * 0.5;
                 });
               }
@@ -300,7 +337,6 @@ export class EsrimapComponent implements OnInit {
             }
             this.bufferGraphicsLayer = new GraphicsLayer();
             this.bufferLineGraphicLayer = new GraphicsLayer();
-            this.tempGraphicsLayer = new GraphicsLayer();
             // mapView.map.remove(this.bufferGraphicsLayer);
             // mapView.map.remove(this.tempGraphicsLayer);
             // mapView.map.remove(this.bufferLineGraphicLayer);
@@ -329,23 +365,27 @@ export class EsrimapComponent implements OnInit {
 
           // set up logic to handle geometry update and reflect the update on "graphicsLayer"
           this.setupClickHandler = (that) => {
-            console.log(1);
             that.mapView.on('click', function (event) {
               that.mapView.hitTest(event).then(function (response) {
-                console.log('here in hittest', response.results);
                 const results = response.results;
                 if (results.length > 0) {
                   for (let i = 0; i < results.length; i++) {
                     // Check if we're already editing a graphic
                     that.sideBar.activatedSpatialControl = (that.editGraphic === null);
-                    if (!that.editGraphic && results[i].graphic.layer.id === 'tempGraphics') {
+                    if (!that.editGraphic && (results[i].graphic.layer.id === 'userGraphicsLayer' || results[i].graphic.layer.id === 'circleGraphicsLayer')) {
+                      // Save a reference to the graphic we intend to update
+                      if (results[i].graphic.layer.id === 'circleGraphicsLayer') {
+                        that.editGraphic = that.graphicsLayer.graphics.getItemAt(0);
+                      } else {
+                        that.editGraphic = results[i].graphic;
+                      }
                       that.sideBar.activatedSpatialControl = (that.editGraphic === null);
                       // Save a reference to the graphic we intend to update
-                      that.editGraphic = results[i].graphic;
+                      // that.editGraphic = results[i].graphic;
                       // Remove the graphic from the GraphicsLayer
                       // Sketch will handle displaying the graphic while being updated
                       that.graphicsLayer.remove(that.editGraphic);
-                      that.sketchViewModel.update(that.editGraphic, that);
+                      that.sketchViewModel.update(that.editGraphic);
                       break;
                     }
                   }
@@ -353,6 +393,41 @@ export class EsrimapComponent implements OnInit {
               });
             });
             this.__sketchStatus.next(true);
+          };
+          // draw line as cursor moves
+          this.drawLine = (event) => {
+            if (event.vertices.length > 2) {
+              this.action.complete();
+            } else {
+              const _graphic = this.createGraphic(event, vars.polylineSymbol);
+              if (event.vertices.length > 1) {
+                // do not draw cicle before the user moves mouse or drags (until second )
+                // basically listen untill at least one point is added
+                this.createCircle(event.vertices[0], event.vertices[1]);
+              }
+              this.graphicsLayer.add(_graphic);
+            }
+          };
+          // Label buffer with buffer distance
+          this.labelBufferDist = (geom, distance) => {
+            this.tempGraphicsLayer.removeAll();
+            const _graphic = new Graphic({
+              geometry: geom,
+              symbol: {
+                type: 'text',
+                color: 'white',
+                haloColor: 'black',
+                haloSize: '1px',
+                text: distance.toFixed(2) + ' miles',
+                xoffset: 3,
+                yoffset: 3,
+                font: { // autocast as Font
+                  size: 14,
+                  family: 'sans-serif'
+                }
+              }
+            });
+            this.tempGraphicsLayer.add(_graphic);
           };
           // called when sketchViewModel's create-complete event is fired.
           this.addGraphic = (event, that = this) => {
@@ -364,21 +439,113 @@ export class EsrimapComponent implements OnInit {
               symbol: that.sketchViewModel.graphic.symbol
             });
             that.graphicsLayer.add(graphic);
+            that.editGraphic = null;
             that.sideBar.activatedSpatialControl = true;
+          };
+          this.createCircle = (center, end) => {
+            // function to create a geodesic circle using the center and end parameter as specified by the user while drawing
+            this.circleGraphicsLayer.removeAll();
+            const centerPt = new Point({ x: center[0], y: center[1], spatialReference: this.mapView.spatialReference });
+            const endPt = new Point({ x: end[0], y: end[1], spatialReference: this.mapView.spatialReference });
+            const polyline = new Polyline({
+              paths: [center, end],
+              spatialReference: this.mapView.spatialReference
+            });
+            const radius = geometryEngine.geodesicLength(polyline, 'miles');
+            const _circle = new Circle({
+              center: centerPt,
+              radius: radius,
+              radiusUnit: 'miles',
+              geodesic: true,
+              spatialReference: this.mapView.spatialReference
+            });
+            const circleGraphic = new Graphic({
+              geometry: _circle,
+              symbol: vars.polygonSymbol
+            });
+            const startPtGraphic = new Graphic({ geometry: centerPt, symbol: vars.pointSymbol });
+            const endPtGraphic = new Graphic({ geometry: endPt, symbol: vars.pointSymbol });
+            this.circleGraphicsLayer.add(circleGraphic);
+            this.labelBufferDist(endPt, radius);
+            this.tempGraphicsLayer.addMany([startPtGraphic, endPtGraphic]);
+            return this.circleGraphicsLayer;
+          };
+          this.addVertices = (event) => {
+            // function called by draw action to add vertices at user clicked location
+            if (event.vertices.length < 2) {
+              this.tempGraphicsLayer.removeAll();
+              const gg = new Graphic({
+                geometry: new Point({ x: event.vertices[0][0], y: event.vertices[0][1], spatialReference: this.mapView.spatialReference }),
+                symbol: vars.pointSymbol
+              });
+              this.tempGraphicsLayer.add(gg);
+            } else if (event.vertices.length === 2) {
+              this.tempGraphicsLayer.removeAll();
+              const graphic = this.createGraphic(event, vars.polylineSymbol);
+              this.createCircle(event.vertices[0], event.vertices[1]);
+              this.graphicsLayer.add(graphic);
+              this.action.complete();
+            }
+          };
+
+          this.createGraphic = (event, symbol) => {
+            this.graphicsLayer.removeAll();
+            const _polyline = new Polyline({
+              paths: event.vertices,
+              spatialReference: this.mapView.spatialReference
+            });
+            const _graphic = new Graphic({
+              geometry: _polyline,
+              symbol: vars.polylineSymbol
+            });
+            return _graphic;
+          };
+
+          this.completeGraphicsForCircle = (event) => {
+            // function to intercept and complete drawing temporarily depending on whether it is for buffer circle or generic geometries
+            if (event.geometry.type === 'polyline') {
+              this.updateGraphicTemp(event);
+              this.editGraphic = null;
+              this.sketchViewModel.complete();
+            } else {
+              this.updateGraphicTemp(event);
+            }
+          };
+
+          this.updateGraphicTemp = (event) => {
+            // Create a new graphic and set its geometry event.geometry
+            if (event.geometry.type === 'polyline') {
+              // only create a circle and do these filtering if its a polyline
+              this.graphicsLayer.removeAll();
+              const totalVertices = event.geometry.paths[0].length;
+              const _polyline = new Polyline({
+                paths: [event.geometry.paths[0][0], event.geometry.paths[0][totalVertices - 1]],
+                spatialReference: this.mapView.spatialReference
+              });
+              const _graphic = new Graphic({
+                geometry: _polyline,
+                symbol: this.sketchViewModel.graphic.symbol
+              });
+              this.graphicsLayer.add(_graphic);
+              this.createCircle(_polyline.paths[0][0], _polyline.paths[0][1]);
+            } else {
+              this.graphicsLayer.removeAll();
+              const _graphic = new Graphic({
+                geometry: event.geometry,
+                symbol: this.editGraphic.symbol
+              });
+              this.graphicsLayer.add(_graphic);
+            }
           };
           // Runs when sketchViewModel's update-complete or update-cancel
           // events are fired.
-          this.updateGraphic = (event, that = this) => {
+          this.updateGraphic = (event) => {
             // Create a new graphic and set its geometry event.geometry
-            const graphic = new Graphic({
-              geometry: event.geometry,
-              symbol: this.editGraphic.symbol
-            });
-            that.graphicsLayer.add(graphic);
+            this.updateGraphicTemp(event);
 
             // set the editGraphic to null update is complete or cancelled.
-            that.editGraphic = null;
-            that.sideBar.activatedSpatialControl = (that.editGraphic === null);
+            this.editGraphic = null;
+            this.sideBar.activatedSpatialControl = (this.editGraphic === null);
           };
           // select features
           this.selectFeaturesByGeom = (inputgeom, graphics) => {
@@ -403,7 +570,6 @@ export class EsrimapComponent implements OnInit {
             this._data.allDataService.next(_selected);
           };
           this.setupSketchViewModel = (mapView) => {
-            console.log(mapView);
             // setup sketch view model for drawing geometries
             this.sketchViewModel = new SketchViewModel({
               view: mapView,
@@ -412,26 +578,72 @@ export class EsrimapComponent implements OnInit {
               polylineSymbol: vars.polylineSymbol,
               polygonSymbol: vars.polygonSymbol
             });
-           this.setupClickHandler(this);
-            // Listen to create-complete event to add a newly created graphic to view
+            mapView.map.addMany([this.graphicsLayer, this.circleGraphicsLayer, this.tempGraphicsLayer]);
+            this.setupClickHandler(this);
             this.sketchViewModel.on('create-complete', this.addGraphic);
-            // Listen the sketchViewModel's update-complete and update-cancel events
+            // Listen to create-complete event to add a newly created graphic to view
+            this.sketchViewModel.on('reshape-complete', this.completeGraphicsForCircle);
+            this.sketchViewModel.on('scale', this.updateGraphicTemp);
+            this.sketchViewModel.on('scale-complete', this.updateGraphic);
+            this.sketchViewModel.on('update', this.updateGraphicTemp);
             this.sketchViewModel.on('update-complete', this.updateGraphic);
+            this.sketchViewModel.on('rotate-complete', this.completeGraphicsForCircle);
+            this.sketchViewModel.on('move', this.updateGraphicTemp);
+            this.sketchViewModel.on('move-complete', this.completeGraphicsForCircle);
             this.sketchViewModel.on('update-cancel', this.updateGraphic);
             this.__sketchStatus.next(true);
           };
 
+          this.clearDrawGraphics = () => {
+            // function to clear all active graphics in the map along with the view and graphcis layer
+            // also resets the sketchviewmodel is that is active so that next drawing could be initialized properly
+            this.sideBar.resetData();
+            this.__sketchStatus.subscribe(_sketchStatus => {
+              if (_sketchStatus) {
+                this.sketchViewModel.reset();
+                this.graphicsLayer.removeAll();
+                this.circleGraphicsLayer.removeAll();
+                this.tempGraphicsLayer.removeAll();
+                this.editGraphic = null;
+                this.sketchViewModel.complete();
+                this.sketchViewModel.reset();
+              }
+            });
+          };
+
           this.performSpatialQuery = (control) => {
             console.log('received this control in esir map', control);
-            if (control === 'buffer') {
-              this.selectFeaturesByGeom(this.buffer, this.industriesGraphicsLayer);
-            }
+            if (this.sketchViewModel) {
+              if (this.sketchViewModel.state === 'creating' || this.sketchViewModel.state === 'updating') {
+                this.sketchViewModel.complete();
+              }
+                if (control === 'buffer') {
+                  this.selectFeaturesByGeom(this.circleGraphicsLayer.graphics.getItemAt(0).geometry, this.industriesGraphicsLayer);
+                } else if (control === 'point') {
+                  const totalPt = (this.graphicsLayer.graphics.length);
+                  console.log(totalPt);
+                  if (totalPt > 0) {
+                   const geoj = JSON.stringify(this.graphicsLayer.graphics.getItemAt(0).geometry.toJSON());
+                    this.pointInCountyService.getCountyNameFromPoint(geoj);
+                    this.pointInCountyService.pointInCountyDataService.subscribe(d => {
+                      this.sideBar.applyFilterArray('County', d);
+                    });
+                    // .subscribe(d => console.log(d));
+                  }
+                } else if (control === 'rectangle' || control === 'polygon') {
+                  this.selectFeaturesByGeom(this.graphicsLayer.graphics.getItemAt(0).geometry, this.industriesGraphicsLayer);
+                }
+              }
           };
 
           this.mapView.when(() => {
             this.__mapViewStatus.next(true);
             this.addGraphicsToMap();
             this.setupSketchViewModel(this.mapView);
+            // initialize a draw action for creating a buffer polygon
+            this.draw = new Draw({
+              view: this.mapView
+            });
           }, (err) => {
             this.__mapViewStatus.next(false);
             console.log(err);

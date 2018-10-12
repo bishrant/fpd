@@ -24,31 +24,30 @@ export const lineSymbol = {
 // 'Panel or wood pellet plant': {'type': 'Secondary', 'color': 'green'},
 // 'Preservative treating plant': {'type': 'Secondary', 'color': 'purple'},
 // 'Other Secondary Industry': {'type': 'Secondary', 'color': 'black'}];
-export const  polylineSymbol = {
-    type: 'simple-line',  // autocasts as new SimpleMarkerSymbol()
-    color: '#660404',
-    width: '2',
-    style: 'dash'
-  };
-export const  polygonSymbol = {
-    type: 'simple-fill',  // autocasts as new SimpleMarkerSymbol()
-    color: 'rgba(255,0,0, 0.3)',
-    style: 'solid',
-    outline: { // autocasts as new SimpleLineSymbol()
-      color: '#660404',
-      width: 1
-    }
-};
 export const pointSymbol = {
-    type: 'simple-marker', // autocasts as new SimpleMarkerSymbol()
-    style: 'square',
-    color: '#8A2BE2',
-    size: '16px',
-    outline: { // autocasts as new SimpleLineSymbol()
-      color: [255, 255, 255],
-      width: 3
-    }
-  };
+  type: 'simple-marker', // autocasts as new SimpleMarkerSymbol()
+  style: 'circle',
+  color: '#8A2BE2',
+  size: '8px',
+};
+
+export const polylineSymbol = {
+  type: 'simple-line', // autocasts as new SimpleLineSymbol()
+  color: '#8A2BE2',
+  width: '4',
+  style: 'solid',
+  cap: 'butt'
+};
+
+export const polygonSymbol = {
+  type: 'simple-fill', // autocasts as new SimpleFillSymbol()
+  color: 'rgba(138,43,226, 0.8)',
+  style: 'solid',
+  outline: {
+    color: 'white',
+    width: 1
+  }
+};
 
 
 export const masterLegend = [{ name: 'Biomass, wood pellet or landscape organic facility', type: 'Primary', color: 'red' },

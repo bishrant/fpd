@@ -57,6 +57,11 @@ export class SidebarComponent implements OnInit {
     this._data.allDataService.next(this.tableData.filter(f => reg.test(f.properties[attribute])));
   }
 
+  public applyFilterArray(attribute, listOfValues) {
+    const reg = new RegExp(listOfValues.join('|'), 'i'); // i is for ignoring case
+    this._data.allDataService.next(this.tableData.filter(f => reg.test(f.properties[attribute])));
+  }
+
   public selected(value: any, attribute: string): void {
     console.log('Selected value is: ', value.text);
     this.applyFilter(attribute, value.text);
@@ -77,7 +82,7 @@ export class SidebarComponent implements OnInit {
   public updateItems() {
     this.counties = ['test1', 'test3', 'something else very long'];
   }
-  resetData = () => {
+  public resetData() {
     this._data.orginalDataObservable.subscribe(d => {
       // reset the data from original data source
       this._data.allDataService.next(d);

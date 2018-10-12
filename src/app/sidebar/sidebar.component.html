@@ -26,9 +26,11 @@
     <ng-template ngbPanelContent>
       <button (click)="activateSpatialControl('buffer')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-maps"></i> Buffer</button><br>
       <button (click)="activateSpatialControl('polygon')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-polygon"></i> Polygon</button><br>
+      <button (click)="activateSpatialControl('rectangle')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-checkbox-unchecked"></i> Rectangle</button><br>
       <button (click)="activateSpatialControl('point')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-map-pin"></i> Select by counties</button><br>
       <hr>
       <button *ngIf='activatedSpatialControl === true' (click)='clickedSpatialQuery($event)' class="btn" ><i class="esri-icon-search"></i>Query</button>
+     &nbsp;&nbsp; <button *ngIf='activatedSpatialControl === true' (click)="activateSpatialControl('clear')" class="btn" ><i class="esri-icon-trash"></i>Clear</button>
      <!-- <app-spatialsearch></app-spatialsearch> -->
     </ng-template>
   </ngb-panel>
