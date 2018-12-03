@@ -1,4 +1,4 @@
-@import "node_modules/angular2-draggable/css/resizable.css";
+@import "../assets/css/resizable.css";
 html,
 body {
     height: 100%;
@@ -55,6 +55,7 @@ body {
         margin: auto;
         margin-bottom: 5px;
         z-index: 1000;
+        overflow-y: auto;
     }
 }
 @media (max-width: 768px) {

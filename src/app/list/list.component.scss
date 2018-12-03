@@ -1,0 +1,65 @@
+.fill-remaining-space {
+    flex: 1 1 auto;
+  }
+
+  .table-toolbar {
+    position: sticky;
+    position: -webkit-sticky; /* For macOS/iOS Safari */
+    top: 0; /* Sets the sticky toolbar to be on top */
+    z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
+}
+
+.mat-cell{
+    font-size:12px;
+    font-family: Verdana,Sans-Serif;
+    display: table-cell;
+    height: 28px;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  //  border-top: 1px solid rgba(0, 0, 0, 0.12);
+   // border-left: 2px solid rgba(0, 0, 0, 0.12);
+    border-right: 2px solid rgba(0, 0, 0, 0.12);
+    }
+
+.mat-header-cell {
+    font-size:16px;
+    font-family: Verdana,Sans-Serif;
+    display: table-cell;
+    height: 28px;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  //  border-top: 1px solid rgba(0, 0, 0, 0.12);
+   // border-left: 2px solid rgba(0, 0, 0, 0.12);
+    border-right: 2px solid rgba(0, 0, 0, 0.12);
+}
+
+.mat-column-Id {
+    flex: 0 0 13%; //change the 13% with every width you need
+ }
+
+ .mat-paginator {
+     color: black;
+     background: transparent;
+ }
+
+ .mat-toolbar-row{
+     padding: 0 5px;
+     height: 40px;
+ }
+
+ .mat-toolbar-multiple-rows {
+    min-height: 44px;
+}
+
+span.ui-column-resizer {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    width: 8px;
+    height: 100%;
+    padding: 0;
+    cursor: col-resize;
+    border: 1px solid red;
+  }

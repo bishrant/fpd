@@ -202,31 +202,36 @@ export class EsrimapComponent implements OnInit {
     setTimeout(() => {
       return loadModules([
         'esri/Map', 'esri/views/MapView', 'esri/layers/FeatureLayer',
-        'esri/geometry/geometryEngine', 'esri/views/ui/DefaultUI',
-        'esri/layers/MapImageLayer', 'esri/views/2d/draw/Draw', 'esri/geometry/Circle',
-        'esri/widgets/Sketch/SketchViewModel', 'esri/geometry/Polyline',
+        'esri/geometry/geometryEngine', 'esri/views/ui/DefaultUI', 'esri/layers/TileLayer',
+        'esri/layers/VectorTileLayer', 'esri/views/2d/draw/Draw', 'esri/geometry/Circle',
+        'esri/widgets/Sketch/SketchViewModel', 'esri/geometry/Polyline', 'esri/geometry/SpatialReference',
         'esri/Graphic', 'esri/layers/GraphicsLayer', 'esri/geometry/Point', 'esri/tasks/PrintTask',
         'esri/tasks/support/PrintTemplate', 'esri/tasks/support/PrintParameters',
         'esri/widgets/BasemapToggle', 'dojo/domReady!'
       ])
-        .then(([EsriMap, EsriMapView, FeatureLayer, geometryEngine, DefaultUI, MapImageLayer, Draw, Circle,
-          SketchViewModel, Polyline, Graphic, GraphicsLayer, Point, PrintTask, PrintTemplate, PrintParameters, BasemapToggle]) => {
+        .then(([EsriMap, EsriMapView, FeatureLayer, geometryEngine, DefaultUI, TileLayer, VectorTileLayer, Draw, Circle,
+          SketchViewModel, Polyline, SpatialReference, Graphic, GraphicsLayer, Point, PrintTask, PrintTemplate, PrintParameters, BasemapToggle]) => {
           // create a boilerplate graphics layer for adding industries points later on
           this.industriesGraphicsLayer = new GraphicsLayer();
 
           this.graphicsLayer = new GraphicsLayer({ id: 'userGraphicsLayer' });
           this.circleGraphicsLayer = new GraphicsLayer({ id: 'circleGraphicsLayer' });
           this.tempGraphicsLayer = new GraphicsLayer({ id: 'tempGraphicsLayer' });
+         // const countyLayer = new VectorTileLayer({url: 'https://tiles.arcgis.com/tiles/ELI1iJkCzTIagHkp/arcgis/rest/services/TexasCounties6/VectorTileServer'});
           this.map = new EsriMap({
             basemap: vars._basemap,
-            layers: [this.industriesGraphicsLayer, this.graphicsLayer]
+            layers: [this.industriesGraphicsLayer, this.graphicsLayer],
+            spatialReference: new SpatialReference({wkid: 4326})
           });
 
           const _mapViewProperties = {
             container: this.mapViewEl.nativeElement,
             center: vars._center,
             zoom: vars._zoom,
-            map: this.map
+            map: this.map,
+            constraints: {
+              snapToZoom: false
+            }
           };
           this.addGraphicsToMap = () => {
             this._data.currentData.subscribe(d => {
@@ -250,16 +255,19 @@ export class EsrimapComponent implements OnInit {
               if (typeof (this.graphicsLayer) !== 'undefined' || typeof (this.circleGraphicsLayer) !== 'undefined') {
                   if (this.circleGraphicsLayer.graphics.length > 0) {
                     console.log('from cicle extent');
-                    this.mapView.goTo(this.circleGraphicsLayer.graphics).then(() => {this.mapView.scale = this.mapView.scale * 0.5; });
+                    console.log(this.graphicsLayer);
+                   // console.log(this.circleGraphicsLayer.fullExtent.expand(1.3));
+                    const ext = this.circleGraphicsLayer.graphics.getItemAt(0).geometry.extent;
+                    const cloneExt = ext.clone();
+                    this.mapView.extent = cloneExt.expand(1.5);
+                   // this.mapView.goTo({target: this.circleGraphicsLayer.graphics, extent: cloneExt}); // .then(() => {this.mapView.scale = this.mapView.scale * 0.5; });
                   } else if (this.graphicsLayer.graphics.length > 0) {
-                    console.log('from others extent');
-                    console.log(this.graphicsLayer.graphics.getItemAt(0).geometry.extent);
-                    this.mapView.goTo(this.graphicsLayer.graphics).then(() => {this.mapView.scale = this.mapView.scale * 0.2; });
+                    const ext = this.graphicsLayer.graphics.getItemAt(0).geometry.extent;
+                    const cloneExt = ext.clone();
+                    this.mapView.extent = cloneExt.expand(1.5);
                   } else {
                     console.log('from default extent');
-                    this.mapView.goTo(graphicsArray).then(function () {
-                      this.mapView.scale = this.mapView.scale * 0.5;
-                    });
+                    this.mapView.goTo(graphicsArray); // .then(function () {this.mapView.scale = this.mapView.scale * 0.5;         });
                   }
               } else {
                 this.mapView.goTo(graphicsArray).then(function () {
@@ -272,7 +280,7 @@ export class EsrimapComponent implements OnInit {
           this.mapView = new EsriMapView(_mapViewProperties);
           this.mapView.ui.move('zoom', 'top-right');
           this.printTask = new PrintTask({
-            url: 'http://128.194.232.177/arcgis/rest/services/FPD/ExportToPDF/GPServer/ExportToPDF'
+            url: 'https://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/ForestProductsDirectory/ExportToPDFClientSideLegend/GPServer/ExportToPDF'
           });
 
           this.printTemplate = new PrintTemplate({
@@ -644,6 +652,7 @@ export class EsrimapComponent implements OnInit {
             this.draw = new Draw({
               view: this.mapView
             });
+            console.log('setup view of map');
           }, (err) => {
             this.__mapViewStatus.next(false);
             console.log(err);

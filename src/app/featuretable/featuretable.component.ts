@@ -1,19 +1,27 @@
-import { Component, OnInit, ViewChild, NgModule, EventEmitter, Output, Injectable } from '@angular/core';
-import { MatPaginator, MatSort } from '@angular/material';
+import { MatSortModule, MatSort  } from '@angular/material';
+import { AfterViewInit, Component, OnInit, ElementRef, NgModule, ViewChild} from '@angular/core';
 import { IndustriesGeojson } from '../services/industries-geojson.service';
-import { MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/material';
+import { MatPaginator, MatTableModule, MatPaginatorModule } from '@angular/material';
 import { AngularDraggableModule } from 'angular2-draggable';
 import { HttpClient } from '@angular/common/http';
 import { WindowService } from '../services/window.service';
 import { ExcelService } from '../services/excel.service';
+import { FormsModule } from '@angular/forms';
+import { FeatureTableDataSource } from './featuretable-datasource';
+import { fromEvent } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import {tap, map} from 'rxjs/operators';
+import { merge } from 'rxjs';
 
 @NgModule({
   imports: [
+    MatSort,
+    MatSortModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule,
     HttpClient,
-    AngularDraggableModule
+    AngularDraggableModule,
+    FormsModule
   ],
   providers: [HttpClient]
 })
@@ -23,10 +31,13 @@ import { ExcelService } from '../services/excel.service';
   styleUrls: ['./featuretable.component.scss']
 })
 
-export class FeaturetableComponent implements OnInit {
+export class FeaturetableComponent implements OnInit, AfterViewInit {
   public isSingleClick = true;
   public selectedRowIndex;
-  featuredataSource: any;
+  featuredataSource: FeatureTableDataSource;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  // @ViewChild('input') input: ElementRef;
   nativeWindow: any;
   public popupVisibility: any = 'invisible';
   public reportUrl = '#';
@@ -38,7 +49,8 @@ export class FeaturetableComponent implements OnInit {
     right: true
   };
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'Company', 'County', 'Prim_secon', 'Industry_t'];
+  // displayedColumns = ['id', 'Company', 'County', 'MainIndustryType', 'SpecificIndustryType'];
+  displayedColumns = ['Id', 'Company'];
   public selectRow(row) {
     this.isSingleClick = true;
     setTimeout(() => {
@@ -65,17 +77,18 @@ export class FeaturetableComponent implements OnInit {
   public genetateReportPostData(): any {
     const dummy: any = [];
     const _postdata: any = [];
-    const _reportFields: string[] = ['Company', 'County', 'Address', 'Phone1', 'Homepage', 'Email', 'Prim_secon', 'Industry_t', 'PRODUCTS', 'SPECIES'];
-    this.featuredataSource.forEach(_d => {
-      const _partialArray: any = {};
-      _reportFields.forEach(_attr => {
-        if (_d['properties'].hasOwnProperty(_attr)) {
-          _partialArray[_attr] = _d['properties'][_attr];
-        }
-      });
-      _postdata.push(_partialArray);
-    });
-    return _postdata;
+    const _reportFields: string[] = ['Company', 'County', 'Address', 'Phone1', 'Homepage', 'Email', 'MainIndustryType', 'SpecificIndustryType', 'Products', 'Species'];
+    // this.featuredataSource.forEach(_d => {
+    //   const _partialArray: any = {};
+    //   _reportFields.forEach(_attr => {
+    //     if (_d['properties'].hasOwnProperty(_attr)) {
+    //       _partialArray[_attr] = _d['properties'][_attr];
+    //     }
+    //   });
+    //   _postdata.push(_partialArray);
+    // });
+    return [];
+    // return _postdata;
   }
 
   public exportToExcel(event) {
@@ -98,22 +111,37 @@ export class FeaturetableComponent implements OnInit {
     });
   }
 
-  public applyFilter(d) {
-    // console.log(d);
-    const re = new RegExp('12');
-    //  console.log(d.filter(ff => ff.id > 445 && ff.properties.Id < 40 && re.test(ff.properties.ARC_Street)));
-  }
+
   constructor(private _data: IndustriesGeojson, private http: HttpClient,
     private _excelService: ExcelService, private winRef: WindowService
   ) {
     this.nativeWindow = winRef.getNativeWindow();
   }
   ngOnInit() {
-    this._data.currentData.subscribe(d => {
-      console.log('got this in filter tbale');
-      this.featuredataSource = d;
-      this.applyFilter(d);
-    });
+    // this.featuredataSource = [{type: 'Feature', id: 1, geometry: {type: 'Point', coordinates: [1, 2]},
+    // properties: {Id: 123, Company: 'Dummy', County: 'Blanco', MainIndustryType: 'Primary', SpecificIndustryType: 'dummy'}}];
+    // this._data.currentData.subscribe(d => {
+    //   console.log('got this in filter tbale');
+    //   console.log(d);
+    //   this.featuredataSource = d;
+    // });
+    console.log(this.paginator);
+   this.featuredataSource = new FeatureTableDataSource(this._data, this.paginator, this.sort);
+   this.featuredataSource.findTableData(0, 3);
   }
+
+    ngAfterViewInit() {
+      console.log(1);
+      this.paginator.page.subscribe(p => {
+        console.log(p);
+      });
+      merge(this.paginator)
+      .pipe(
+          tap(() => {
+          console.log(this.paginator);
+          })
+      );
+
+    }
 
 }

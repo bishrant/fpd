@@ -38,7 +38,7 @@ export class PrintLegendDirective implements OnInit {
     this._data.currentData.subscribe(d => {
       const canvas: any = document.getElementById('canvasPrimaryLegend');
       const ctx = canvas.getContext('2d');
-      const totalLegend = this._data.getDataForComboBox(d, 'Industry_t').sort();
+      const totalLegend = this._data.getDataForComboBox(d, 'SpecificIndustryType').sort();
       console.log(totalLegend);
       const legendSymbol = ['red', 'blue', 'yellow', 'green', 'purple', 'black'];
     const masterPrimary: Array<string> = [];

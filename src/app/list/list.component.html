@@ -1,0 +1,51 @@
+<div class="course">
+    <!-- <button>dsfsd</button>
+    <mat-paginator [length]="getPageLength()" [pageSize]="10"
+    [pageSizeOptions]="[3, 5, 10]">
+ 
+  </mat-paginator> -->
+
+  <mat-toolbar class="table-toolbar">
+      <mat-toolbar-row >
+        <button mat-button (click)="console.log(1)" title="Export as CSV" >
+            <mat-icon >save_alt</mat-icon>
+            Export
+        </button>
+        
+        <span class="fill-remaining-space"></span>
+        <mat-paginator [length]="getPageLength()" [pageSize]="10"
+        [pageSizeOptions]="[3, 5, 10]"></mat-paginator>
+      </mat-toolbar-row>
+    </mat-toolbar>
+
+  <mat-table class="feature-table mat-elevation-z8" [dataSource]="dataSource"
+             matSort >
+      <ng-container matColumnDef="Id">
+          <span 
+          class = "ui-column-resizer"
+          (mousedown) = "onMouseDown($event)"></span>
+          <mat-header-cell *matHeaderCellDef mat-sort-header>SN     
+            
+          </mat-header-cell>
+
+          <mat-cell *matCellDef="let row">{{row.Id}}</mat-cell>
+
+      </ng-container>
+      <ng-container matColumnDef="Company">
+
+          <mat-header-cell *matHeaderCellDef mat-sort-header matSortDirection= "desc">Name</mat-header-cell>
+
+          <mat-cell *matCellDef="let row">{{row.Company}}</mat-cell>
+
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+  </mat-table>
+
+
+  
+
+</div>

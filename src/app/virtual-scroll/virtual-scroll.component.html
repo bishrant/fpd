@@ -1,0 +1,13 @@
+<ng-select [items]="photos"
+         [virtualScroll]="true"
+         placeholder="Select photo">
+  <ng-template ng-option-tmp let-item="item" let-index="index">
+      <b>{{index}}</b> {{item}}
+  </ng-template>
+</ng-select>
+
+<ng-select [items]="photosBuffer" class="custom"></ng-select>
+<!--
+    bindLabel="title"
+         bindValue="thumbnailUrl"
+-->
