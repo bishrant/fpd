@@ -36,3 +36,12 @@ a.navbar-dark{
     color: black !important;
     background-color: #2E7D32;
 }
+.dropdownSubmenu {
+    margin-bottom: 10px;
+}
+@media(max-height: 350px){
+    .dropdownSubmenu {
+        margin-bottom: 100px;
+    }
+}
+

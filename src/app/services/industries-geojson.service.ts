@@ -111,11 +111,11 @@ export class IndustriesGeojson implements OnInit {
   }
 
   getTableData(d): void {
-    console.log(d);
+    // console.log(d);
     // const d1 = d.sort();
     const _tableData = d.map(f => f.properties);
     const _t = Object.values(_tableData).sort((a, b) => a['id'] - b['id']);
-    console.log(_tableData);
+    // console.log(_tableData);
     this.currentTableData = _t;
     this.tableDataService.next(_t);
   }

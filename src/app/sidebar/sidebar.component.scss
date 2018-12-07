@@ -8,3 +8,85 @@
 .btn-secondary:hover{
     background-color: lightgray;
 }
+
+#sidebar{
+    width: 100%;
+    overflow: auto;
+    max-width: 320px;
+}
+span.card-header-link { width: 100% !important; }
+
+ngb-accordion .card-header > a{
+    width: 100%;
+    height: 100%;
+    padding: .5rem 1.25rem; /* Or whatever padding you would have applied in the next rule*/
+    min-width: 320px;
+    }
+    
+    ngb-accordion .card-header {
+    padding: 0; /* Just to make sure the <a> fills the whole card header */
+    }
+
+    .mat-expansion-panel-header:not([aria-disabled=true]) {
+        cursor: pointer;
+        border: 1px solid lightgray;
+        box-shadow: 0 1px 1px;
+        height: 48px !important;
+        font-weight: bold;
+    }
+
+    .mat-expansion-panel-content {
+        display: flex;
+        flex-direction: column;
+        overflow: visible;
+        padding-top: 10px;
+    }
+
+    .mat-expansion-panel-content .ng-trigger .ng-trigger-bodyExpansion{
+        display:none;
+    }
+
+    .mat-expansion-panel:not([class*=mat-elevation-z]) {
+         box-shadow: unset;
+        background-color: white;
+        /* border: 2px solid gray; */
+        // border-bottom: 2px solid green;
+    }
+
+    .mat-drawer {
+        background-color: #fff;
+        color: black !important;
+    }
+
+    .sidebarCloseBtn{
+        position: absolute !important;
+    right: -49px;
+    width: 50px;
+    height: 49px;
+    background-color: white;
+    font-size: 25pt;
+    vertical-align: center;
+    margin: auto;
+    vertical-align: middle;
+    text-align: center;
+    top: px;
+    overflow: visible;
+    min-width: unset !important;
+    // border: 1px 0 0 1px solid green;
+    // border-right: 1px solid gray;
+    // border-bottom: 1px solid gray;
+    border-radius: 0 0 10px 0 !important;
+    box-shadow: 5px 4px 5px rgba(0, 0, 0, 0.16), 5px 9px 10px rgba(0, 0, 0, 0.12) !important;
+    }
+
+    
+
+    .sidenav{
+        overflow:visible
+    }
+
+    @media (max-width: 350px){
+        .sidebarCloseBtn {
+            display: none !important;
+        }
+    }

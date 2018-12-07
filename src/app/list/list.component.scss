@@ -1,65 +1,262 @@
 .fill-remaining-space {
-    flex: 1 1 auto;
-  }
-
-  .table-toolbar {
-    position: sticky;
-    position: -webkit-sticky; /* For macOS/iOS Safari */
-    top: 0; /* Sets the sticky toolbar to be on top */
-    z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
+  flex: 1 1 auto;
 }
 
-.mat-cell{
-    font-size:12px;
-    font-family: Verdana,Sans-Serif;
-    display: table-cell;
-    height: 28px;
-    vertical-align: middle;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+.table-toolbar {
+  position: sticky;
+  position: -webkit-sticky;
+  /* For macOS/iOS Safari */
+  top: 0;
+  /* Sets the sticky toolbar to be on top */
+  z-index: 1000;
+  /* Ensure that your app's content doesn't overlap the toolbar */
+}
+
+.mat-cell {
+  font-size: 13px;
+  font-family: Verdana, Sans-Serif;
+  padding-left: 5px;
+  height: 20px;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   //  border-top: 1px solid rgba(0, 0, 0, 0.12);
-   // border-left: 2px solid rgba(0, 0, 0, 0.12);
-    border-right: 2px solid rgba(0, 0, 0, 0.12);
-    }
+  // border-left: 2px solid rgba(0, 0, 0, 0.12);
+  color: black;
+  border-right: 2px solid rgba(0, 0, 0, 0.12);
+}
 
 .mat-header-cell {
-    font-size:16px;
-    font-family: Verdana,Sans-Serif;
-    display: table-cell;
-    height: 28px;
-    vertical-align: middle;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  font-size: 14px;
+  font-family: Verdana, Sans-Serif;
+  font-weight: bold;
+  height: 20px;
+  padding-left: 5px;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   //  border-top: 1px solid rgba(0, 0, 0, 0.12);
-   // border-left: 2px solid rgba(0, 0, 0, 0.12);
-    border-right: 2px solid rgba(0, 0, 0, 0.12);
+  // border-left: 2px solid rgba(0, 0, 0, 0.12);
+  border-right: 2px solid rgba(0, 0, 0, 0.12);
+  color: black
+}
+
+mat-row {
+  height: 34px;
+  min-height: 34px;
+}
+
+mat-header-row {
+  background-color: #70ad47;
+  color: black;
+  height: 36px;
+  min-height: 36px;
 }
 
 .mat-column-Id {
-    flex: 0 0 13%; //change the 13% with every width you need
- }
+  flex: 0 0 40px; //change the 13% with every width you need
+}
 
- .mat-paginator {
-     color: black;
-     background: transparent;
- }
+.mat-column-County {
+  flex: 0 0 100px; //change the 13% with every width you need
+}
 
- .mat-toolbar-row{
-     padding: 0 5px;
-     height: 40px;
- }
+.mat-column-MainIndustryType {
+  flex: 0 0 140px; //change the 13% with every width you need
+}
 
- .mat-toolbar-multiple-rows {
-    min-height: 44px;
+@media (min-width: 768px) {
+  .mat-column-Company {
+    flex: 0 0 250px;
+  }
+
+}
+
+@media (min-width: 1200px) {
+  #featureTable {
+    min-height: 420px;
+    width: 60%;
+    margin: auto;
+    margin-bottom: 5px;
+    z-index: 1000;
+    overflow: auto;
+    min-width: 850px;
+    // min-width: 600px;
+    //  overflow-y: auto;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+  #featureTable {
+    min-height: 420px;
+    width: 85%;
+    margin: auto;
+    margin-bottom: 5px;
+    z-index: 1000;
+    overflow: auto;
+    min-width: 768px;
+    // min-width: 600px;
+    //  overflow-y: auto;
+  }
+
+}
+
+@media (max-width: 768px) {
+  #featureTable {
+    min-height: 420px;
+    width: 100%;
+    margin: auto;
+    margin-bottom: 5px;
+    z-index: 1000;
+    overflow: auto //  min-width: 500px;
+  }
+}
+
+.mat-paginator-page-size-label {
+  margin: 0 4px;
+  display: none !important;
+}
+
+.featureTableMaximized {
+  // transform: translateY(0%) !important;
+  margin-bottom: 5px;
+  overflow: auto;
+  //    -webkit-transition: all 1s;
+  /* Safari */
+  //   transition: all 1s;
+}
+
+.featureTableMinimized {
+  //  transform: translateY(140%) !important;
+  margin-bottom: 0;
+  //  -webkit-transition: all 1s;
+  /* Safari */
+  //   transition: all 1s;
+}
+
+
+//  .mat-column-SpecificIndustryType{
+//     flex: 0 0 320px;
+// }
+
+.mat-paginator {
+  color: white;
+  background: transparent;
+}
+
+.mat-toolbar-row {
+  padding: 0 5px;
+  height: 40px;
+  background-color: #2e7d32;
+  color: white;
+}
+
+.mat-toolbar-multiple-rows {
+  min-height: 44px;
+}
+
+.mat-select-value {
+  color: white !important;
+}
+
+.mat-select-arrow {
+  color: white !important;
 }
 
 span.ui-column-resizer {
-    display: block;
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 0;
-    width: 8px;
-    height: 100%;
-    padding: 0;
-    cursor: col-resize;
-    border: 1px solid red;
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  width: 8px;
+  height: 100%;
+  padding: 0;
+  cursor: col-resize;
+  border: 1px solid red;
+}
+
+.mat-row:nth-child(even) {
+  background-color: #c6e0b4;
+}
+
+.mat-row:nth-child(odd) {
+  background-color: #e2efda;
+}
+
+.featureList {
+  min-width: 830px;
+  max-height: 305px;
+  overflow: auto;
+}
+@media(max-height: 600px){
+  .featureList {
+    min-width: 830px;
+    max-height: 220px;
+    overflow: auto;
   }
+}
+
+
+.mat-paginator {
+  display: block
+}
+
+.mat-paginator-outer-container {
+  display: flex
+}
+
+.mat-paginator-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 56px;
+  padding: 0 8px;
+  flex-wrap: wrap-reverse;
+  width: 100%
+}
+
+.mat-paginator-page-size {
+  display: flex;
+  align-items: baseline;
+  margin-right: 8px
+}
+
+[dir=rtl] .mat-paginator-page-size {
+  margin-right: 0;
+  margin-left: 8px
+}
+
+.mat-paginator-page-size-label {
+  margin: 0 4px;
+  display: none;
+}
+
+.mat-paginator-page-size-select {
+  margin: 6px 4px 0 4px;
+  width: 56px
+}
+
+.mat-paginator-page-size-select.mat-form-field-appearance-outline {
+  width: 64px
+}
+
+.mat-paginator-page-size-select.mat-form-field-appearance-fill {
+  width: 64px
+}
+
+.mat-paginator-range-label {
+  margin: 0 32px 0 24px
+}
+
+.mat-paginator-range-actions {
+  display: flex;
+  align-items: center
+}
+
+.mat-paginator-icon {
+  width: 28px;
+  fill: currentColor
+}
+
+[dir=rtl] .mat-paginator-icon {
+  transform: rotate(180deg)
+}

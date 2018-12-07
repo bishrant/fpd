@@ -35,6 +35,7 @@ export class SidebarComponent implements OnInit {
   @Output() exportButtonClicked = new EventEmitter<string>();
   @Output() spatialControlClicked = new EventEmitter<string>();
   @Output() performSpatialQuery = new EventEmitter<any>();
+  @Output() hideSidebarEvent = new EventEmitter<any>();
   public _exportPDFSubject = new ReplaySubject<any>(1);
   public _exportPDFEvent = this._exportPDFSubject.asObservable();
   public activeControl: String;
@@ -44,9 +45,15 @@ export class SidebarComponent implements OnInit {
   // @ViewChild('companies') public cc: SelectComponent;
   @ViewChildren('companiess') public cc: ElementRef;
   @ViewChild('companiess') public ccc: NgSelectComponent;
+  @ViewChild('ngSpecificIndustry') public ngSpecificIndustry: NgSelectComponent;
+  @ViewChild('ngCounty') public ngCounty: NgSelectComponent;
   // sendMessage() {
   //   this.messageEvent.emit('btn clicked');
   // }
+  hideSidebarFn() {
+    this.hideSidebarEvent.next(true);
+  }
+
   getData() {
     this.sidebarService.getInitialRestData()
       .subscribe((data: Rest) => console.log(data));
@@ -96,9 +103,13 @@ export class SidebarComponent implements OnInit {
     console.log('Selected value is: ', value, ' of name: ', attribute);
     if (typeof attribute === 'undefined') {
       return;
-    }
+    } else {
     switch (attribute) {
       case 'MainIndustryType':
+        console.log(this.ngSpecificIndustry);
+        this.ngSpecificIndustry.items = this.specificIndustryType;
+        this.ngSpecificIndustry.clearModel();
+        this.ngCounty.clearModel();
         this._data.getDataForSpecificIndustry(value);
         break;
       case 'SpecificIndustryType':
@@ -108,6 +119,7 @@ export class SidebarComponent implements OnInit {
         break;
     }
     this.applyFilter(attribute, value);
+  }
   }
 
   public removed(value: any): void {

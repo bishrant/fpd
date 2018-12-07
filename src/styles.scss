@@ -1,9 +1,153 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: 'Roboto', sans-serif; overflow: hidden}
-
-ui-select-choices.dropdown-menu{
-    display: block;
+html,
+body {
+  height: 100%;
 }
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  overflow: hidden
+}
+
+.appRoot{
+  display: flex;
+  min-height: 100vh
+}
+
+ui-select-choices.dropdown-menu {
+  display: block;
+}
+
+// without global styles, material paginator's css could not be overidden
+
+@media (max-width: 768px) {
+  .mat-paginator-page-size-label {
+    margin: 0 4px;
+    display: none !important;
+  }
+
+  .mat-paginator-page-size {
+    display: flex;
+    align-items: baseline;
+    margin-right: 0 !important;
+  }
+  .mat-toolbar-single-row{
+    padding: 0px !important;
+    height: 56px !important;
+  }
+}
+
+.mat-select-trigger {
+  color: white !important;
+}
+
+.mat-paginator-page-size-select {
+  margin: 6px 4px 0 4px;
+  width: 40px !important;
+}
+
+.mat-paginator-range-label {
+  margin: 0 10px 0 10px !important;
+}
+
+//fix navbar for smaller screen sizes
+@media (max-width: 400px) {
+  .navbar-toggler {
+    padding: 0rem !important;
+    width: unset !important;
+  }
+
+  .navbar-brand {
+    margin-right: 0rem !important;
+  }
+
+  .hide-sm {
+    display: none
+  }
+  .mat-toolbar {
+    font-size: 15px !important;
+  }
+  .mat-drawer{
+    margin-top: 56px !important;
+    max-width: 320px !important;
+  }
+}
+
+// for extremely small screen
+@media (max-width: 315px) {
+  .navbar[_ngcontent-c1] {
+    padding: 0.1em !important;
+  }
+
+  .mat-paginator-range-label {
+    margin: 0 !important;
+  }
+}
+.mat-drawer{
+  margin-top: 62px !important;
+  max-width: 320px !important;
+  width: 100%;
+}
+@media (max-width: 992px) {
+  .mat-drawer{
+    margin-top: 56px !important;
+  }
+}
+
+@media (min-width: 768px){
+  .mat-toolbar-single-row{
+    padding: 0px !important;
+    height: 56px !important;
+  }
+}
+
+.esri-zoom .esri-widget--button:last-child {
+    border-top: solid 1px white !important;
+}
+
+.esri-widget--button {
+    background-color: green !important;
+    color: white !important;
+}
+
+
+
+.navbar-dark .navbar-nav .nav-link {
+  color: white !important;
+}
+
+.mat-toolbar {
+  font-size: 18px !important;
+}
+
+
+.navbar-dark .navbar-toggler {
+  color: white !important;
+  border-color: transparent !important;
+}
+
+.navbar-toggler .mat-icon {
+  font-size: 30pt !important;
+}
+
+.sidebarCloseBtn .mat-button{
+  border-radius: unset !important;
+  padding: unset !important;
+  min-width: unset !important;
+}
+
+.navbar-dark .navbar-toggler {
+  margin-right: 8px;
+}
+
+// .navbar-collapse {
+//   flex-basis: 100%;
+//   flex-grow: 1;
+//   align-items: center;
+//   overflow: auto;
+//   /* margin-bottom: 50px; */
+//   // padding-bottom: 25px;
+// }

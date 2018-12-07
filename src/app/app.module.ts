@@ -21,9 +21,12 @@ import { SpatialsearchComponent } from './spatialsearch/spatialsearch.component'
 // import { SelectModule } from 'ng2-select';
 import { PrintLegendDirective } from './directives/print-legend.directive';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ResizableModule  } from 'angular-resizable-element';
 import { VirtualScrollComponent } from './virtual-scroll/virtual-scroll.component';
 import { ListComponent } from './list/list.component';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatExpansionModule} from '@angular/material/expansion';
 // import { DataTableComponent } from './data-table/data-table.component';
 
 @NgModule({
@@ -39,8 +42,8 @@ import { ListComponent } from './list/list.component';
     ListComponent,
   ],
   imports: [
-    MatSortModule, MatPaginatorModule, BrowserModule, BrowserAnimationsModule,  NgbModule, MatTableModule, AngularDraggableModule, NgSelectModule,
-    HttpClientModule, AngularFontAwesomeModule,  MatProgressSpinnerModule, FormsModule,
+    MatSortModule, MatPaginatorModule, ResizableModule, BrowserModule, BrowserAnimationsModule,  NgbModule, MatTableModule, AngularDraggableModule, NgSelectModule,
+    HttpClientModule, MatSidenavModule, MatExpansionModule, AngularFontAwesomeModule, DragDropModule, MatProgressSpinnerModule, FormsModule,
     MatFormFieldModule, MatInputModule, MatSelectModule, MatTooltipModule, MatIconModule, MatToolbarModule, MatButtonModule
   ],
   providers: [HttpClient],

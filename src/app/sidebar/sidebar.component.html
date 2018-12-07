@@ -1,64 +1,74 @@
-<ngb-accordion [closeOthers]="true" activeIds="searchAttributes" id='sidebar'>
-  <ngb-panel id="searchAttributes" title='Search by attributes'>
-    <ng-template ngbPanelContent>
+<button mat-button class="sidebarCloseBtn" (click)="hideSidebarFn()">
+  <i class="fa fa-chevron-left"></i>
+</button>
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Search by Attributes
+      </mat-panel-title>
+    </mat-expansion-panel-header>
 
-      Search by Company: <br />
-      <ng-select #companiess id='companiess' [searchable]="true" [selectOnTab]="true" [virtualScroll]="true" [items]="companies" class="otherCls"
-        placeholder="Company name.." notFoundText="No companies found.." (change)="selected($event, 'Company')" [(ngModel)]="selectedValues.Company">
-      </ng-select>
-      <hr /> Search by County: <br>
-      <ng-select [searchable]="true" [selectOnTab]="true" [virtualScroll]="true" [items]="counties" (change)="selected($event, 'County')"
-        placeholder="Select an county.." class="otherCls" [(ngModel)]="selectedValues.County">
-      </ng-select>
-      <hr> Search by Industry Type <br>
-      <ng-select [selectOnTab]="true" [virtualScroll]="true" [items]="industrytype" (change)="selected($event, 'MainIndustryType')"
-        placeholder="Main industry type.." class="otherCls" [(ngModel)]="selectedValues.MainIndustryType">
-      </ng-select>
-      <ng-select [selectOnTab]="true" [virtualScroll]="true" [items]="specificIndustryType" (change)="selected($event, 'SpecificIndustryType')"
+    Search by Company: <br />
+    <ng-select #companiess id='companiess' [searchable]="true" [selectOnTab]="true" [virtualScroll]="true" [items]="companies"
+      class="otherCls" placeholder="Company name.." notFoundText="No companies found.." (change)="selected($event, 'Company')"
+      [(ngModel)]="selectedValues.Company">
+    </ng-select>
+    <hr /> Search by County: <br>
+    <ng-select #ngCounty [searchable]="true" [selectOnTab]="true" [virtualScroll]="true" [items]="counties" (change)="selected($event, 'County')"
+      placeholder="Select an county.." class="otherCls" [(ngModel)]="selectedValues.County">
+    </ng-select>
+    <hr> Search by Industry Type <br>
+    <ng-select [selectOnTab]="true" [virtualScroll]="true" [items]="industrytype" (change)="selected($event, 'MainIndustryType')"
+      placeholder="Main industry type.." class="otherCls" [(ngModel)]="selectedValues.MainIndustryType">
+    </ng-select>
+    <ng-select #ngSpecificIndustry [selectOnTab]="true" [virtualScroll]="true" [items]="specificIndustryType" (change)="selected($event, 'SpecificIndustryType')"
       placeholder="Specific industry type.." class="otherCls" [(ngModel)]="selectedValues.SpecificIndustryType">
     </ng-select>
-      <!-- only show additional filter if the industry type is sawmill
-      <span *ngIf='showSawMillSpecies === true'>
+    <!-- only show additional filter if the industry type is sawmill -->
+    <!-- <span *ngIf='showSawMillSpecies === true'>
       <hr> Sawmill type <br>
-      <ng-select [allowClear]="true" [items]="sawmillMajorSpecies" (data)="refreshValue($event)" (selected)="selected($event, 'maj_spec')"
+      <ng-select  [items]="sawmillMajorSpecies" (data)="refreshValue($event)" (selected)="selected($event, 'maj_spec')"
          placeholder="Select an major species.." class="otherCls">
       </ng-select>
-    </span>-->
-      <hr>
-      <button (click)="resetData()" class="btn fa fa-eraser">Clear Search</button>
-    </ng-template>
+    </span> -->
+    <hr>
+    <button (click)="resetData()" class="btn fa fa-eraser">Clear Search</button>
+  </mat-expansion-panel>
 
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Search on Map
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <button (click)="activateSpatialControl('buffer')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-maps"></i>
+      Buffer</button><br>
+    <button (click)="activateSpatialControl('polygon')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-polygon"></i>
+      Polygon</button><br>
+    <button (click)="activateSpatialControl('rectangle')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-checkbox-unchecked"></i>
+      Rectangle</button><br>
+    <button (click)="activateSpatialControl('point')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-map-pin"></i>
+      Select by counties</button><br>
+    <hr>
+    <button *ngIf='activatedSpatialControl === true' (click)='clickedSpatialQuery($event)' class="btn"><i class="esri-icon-search"></i>Query</button>
+    &nbsp;&nbsp; <button *ngIf='activatedSpatialControl === true' (click)="activateSpatialControl('clear')" class="btn"><i
+        class="esri-icon-trash"></i>Clear</button>
+    <app-spatialsearch></app-spatialsearch>
+  </mat-expansion-panel>
 
-  </ngb-panel>
-  <ngb-panel id="searchMap">
-    <ng-template ngbPanelTitle>
-      <span>Search on Map</span>
-    </ng-template>
-    <ng-template ngbPanelContent>
-      <button (click)="activateSpatialControl('buffer')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-maps"></i>
-        Buffer</button><br>
-      <button (click)="activateSpatialControl('polygon')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-polygon"></i>
-        Polygon</button><br>
-      <button (click)="activateSpatialControl('rectangle')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-checkbox-unchecked"></i>
-        Rectangle</button><br>
-      <button (click)="activateSpatialControl('point')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-map-pin"></i>
-        Select by counties</button><br>
-      <hr>
-      <button *ngIf='activatedSpatialControl === true' (click)='clickedSpatialQuery($event)' class="btn"><i class="esri-icon-search"></i>Query</button>
-      &nbsp;&nbsp; <button *ngIf='activatedSpatialControl === true' (click)="activateSpatialControl('clear')" class="btn"><i
-          class="esri-icon-trash"></i>Clear</button>
-      <!-- <app-spatialsearch></app-spatialsearch> -->
-    </ng-template>
-  </ngb-panel>
-  <ngb-panel id="export" title="Export">
-    <ng-template ngbPanelContent>
-      <button (click)="printMapPDF()" #exportmap class="btn"><span class="fa fa-share-square"> </span>&nbsp;&nbsp;Export
-        Map</button>
-      <p *ngIf="printStatus === 'running'">
-        <mat-spinner [diameter]=35></mat-spinner>Printing...
-      </p>
-      <p class="text-danger" *ngIf="printStatus === 'error'">Error while printing. Please try again</p>
-      <p *ngIf="linkToPDFReport !== ''"><a href="{{linkToPDFReport}}" target="_blank">Untitled.pdf</a></p>
-    </ng-template>
-  </ngb-panel>
-</ngb-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Export
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <button (click)="printMapPDF()" #exportmap class="btn"><span class="fa fa-share-square"> </span>&nbsp;&nbsp;Export
+      Map</button>
+    <p *ngIf="printStatus === 'running'">
+      <mat-spinner [diameter]=35></mat-spinner>Printing...
+    </p>
+    <p class="text-danger" *ngIf="printStatus === 'error'">Error while printing. Please try again</p>
+    <p *ngIf="linkToPDFReport !== ''"><a href="{{linkToPDFReport}}" target="_blank">Untitled.pdf</a></p>
+  </mat-expansion-panel>
+</mat-accordion>

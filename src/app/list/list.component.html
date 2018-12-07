@@ -1,51 +1,56 @@
-<div class="course">
-    <!-- <button>dsfsd</button>
-    <mat-paginator [length]="getPageLength()" [pageSize]="10"
-    [pageSizeOptions]="[3, 5, 10]">
- 
-  </mat-paginator> -->
+<div cdkDrag #featureTable>
 
-  <mat-toolbar class="table-toolbar">
-      <mat-toolbar-row >
-        <button mat-button (click)="console.log(1)" title="Export as CSV" >
-            <mat-icon >save_alt</mat-icon>
-            Export
-        </button>
-        
-        <span class="fill-remaining-space"></span>
-        <mat-paginator [length]="getPageLength()" [pageSize]="10"
-        [pageSizeOptions]="[3, 5, 10]"></mat-paginator>
-      </mat-toolbar-row>
-    </mat-toolbar>
 
-  <mat-table class="feature-table mat-elevation-z8" [dataSource]="dataSource"
-             matSort >
+  <mat-toolbar class="table-toolbar" cdkDragHandle>
+    <mat-toolbar-row>
+      <button mat-button (click)="dockTable($event)" title="Export as CSV">
+        <mat-icon>save_alt</mat-icon>
+        <span class='hide-sm' >Export</span>
+      </button>
+
+      <span class="fill-remaining-space" style="cursor:move">&nbsp;</span>
+      <mat-paginator [length]="getPageLength()" [pageSize]="10" [pageSizeOptions]="[3, 5, 10, 375]" id='paginator'></mat-paginator>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <div class="featureTableMaximized ">
+    <mat-table class="feature-table mat-elevation-z8 featureList" [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="Id">
-          <span 
-          class = "ui-column-resizer"
-          (mousedown) = "onMouseDown($event)"></span>
-          <mat-header-cell *matHeaderCellDef mat-sort-header>SN     
-            
-          </mat-header-cell>
+        <span class="ui-column-resizer" (mousedown)="onMouseDown($event)"></span>
+        <mat-header-cell *matHeaderCellDef mat-sort-header>SN
 
-          <mat-cell *matCellDef="let row">{{row.Id}}</mat-cell>
+        </mat-header-cell>
+
+        <mat-cell *matCellDef="let row">{{row.Id}}</mat-cell>
 
       </ng-container>
       <ng-container matColumnDef="Company">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.Company}}</mat-cell>
+      </ng-container>
 
-          <mat-header-cell *matHeaderCellDef mat-sort-header matSortDirection= "desc">Name</mat-header-cell>
+      <ng-container matColumnDef="County">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>County</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.County}}</mat-cell>
+      </ng-container>
 
-          <mat-cell *matCellDef="let row">{{row.Company}}</mat-cell>
+      <ng-container matColumnDef="MainIndustryType">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Main Industry</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.MainIndustryType}}</mat-cell>
+      </ng-container>
 
+      <ng-container matColumnDef="SpecificIndustryType">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Specific Industry</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.SpecificIndustryType}}</mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
       <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
 
-  </mat-table>
+    </mat-table>
 
 
-  
 
+
+  </div>
 </div>

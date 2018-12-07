@@ -1,8 +1,10 @@
 @import "../assets/css/resizable.css";
+@import '../../node_modules/angular2-draggable/css/resizable.min.css';
 html,
 body {
     height: 100%;
     overflow: hidden !important;
+
 }
 
 body {
@@ -26,6 +28,12 @@ body {
     height: 100%;
 }
 
+// remove default row margins
+.row{
+    margin-right: 0;
+    margin-left: 0;
+}
+
 .flex-col {
     display: flex;
     display: -webkit-flex;
@@ -44,37 +52,56 @@ body {
 #side1 {
     background-color: purple;
 }
+.ng-draggable>.fill-remaining-space {
+    cursor: move;
+  }
 
-@media (min-width: 768px) {
-    #side1 {
-        background-color: orange;
-    }
-    #featureTable {
-        height: 300px;
-        width: 50%;
-        margin: auto;
-        margin-bottom: 5px;
-        z-index: 1000;
-        overflow-y: auto;
-    }
-}
-@media (max-width: 768px) {
-    #featureTable {
-        height: 300px;
-        width: 100%;
-        margin: auto;
-        margin-bottom: 5px;
-        z-index: 1000;
-    }
-    
-}
 
+.container-fluid{
+    padding-right: 0px; 
+    padding-left: 0px; 
+}
+     
 .nodisplay {
     display: none;
 }
 
 .blockdisplay {
     display: block;
+}
+
+.appList{
+    z-index: 10;
+}
+@media (min-width: 1200px) {
+    .appList {
+        width: 50%;
+        margin: auto;
+        z-index: 10;
+        min-width: 850px;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1200px) {
+    .appList {
+        width: 60%;
+        margin: auto;
+        z-index: 10;
+        min-width: 850px;
+    }
+  }
+@media (max-width: 768px) {
+    .appList {
+        width: 100%;
+        margin: auto;
+        z-index: 10;
+    }
+}
+
+
+.mat-paginator-page-size-label {
+    margin: 0 4px;
+    display: none !important;
 }
 
 .fullpageMap {
@@ -113,18 +140,130 @@ body {
     border-radius: 5px 5px 0 0;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.16), 5px 5px 10px rgba(0, 0, 0, 0.12);
 }
-.featureTableMaximized {
-    transform: translateY(0%) !important;
-    margin-bottom: 5px;
-    -webkit-transition: all 1s;
+
+
+#side1 {
+    background-color: purple;
+}
+.slideOut {
+    transform: translateX(-100%);
+  //  -webkit-transition: all 1s;
     /* Safari */
-    transition: all 1s;
+ //   transition: all 1s;
 }
 
-.featureTableMinimized {
-    transform: translateY(140%) !important;
-    margin-bottom: 0;
-    -webkit-transition: all 1s;
+.slideIn {
+    transform: translate(0%);
+  //  -webkit-transition: all 1s;
     /* Safari */
-    transition: all 1s;
+  //  transition: all 1s;
+}
+
+#slideBtn {
+ //   transition: all 4s;
+    height: 1.25em;
+    position: absolute;
+    right: -1.45em;
+    z-index: 30;
+    font-size: 35px;
+    cursor: pointer;
+    background-color: #44993b;
+    width: 1.5em;
+    text-align: center;
+    line-height: 1.35em;
+    color: white;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.16), 5px 5px 10px rgba(0, 0, 0, 0.12);
+    z-index: 10;
+    border: 0 0 5px 0;
+    border-radius: 0 0 5px 0;
+}
+
+#slideBtnActive {
+    height: 1.25em;
+    position: absolute;
+    right: -1.45em;
+    z-index: 30;
+    font-size: 35px;
+    cursor: pointer;
+    background-color: white;
+    width: 1.5em;
+    text-align: center;
+    line-height: 1.5em;
+    color: #44993b;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.16), 5px 5px 10px rgba(0, 0, 0, 0.12);
+    top: 0;
+    z-index: 9;
+    border-radius: 0 0 5px 0;
+    border: none;
+}
+
+.sideNav {
+    height: 100%;
+    display: inline-flex;
+    width: 30%;
+    max-width: 300px;
+}
+
+@media (max-width: 768px) {
+    .sideNav {
+        height: 100%;
+        display: inline-flex;
+        width: 90%;
+        max-width: 90%;
+    }
+}
+
+#slide1 {
+    box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.16), 5px 0px 10px rgba(0, 0, 0, 0.12);
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: 20;
+    position: fixed;
+    left:0;
+    margin-top: 64px;
+    padding-bottom: 64px;
+}
+
+.headerBar{
+    width: 100%;
+    height: 100%;
+    z-index: 25
+}
+
+.mainBody{
+    // background-color: red;
+    display: flex;
+    flex:1;
+}
+.sidenav-container{
+    display: flex;
+    flex: 1;
+}
+
+.drawerContent{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+
+.openSideBarButton{
+    position: absolute !important;
+left: 0;
+width: 50px;
+height: 49px;
+background-color: white;
+font-size: 25pt;
+vertical-align: center;
+margin: auto;
+vertical-align: middle;
+text-align: center;
+top: 62px;
+overflow: visible;
+min-width: unset !important;
+// border: 1px 0 0 1px solid green;
+// border-right: 1px solid gray;
+// border-bottom: 1px solid gray;
+border-radius: 0 0 10px 0 !important;
+box-shadow: 5px 4px 5px rgba(0, 0, 0, 0.16), 5px 9px 10px rgba(0, 0, 0, 0.12) !important;
+z-index: 10;
 }
