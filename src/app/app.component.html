@@ -1,74 +1,3 @@
-<!-- <div class="container-fluid" cdkDrop id="appDiv" #mybb style=" height: 100vh; display:flex; flex:1; flex-direction: column">
-  <div class="row flex-row">
-
-    <div class="flex-col">
-      <div class="panel panel-default flex-col">
-        <div class="panel-heading">
-          <app-header></app-header> 
-        </div>
-
-        <div class="panel-body flex-grow grey" style=" width:100%">
- 
-            <mat-drawer-container class="example-container" [hasBackdrop]="false">
-                <mat-drawer #drawer [mode]="push" [opened]="true">
-                  <div >ssdfljksdjflksd 
-                    sdjfklsdjflks
-                  </div>
-                    <app-sidebar class="sideNav slideIn" id='slide1'></app-sidebar> 
-                </mat-drawer>
-                  <mat-form-field>
-                    <mat-label>Sidenav mode</mat-label>
-                    <mat-select #mode value="side">
-                      <mat-option value="side">Side</mat-option>
-                      <mat-option value="over">Over</mat-option>
-                      <mat-option value="push">Push</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                  <mat-form-field>
-                    <mat-label>Has backdrop</mat-label>
-                    <mat-select #hasBackdrop>
-                      <mat-option>Unset</mat-option>
-                      <mat-option [value]="true">True</mat-option>
-                      <mat-option [value]="false">False</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                  <button mat-raised-button (click)="drawer.toggle()">Toggle drawer</button> 
-                  [mode]="(isHandset$ | async) ? 'over' : 'side'"
-                    [opened]="!(isHandset$ | async)"
-              </mat-drawer-container>
-              <mat-sidenav-container class="sidenav-container">
-                  <mat-sidenav
-                    #drawer
-                    class="sidenav"
-                    fixedInViewport="true"
-                   [mode]='over'
-                   [opened]='true'
-                    >
-                    <mat-toolbar color="warn"><app-sidebar class="sideNav slideIn" id='slide1'></app-sidebar> </mat-toolbar>
-                    <button
-                    type="button"
-                    aria-label="Toggle sidenav"
-                    mat-icon-button
-                    (click)="drawer.toggle()"
-                    >
-                    <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-                  </button>
-                  </mat-sidenav>
-                  <mat-sidenav-content>
-                    <mat-toolbar color="primary">
-                      
-                      <span><app-header></app-header></span>
-                    </mat-toolbar>
-                  </mat-sidenav-content>
-                </mat-sidenav-container>
-          <app-esrimap class="fullpageMap"></app-esrimap>
-        </div>
-
-
-      </div>
-    </div>
-
-  </div> -->
 <!-- <div id='featureTable' class="{{featureTableStatus}}"
      ngResizable rzHandles="all" ngDraggable class="drag-block" [bounds]="mybb" [inBounds]="true">
     <app-featuretable></app-featuretable>
@@ -77,9 +6,6 @@
   </div> -->
 
 <!-- <app-list class="appList"></app-list> -->
-
-
-
 
 <!-- <span class="openFeatureTableButton"  (click)="showHideFeatureTable($event)" *ngIf="featureTableStatus === 'featureTableMinimized'">
     <i class="fa fa-table"></i>
@@ -113,50 +39,13 @@
             <button mat-button class="openSideBarButton" *ngIf="!drawer.opened" (click)="drawer.open()">
               <i class="fa fa-chevron-right"></i>
             </button>
-            <app-esrimap class="fullpageMap"></app-esrimap>
+            <app-esrimap class="fullpageMap">
+              
+            </app-esrimap>
             
           </div>
           <app-list class="appList"></app-list>
     </mat-drawer-content>
-  <!-- <mat-sidenav-content class="drawerContent">
-      <mat-toolbar>
-          <app-header class="headerBar"></app-header>
-        </mat-toolbar>
-    <div class="mainBody">some content [opened]='true'
-        <mat-sidenav #drawer class="sidenav" fixedInViewport="false" [mode]='side'  id='slide1'>
-            <mat-toolbar color="warn">
-              <app-sidebar></app-sidebar>
-            </mat-toolbar>
-            <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
-              <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-            </button>
-          </mat-sidenav>
-        <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
-            <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-          </button>
-    </div>
-  </mat-sidenav-content> -->
+  
 
 </mat-drawer-container>
-
-<!-- <mat-sidenav-container class="sidenav-container" [hasBackdrop]="true">
-    <mat-sidenav-content class="drawerContent">
-        <mat-toolbar>
-            <app-header class="headerBar"></app-header>
-          </mat-toolbar>
-      <div class="mainBody">some content [opened]='true'
-          <mat-sidenav #drawer class="sidenav" fixedInViewport="false" [mode]='side'  id='slide1'>
-              <mat-toolbar color="warn">
-                <app-sidebar></app-sidebar>
-              </mat-toolbar>
-              <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
-                <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-              </button>
-            </mat-sidenav>
-          <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
-              <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-            </button>
-      </div>
-    </mat-sidenav-content>
-  
-  </mat-sidenav-container> -->

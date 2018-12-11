@@ -39,10 +39,10 @@
   <mat-expansion-panel>
     <mat-expansion-panel-header>
       <mat-panel-title>
-        Search on Map
+        Search on Maps
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <button (click)="activateSpatialControl('buffer')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-maps"></i>
+    <button (click)="activateSpatialControl('buffer')"  class="btn" style='margin-top: 10px;'> <i class="esri-icon-maps"></i>
       Buffer</button><br>
     <button (click)="activateSpatialControl('polygon')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-polygon"></i>
       Polygon</button><br>
@@ -51,10 +51,14 @@
     <button (click)="activateSpatialControl('point')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-map-pin"></i>
       Select by counties</button><br>
     <hr>
-    <button *ngIf='activatedSpatialControl === true' (click)='clickedSpatialQuery($event)' class="btn"><i class="esri-icon-search"></i>Query</button>
+    <!-- <button *ngIf='activatedSpatialControl === true' (click)='clickedSpatialQuery($event)' class="btn"><i class="esri-icon-search"></i>Query</button>
     &nbsp;&nbsp; <button *ngIf='activatedSpatialControl === true' (click)="activateSpatialControl('clear')" class="btn"><i
-        class="esri-icon-trash"></i>Clear</button>
-    <app-spatialsearch></app-spatialsearch>
+        class="esri-icon-trash"></i>Clear</button> -->
+        <button (click)='clickedSpatialQuery($event)' class="btn">
+          <i class="esri-icon-search"></i>Query</button>
+        &nbsp;&nbsp; <button (click)="activateSpatialControl('clear')" class="btn"><i
+            class="esri-icon-trash"></i>Clear</button>
+    
   </mat-expansion-panel>
 
   <mat-expansion-panel>
@@ -70,5 +74,8 @@
     </p>
     <p class="text-danger" *ngIf="printStatus === 'error'">Error while printing. Please try again</p>
     <p *ngIf="linkToPDFReport !== ''"><a href="{{linkToPDFReport}}" target="_blank">Untitled.pdf</a></p>
+    <button (click)="ExportDataPdf()" #exportDataPdf class="btn"><span class="fa fa-share-square"> </span>
+      &nbsp;&nbsp;Export List</button>
+
   </mat-expansion-panel>
 </mat-accordion>

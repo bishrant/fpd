@@ -260,3 +260,10 @@ span.ui-column-resizer {
 [dir=rtl] .mat-paginator-icon {
   transform: rotate(180deg)
 }
+
+.noIndustries {
+  background: white;
+  display: flex;
+  color: red;
+  font-size: 20px;
+}

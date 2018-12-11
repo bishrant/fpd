@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
 import { Rest, SidebarService } from './sidebar.service';
 import { IndustriesGeojson } from '../services/industries-geojson.service';
 // import { _CdkTextareaAutosize } from '@angular/material';
-import { SpatialsearchComponent } from '../spatialsearch/spatialsearch.component';
 import { ReplaySubject } from 'rxjs';
 import { NgSelectComponent } from '@ng-select/ng-select';
 
@@ -13,7 +12,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
   templateUrl: './sidebar.component.html',
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['./sidebar.component.scss'],
-  providers: [SidebarService, SpatialsearchComponent]
+  providers: [SidebarService]
 })
 
 @Injectable()
@@ -38,9 +37,9 @@ export class SidebarComponent implements OnInit {
   @Output() hideSidebarEvent = new EventEmitter<any>();
   public _exportPDFSubject = new ReplaySubject<any>(1);
   public _exportPDFEvent = this._exportPDFSubject.asObservable();
-  public activeControl: String;
-  public activatedSpatialControl = false;
-  public activeAttributeFilter: String;
+  public activeControl: string;
+ 
+  public activeAttributeFilter: string;
 
   // @ViewChild('companies') public cc: SelectComponent;
   @ViewChildren('companiess') public cc: ElementRef;
@@ -89,14 +88,7 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  public applyFilterArray(attribute, listOfValues) {
-    const reg = new RegExp(listOfValues.join('|'), 'i'); // i is for ignoring case
-      this._data.orginalDataObservable.subscribe(d => {
-        // reset the data from original data source
-        const d1 = d as any[];
-        this._data.allDataService.next(d1.filter(f => reg.test(f.properties[attribute])));
-      });
-  }
+
 
   public selected(value: any, attribute: string): void {
     this.selectedValues[attribute] = value;
@@ -160,10 +152,13 @@ export class SidebarComponent implements OnInit {
   public activateSpatialControl(control: string) {
     this.activeControl = control;
     this.spatialControlClicked.emit(control);
+    console.log(control);
+    this._data.activeSpataiControl.next(control);
   }
   public clickedSpatialQuery(evt) {
     console.log('active control to do qyuery', this.activeControl);
-    this.performSpatialQuery.emit(this.activeControl);
+    this._data.performSpatailQuery.next(this.activeControl);
+    // this.performSpatialQuery.emit(this.activeControl);
     // this.spatialControlClicked.emit(this.activeControl);
   }
 

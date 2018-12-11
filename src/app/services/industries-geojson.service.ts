@@ -53,6 +53,12 @@ export class IndustriesGeojson implements OnInit {
   // create a mapping between specific and main industry
   public mappingMainSpecificIndustryType: any = {};
 
+  public activeSpataiControl = new ReplaySubject<string>(1);
+  public activeSpatialControlObservable = this.activeSpataiControl.asObservable();
+
+  public performSpatailQuery = new ReplaySubject<string>(1);
+  public performSpatialQueryObservable = this.performSpatailQuery.asObservable();
+
   // filter only by the sawmill to get a second list of major species
   private filteredSawmillSpecies = new ReplaySubject<object>(1);
   currentSawmillSpecies = this.filteredSawmillSpecies.asObservable();

@@ -78,6 +78,7 @@ export class FeaturetableComponent implements OnInit, AfterViewInit {
     const dummy: any = [];
     const _postdata: any = [];
     const _reportFields: string[] = ['Company', 'County', 'Address', 'Phone1', 'Homepage', 'Email', 'MainIndustryType', 'SpecificIndustryType', 'Products', 'Species'];
+    // console.log(this.)
     // this.featuredataSource.forEach(_d => {
     //   const _partialArray: any = {};
     //   _reportFields.forEach(_attr => {
@@ -87,7 +88,7 @@ export class FeaturetableComponent implements OnInit, AfterViewInit {
     //   });
     //   _postdata.push(_partialArray);
     // });
-    return [];
+    // return [];
     // return _postdata;
   }
 

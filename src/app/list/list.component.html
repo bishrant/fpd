@@ -3,17 +3,20 @@
 
   <mat-toolbar class="table-toolbar" cdkDragHandle>
     <mat-toolbar-row>
-      <button mat-button (click)="dockTable($event)" title="Export as CSV">
+      <button mat-button (click)="exportAsExcel($event)" title="Export as CSV" [disabled]="pageLength === 0">
         <mat-icon>save_alt</mat-icon>
-        <span class='hide-sm' >Export</span>
+        <span class='hide-sm' >Export XLS</span>
       </button>
 
       <span class="fill-remaining-space" style="cursor:move">&nbsp;</span>
-      <mat-paginator [length]="getPageLength()" [pageSize]="10" [pageSizeOptions]="[3, 5, 10, 375]" id='paginator'></mat-paginator>
+      <mat-paginator [disabled]="pageLength === 0" [length]="getPageLength()" [pageSize]="10" [pageSizeOptions]="[3, 5, 10, 375]" id='paginator'></mat-paginator>
     </mat-toolbar-row>
   </mat-toolbar>
   <div class="featureTableMaximized ">
-    <mat-table class="feature-table mat-elevation-z8 featureList" [dataSource]="dataSource" matSort>
+    <span *ngIf="pageLength === 0" class="noIndustries">No industries found. Please try a different search criteria</span>
+    
+    <mat-table class="feature-table mat-elevation-z8 featureList" *ngIf="pageLength != 0"
+    [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="Id">
         <span class="ui-column-resizer" (mousedown)="onMouseDown($event)"></span>
         <mat-header-cell *matHeaderCellDef mat-sort-header>SN

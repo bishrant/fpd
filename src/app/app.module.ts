@@ -17,7 +17,6 @@ import { EsrimapComponent } from './esrimap/esrimap.component';
 import { HeaderComponent } from './header/header.component';
 import { FeaturetableComponent } from './featuretable/featuretable.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { SpatialsearchComponent } from './spatialsearch/spatialsearch.component';
 // import { SelectModule } from 'ng2-select';
 import { PrintLegendDirective } from './directives/print-legend.directive';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
@@ -36,7 +35,6 @@ import {MatExpansionModule} from '@angular/material/expansion';
     HeaderComponent,
     FeaturetableComponent,
     SidebarComponent,
-    SpatialsearchComponent,
     PrintLegendDirective,
     VirtualScrollComponent,
     ListComponent,

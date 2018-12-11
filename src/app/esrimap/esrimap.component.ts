@@ -9,6 +9,7 @@ import esri = __esri;
 import { IndustriesGeojson } from '../services/industries-geojson.service';
 import { PrintLegendDirective } from '../directives/print-legend.directive';
 import { PointincountyService } from '../services/pointincounty.service';
+import { DatafiltersService } from '../services/datafilters.service';
 
 @Component({
   selector: 'app-esrimap',
@@ -63,6 +64,7 @@ export class EsrimapComponent implements OnInit {
   public updateGraphicTemp;
   public setupClickHandler;
   public touchEnabledDisplay = 'ontouchstart' in document.documentElement;
+  public activatedSpatialControl = false;
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
   @ViewChild(SidebarComponent) private sideBar: SidebarComponent;
@@ -196,9 +198,20 @@ export class EsrimapComponent implements OnInit {
     });
   }
   constructor(private _data: IndustriesGeojson, private _legendDirective: PrintLegendDirective,
-    private pointInCountyService: PointincountyService) { }
+    private pointInCountyService: PointincountyService, private dataFilterService: DatafiltersService) { }
 
   public ngOnInit() {
+
+    this._data.activeSpatialControlObservable.subscribe( control => {
+      console.log('activated this control ', control);
+      this.activateSpatialControl(control);
+    });
+
+    //subscribe to perform query button click from sidebar
+    this._data.performSpatialQueryObservable.subscribe(control => {
+      this.performSpatialQuery(control);
+    })
+
     setTimeout(() => {
       return loadModules([
         'esri/Map', 'esri/views/MapView', 'esri/layers/FeatureLayer',
@@ -332,7 +345,7 @@ export class EsrimapComponent implements OnInit {
             that.tempGraphicsLayer.add(labelGraphic);
             that.tempGraphicsLayer.add(bufferGraphic);
             that.tempGraphicsLayer.add(_newLine);
-            this.sideBar.activatedSpatialControl = true;
+           this.activatedSpatialControl = true;
           };
           this.addBufferGraphic = (that, evt, mapView) => {
             // function to add a buffer graphic to the map
@@ -379,7 +392,7 @@ export class EsrimapComponent implements OnInit {
                 if (results.length > 0) {
                   for (let i = 0; i < results.length; i++) {
                     // Check if we're already editing a graphic
-                    that.sideBar.activatedSpatialControl = (that.editGraphic === null);
+                    that.activatedSpatialControl = (that.editGraphic === null);
                     if (!that.editGraphic && (results[i].graphic.layer.id === 'userGraphicsLayer' || results[i].graphic.layer.id === 'circleGraphicsLayer')) {
                       // Save a reference to the graphic we intend to update
                       if (results[i].graphic.layer.id === 'circleGraphicsLayer') {
@@ -387,7 +400,7 @@ export class EsrimapComponent implements OnInit {
                       } else {
                         that.editGraphic = results[i].graphic;
                       }
-                      that.sideBar.activatedSpatialControl = (that.editGraphic === null);
+                      that.activatedSpatialControl = (that.editGraphic === null);
                       // Save a reference to the graphic we intend to update
                       // that.editGraphic = results[i].graphic;
                       // Remove the graphic from the GraphicsLayer
@@ -448,7 +461,7 @@ export class EsrimapComponent implements OnInit {
             });
             that.graphicsLayer.add(graphic);
             that.editGraphic = null;
-            that.sideBar.activatedSpatialControl = true;
+            that.activatedSpatialControl = true;
           };
           this.createCircle = (center, end) => {
             // function to create a geodesic circle using the center and end parameter as specified by the user while drawing
@@ -553,7 +566,7 @@ export class EsrimapComponent implements OnInit {
 
             // set the editGraphic to null update is complete or cancelled.
             this.editGraphic = null;
-            this.sideBar.activatedSpatialControl = (this.editGraphic === null);
+            this.activatedSpatialControl = (this.editGraphic === null);
           };
           // select features
           this.selectFeaturesByGeom = (inputgeom, graphics) => {
@@ -605,7 +618,7 @@ export class EsrimapComponent implements OnInit {
           this.clearDrawGraphics = () => {
             // function to clear all active graphics in the map along with the view and graphcis layer
             // also resets the sketchviewmodel is that is active so that next drawing could be initialized properly
-            this.sideBar.resetData();
+            this.dataFilterService.resetData();
             this.__sketchStatus.subscribe(_sketchStatus => {
               if (_sketchStatus) {
                 this.sketchViewModel.reset();
@@ -634,7 +647,7 @@ export class EsrimapComponent implements OnInit {
                    const geoj = JSON.stringify(this.graphicsLayer.graphics.getItemAt(0).geometry.toJSON());
                     this.pointInCountyService.getCountyNameFromPoint(geoj);
                     this.pointInCountyService.pointInCountyDataService.subscribe(d => {
-                      this.sideBar.applyFilterArray('County', d);
+                      this.dataFilterService.applyFilterArray('County', d);
                     });
                     // .subscribe(d => console.log(d));
                   }
