@@ -81,21 +81,21 @@ export class EsrimapComponent implements OnInit {
     this.__mapViewStatus.subscribe(_mapStatus => {
       if (_mapStatus) {
         console.log('print this map');
-        this.sideBar.printStatus = '';
-        this.sideBar.linkToPDFReport = '';
+        this._data.printStatus = '';
+        this._data.linkToPDFReport = '';
         const _legendBase64 = this._legendDirective.prepareLegend();
         console.log(_legendBase64);
         this.printParams.extraParameters = { Primary_Legend: _legendBase64.primaryLegend, Secondary_Legend: _legendBase64.secondaryLegend };
         this.printParams.set('Primary_Legend', _legendBase64.primaryLegend);
         const printTaskExecuted = this.printTask.execute(this.printParams);
-        this.sideBar.printStatus = 'running';
+        this._data.printStatus = 'running';
         printTaskExecuted.then((result) => {
-          this.sideBar.printStatus = 'completed';
+          this._data.printStatus = 'completed';
           console.log(result['url']);
-          this.sideBar.linkToPDFReport = result['url'];
+          this._data.linkToPDFReport = result['url'];
 
         }, (error) => {
-          this.sideBar.printStatus = 'error';
+          this._data.printStatus = 'error';
           console.log(error);
         });
       }
@@ -207,10 +207,14 @@ export class EsrimapComponent implements OnInit {
       this.activateSpatialControl(control);
     });
 
-    //subscribe to perform query button click from sidebar
+    // subscribe to perform query button click from sidebar
     this._data.performSpatialQueryObservable.subscribe(control => {
       this.performSpatialQuery(control);
-    })
+    });
+
+    this._data.printMapObservable.subscribe(print => {
+      this.printMap();
+    });
 
     setTimeout(() => {
       return loadModules([
@@ -321,7 +325,7 @@ export class EsrimapComponent implements OnInit {
               geometry: tempEndPt,
               symbol: {
                 type: 'text',
-                color: '#380202',
+                color: '#003300',
                 text: length.toFixed(2) + ' miles',
                 xoffset: 18,
                 yoffset: 3,
@@ -436,7 +440,7 @@ export class EsrimapComponent implements OnInit {
               geometry: geom,
               symbol: {
                 type: 'text',
-                color: 'white',
+                color: 'black',
                 haloColor: 'black',
                 haloSize: '1px',
                 text: distance.toFixed(2) + ' miles',

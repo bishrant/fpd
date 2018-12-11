@@ -28,37 +28,37 @@ export const pointSymbol = {
   type: 'simple-marker', // autocasts as new SimpleMarkerSymbol()
   style: 'circle',
   color: '#8A2BE2',
-  size: '8px',
+  size: '4px',
 };
 
 export const polylineSymbol = {
   type: 'simple-line', // autocasts as new SimpleLineSymbol()
   color: '#8A2BE2',
-  width: '4',
+  width: '2',
   style: 'solid',
   cap: 'butt'
 };
 
 export const polygonSymbol = {
   type: 'simple-fill', // autocasts as new SimpleFillSymbol()
-  color: 'rgba(138,43,226, 0.8)',
+  color: 'rgba(138,43,226, 0.05)',
   style: 'solid',
   outline: {
-    color: 'white',
+    color: '#8A2BE2',
     width: 1
   }
 };
 
 
-export const masterLegend = [{ name: 'Biomass, wood pellet or landscape organic facility', type: 'Primary', color: '#04f704' },
-{ name: 'Paper mill or chip mill', type: 'Primary', color: '#6909ed' },
-{ name: 'Plywood, veneer, or oriented strandboard mill', type: 'Primary', color: '#f97c04' },
-{ name: 'Post, pole, piling, preservative treating plant', type: 'Primary', color: '#adad3a' },
-{ name: 'Sawmill', type: 'Primary', color: '#680944' },
-{ name: 'Other Primary Industry', type: 'Primary', color: '#bbbdc1' },
-{ name: 'Engineered wood product plant', type: 'Secondary', color: '#04f704' },
-{ name: 'Millwork, cabinetry, furniture, or flooring plant', type: 'Secondary', color: '#6909ed' },
-{ name: 'Pallet, container or remanufacture plant', type: 'Secondary', color: '#f97c04' },
-{ name: 'Panel or wood pellet plant', type: 'Secondary', color: '#adad3a' },
-{ name: 'Preservative treating plant', type: 'Secondary', color: '#680944' },
-{ name: 'Other Secondary Industry', type: 'Secondary', color: '#bbbdc1' }];
+export const masterLegend = [{ name: 'Biomass, wood pellet or landscape organic facility', type: 'Primary', color: '#04f704', order: 1 },
+{ name: 'Paper mill or chip mill', type: 'Primary', color: '#6909ed', order: 2 },
+{ name: 'Plywood, veneer, or oriented strandboard mill', type: 'Primary', color: '#f97c04', order: 3 },
+{ name: 'Post, pole, piling, preservative treating plant', type: 'Primary', color: '#adad3a', order: 4 },
+{ name: 'Sawmill', type: 'Primary', color: '#680944', order: 5 },
+{ name: 'Other Primary Industry', type: 'Primary', color: '#bbbdc1', order: 6 },
+{ name: 'Engineered wood product plant', type: 'Secondary', color: '#04f704', order: 1 },
+{ name: 'Millwork, cabinetry, furniture, or flooring plant', type: 'Secondary', color: '#6909ed', order: 2 },
+{ name: 'Pallet, container or remanufacture plant', type: 'Secondary', color: '#f97c04', order: 3 },
+{ name: 'Panel or wood pellet plant', type: 'Secondary', color: '#adad3a', order: 4 },
+{ name: 'Preservative treating plant', type: 'Secondary', color: '#680944', order: 5 },
+{ name: 'Other Secondary Industry', type: 'Secondary', color: '#bbbdc1', order: 6 }];

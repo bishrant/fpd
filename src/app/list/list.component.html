@@ -15,8 +15,8 @@
   <div class="featureTableMaximized ">
     <span *ngIf="pageLength === 0" class="noIndustries">No industries found. Please try a different search criteria</span>
     
-    <mat-table class="feature-table mat-elevation-z8 featureList" *ngIf="pageLength != 0"
-    [dataSource]="dataSource" matSort>
+    <mat-table class="feature-table mat-elevation-z8 featureList" [ngClass]="(pageLength !== 0) ? 'visible': 'hidden'" 
+    [dataSource]="dataSource" matSort matSortActive="Id" matSortDirection="asc">
       <ng-container matColumnDef="Id">
         <span class="ui-column-resizer" (mousedown)="onMouseDown($event)"></span>
         <mat-header-cell *matHeaderCellDef mat-sort-header>SN

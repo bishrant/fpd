@@ -1,7 +1,9 @@
 .fill-remaining-space {
   flex: 1 1 auto;
 }
-
+.hidden {
+  display: none;
+}
 .table-toolbar {
   position: sticky;
   position: -webkit-sticky;

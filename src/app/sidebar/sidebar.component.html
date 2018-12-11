@@ -69,11 +69,11 @@
     </mat-expansion-panel-header>
     <button (click)="printMapPDF()" #exportmap class="btn"><span class="fa fa-share-square"> </span>&nbsp;&nbsp;Export
       Map</button>
-    <p *ngIf="printStatus === 'running'">
+    <p *ngIf="_data.printStatus === 'running'">
       <mat-spinner [diameter]=35></mat-spinner>Printing...
     </p>
-    <p class="text-danger" *ngIf="printStatus === 'error'">Error while printing. Please try again</p>
-    <p *ngIf="linkToPDFReport !== ''"><a href="{{linkToPDFReport}}" target="_blank">Untitled.pdf</a></p>
+    <p class="text-danger" *ngIf="_data.printStatus === 'error'">Error while printing. Please try again</p>
+    <p *ngIf="_data.linkToPDFReport !== ''"><a href="{{_data.linkToPDFReport}}" target="_blank">Untitled.pdf</a></p>
     <button (click)="ExportDataPdf()" #exportDataPdf class="btn"><span class="fa fa-share-square"> </span>
       &nbsp;&nbsp;Export List</button>
 

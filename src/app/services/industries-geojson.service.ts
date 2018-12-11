@@ -24,7 +24,8 @@ export class IndustriesGeojson implements OnInit {
   // data for the tables
   public tableDataService = new BehaviorSubject<any[]>([]);
   currentTableData = [];
-
+  public printStatus;
+  public linkToPDFReport = '';
   // private allDataService = new BehaviorSubject<any>(null);
   allDataService = new ReplaySubject<FeatureTemplate[]>(1);
   originalData = new ReplaySubject<FeatureTemplate[]>(1);
@@ -58,6 +59,9 @@ export class IndustriesGeojson implements OnInit {
 
   public performSpatailQuery = new ReplaySubject<string>(1);
   public performSpatialQueryObservable = this.performSpatailQuery.asObservable();
+
+  public printMapSubject = new ReplaySubject<string>(1);
+  public printMapObservable = this.printMapSubject.asObservable();
 
   // filter only by the sawmill to get a second list of major species
   private filteredSawmillSpecies = new ReplaySubject<object>(1);

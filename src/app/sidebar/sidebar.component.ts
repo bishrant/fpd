@@ -28,7 +28,7 @@ export class SidebarComponent implements OnInit {
   public disabled = false;
   public tableData;
   public linkToPDFReport = '';
-  public printStatus = '';
+  // public printStatus = '';
   public selectedValues = {'Company': null, 'County': null, 'SpecificIndustryType': null, 'MainIndustryType': null};
   // @Output() messageEvent = new EventEmitter<string>();
   @Output() exportButtonClicked = new EventEmitter<string>();
@@ -145,7 +145,8 @@ export class SidebarComponent implements OnInit {
   public printMapPDF() {
     this.exportButtonClicked.emit('clickedExport');
     console.log('here');
-    this._exportPDFSubject.next('clicked');
+    // this._exportPDFSubject.next('clicked');
+    this._data.printMapSubject.next('clicked');
     //  this._esrimap.executePrint();
     // this._legend.prepareLegend();
   }

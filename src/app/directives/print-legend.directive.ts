@@ -38,83 +38,70 @@ export class PrintLegendDirective implements OnInit {
     this._data.currentData.subscribe(d => {
       const canvas: any = document.getElementById('canvasPrimaryLegend');
       const ctx = canvas.getContext('2d');
-      const totalLegend = this._data.getDataForComboBox(d, 'SpecificIndustryType').sort();
-      console.log(totalLegend);
-      const legendSymbol = ['red', 'blue', 'yellow', 'green', 'purple', 'black'];
-    const masterPrimary: Array<string> = [];
-    const masterSecondary: Array<string> = [];
-    vars.masterLegend.filter((e, i, ar) => {
-      return e['type'] === 'Primary';
-    }).forEach(ee => {
-      masterPrimary.push(ee.name);
-    });
-    vars.masterLegend.filter((e, i, ar) => {
-      return e['type'] === 'Secondary';
-    }).forEach(ee => {
-      masterSecondary.push(ee.name);
-    });
-    console.log(masterPrimary, masterSecondary);
-      const activeLegendPrimary = totalLegend.filter((e, i, ar) => {
-      return masterPrimary.indexOf(e) !== -1;
-    });
-    const activeSecondary = totalLegend.filter((e, i, ar) => {
-      return masterSecondary.indexOf(e) !== -1;
-    });
-    console.log(activeLegendPrimary);
-      vars.masterLegend.forEach(legend => {
-        console.log(legend);
-        // legend.
-      //   console.log(legend.keys());
+      const totalLegend = this._data.getDataForComboBox(d, 'SpecificIndustryType');
+
+      const activeLegend = vars.masterLegend.filter(n => {
+        return totalLegend.indexOf(n.name) !== -1;
       });
-      canvas.height = activeLegendPrimary.length * 80;
+
+      const primaryLegend = activeLegend.filter(a => {
+        return a.type === 'Primary';
+      });
+      const secondaryLegend = activeLegend.filter(a => {
+        return a.type === 'Secondary';
+      });
+
+      console.log(activeLegend);
+      canvas.height = (secondaryLegend.length > primaryLegend.length) ? secondaryLegend.length * 80 : primaryLegend.length * 80;
       canvas.width = 1000;
       const rowHeight = 80;
       let _i = 0;
       ctx.font = '30pt Arial';
       ctx.imageSmoothingEnabled = true;
       ctx.webkitImageSmoothingEnabled = true;
-      for (_i = 0; _i < activeLegendPrimary.length; _i++) {
-        ctx.fillStyle = legendSymbol[_i];
+      for (_i = 0; _i < primaryLegend.length; _i++) {
+        ctx.fillStyle = primaryLegend[_i].color;
         ctx.strokeStyle = 'black';
         ctx.textAlign = 'start';
         const i = _i === 0 ? 0.1 : _i;
-        // const i = _i;
-        this.drawCircle(ctx, 30, rowHeight * i, rowHeight * 0.3, legendSymbol[_i]);
+        this.drawCircle(ctx, 30, rowHeight * i, rowHeight * 0.3, primaryLegend[_i].color);
         ctx.fillStyle = 'black';
         ctx.textBaseline = 'top';
-        ctx.fillText(activeLegendPrimary[_i], 60, rowHeight * i);
+        ctx.fillText(primaryLegend[_i].name, 80, rowHeight * i);
         // ctx.fillText'other', 500, rowHeight * _i);
         // ctx.fillText(activeSecondary[_i], 120, rowHeight*_i);
       }
       const canvas2: any = document.getElementById('canvasSecondayLegend');
       const ctx2 = canvas2.getContext('2d');
-      canvas2.height = activeSecondary.length * 80;
+      canvas2.height = secondaryLegend.length * 80;
       canvas2.width = 1000;
       let __i = 0;
       ctx2.font = '30pt Arial';
       ctx2.imageSmoothingEnabled = true;
       ctx2.webkitImageSmoothingEnabled = true;
-      for (__i = 0; __i < activeSecondary.length; __i++) {
-        ctx2.fillStyle = legendSymbol[__i];
+      for (__i = 0; __i < secondaryLegend.length; __i++) {
+        ctx2.fillStyle = secondaryLegend[__i].color;
         ctx2.strokeStyle = 'black';
         ctx2.textAlign = 'start';
-        ctx2.fillRect(10, rowHeight * __i , 50 * 0.8, 50 * 0.8);
+        ctx2.fillRect(10, rowHeight * __i, 50 * 0.8, 50 * 0.8);
         ctx2.fillStyle = 'black';
         ctx2.textBaseline = 'top';
-        ctx2.fillText(activeSecondary[__i], 60, rowHeight * __i);
+        ctx2.fillText(secondaryLegend[__i].name, 60, rowHeight * __i);
       }
       const imgData = this.convertCanvasToWhite(ctx, canvas);
       ctx.putImageData(imgData, 0, 0);
 
       const imgData2 = this.convertCanvasToWhite(ctx2, canvas2);
       ctx2.putImageData(imgData2, 0, 0);
-      return [{'primaryLegend': canvas.toDataURL('image/jpg'), 'secondaryLegend': canvas2.toDataURL('image/jpg') }];
+      return [{ 'primaryLegend': canvas.toDataURL('image/jpg'), 'secondaryLegend': canvas2.toDataURL('image/jpg') }];
     });
     const _cR1 = document.getElementById('canvasPrimaryLegend') as HTMLCanvasElement;
     const _cR2 = document.getElementById('canvasSecondayLegend') as HTMLCanvasElement;
-    return {'primaryLegend': _cR1.toDataURL('image/jpg'),
-    'secondaryLegend': _cR2.toDataURL('image/jpg')
-  };
+    return {
+      // @todo swap primary and secondary
+      'primaryLegend':  _cR1.toDataURL('image/jpg'),
+      'secondaryLegend': _cR2.toDataURL('image/jpg')
+    };
   }
   ngOnInit() {
   }
