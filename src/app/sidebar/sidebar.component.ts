@@ -6,6 +6,8 @@ import { IndustriesGeojson } from '../services/industries-geojson.service';
 // import { _CdkTextareaAutosize } from '@angular/material';
 import { ReplaySubject } from 'rxjs';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import { HttpClient } from '@angular/common/http';
+import { ExcelService } from '../services/excel.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -27,7 +29,7 @@ export class SidebarComponent implements OnInit {
   public _disabledV = '0';
   public disabled = false;
   public tableData;
-  public linkToPDFReport = '';
+
   // public printStatus = '';
   public selectedValues = {'Company': null, 'County': null, 'SpecificIndustryType': null, 'MainIndustryType': null};
   // @Output() messageEvent = new EventEmitter<string>();
@@ -38,7 +40,8 @@ export class SidebarComponent implements OnInit {
   public _exportPDFSubject = new ReplaySubject<any>(1);
   public _exportPDFEvent = this._exportPDFSubject.asObservable();
   public activeControl: string;
- 
+  public printingPDFStatus = '';
+  public linkToPDFReport = '';
   public activeAttributeFilter: string;
 
   // @ViewChild('companies') public cc: SelectComponent;
@@ -162,8 +165,52 @@ export class SidebarComponent implements OnInit {
     // this.performSpatialQuery.emit(this.activeControl);
     // this.spatialControlClicked.emit(this.activeControl);
   }
+  public genetateReportPostData(): any {
+    const dummy: any = [];
+    const _postdata: any = [];
+    const _reportFields: string[] = ['Company', 'County', 'Address', 'Phone1', 'Homepage', 'Email', 'MainIndustryType', 'SpecificIndustryType', 'Products', 'Species'];
+    console.log(this.tableData);
+    // console.log(this.)
+    this.tableData.forEach(_d => {
+      const _partialArray: any = {};
+      _reportFields.forEach(_attr => {
+        if (_d['properties'].hasOwnProperty(_attr)) {
+          _partialArray[_attr] = _d['properties'][_attr];
+        }
+      });
+      _postdata.push(_partialArray);
+    });
+    console.log(_postdata);
+    return _postdata;
+  }
 
-  constructor(private sidebarService: SidebarService, private _data: IndustriesGeojson,
+  public exportDataPDF() {
+    const _postdata = this.genetateReportPostData();
+    this.printingPDFStatus = 'running';
+    this.linkToPDFReport = '';
+    this.http.post('https://localhost/report', _postdata).subscribe(data => {
+      const e: any = data;
+      this.linkToPDFReport = 'http://localhost:5000/report/' + e.fileName;
+      console.log(this.linkToPDFReport);
+      this.printingPDFStatus = 'completed';
+      // const newWin = this.nativeWindow.open(ur);
+      // if (!newWin || newWin.closed || typeof newWin.closed === 'undefined') {
+      //   // POPUP BLOCKED
+      //   this.popupVisibility = 'visible';
+      //   this.reportUrl = ur;
+      // }
+    }, err => {
+      console.log(err);
+      this.printingPDFStatus = 'error';
+      this.linkToPDFReport = '';
+    });
+  }
+
+  public exportDataXLS() {
+    
+  }
+  constructor(private sidebarService: SidebarService, private _data: IndustriesGeojson, private http: HttpClient,
+    private _excelService: ExcelService
   ) { }
 
   ngOnInit() {

@@ -14,6 +14,16 @@
     overflow: auto;
     max-width: 320px;
 }
+
+.mat-progress-spinner circle, .mat-spinner circle {
+    stroke: #3fb53f;
+  }
+  .progresSpinner {
+    float: left;
+  }
+  .italics{
+      font-style: italic;
+  }
 span.card-header-link { width: 100% !important; }
 
 ngb-accordion .card-header > a{
@@ -34,7 +44,9 @@ ngb-accordion .card-header > a{
         height: 48px !important;
         font-weight: bold;
     }
-
+    mat-expansion-panel.mat-expansion-panel.mat-expanded.mat-expansion-panel-spacing {
+        overflow: visible;
+    }
     .mat-expansion-panel-content {
         display: flex;
         flex-direction: column;

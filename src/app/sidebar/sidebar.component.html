@@ -2,7 +2,7 @@
   <i class="fa fa-chevron-left"></i>
 </button>
 <mat-accordion>
-  <mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel >
     <mat-expansion-panel-header>
       <mat-panel-title>
         Search by Attributes
@@ -61,21 +61,32 @@
     
   </mat-expansion-panel>
 
-  <mat-expansion-panel>
+  <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
       <mat-panel-title>
         Export
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <button (click)="printMapPDF()" #exportmap class="btn"><span class="fa fa-share-square"> </span>&nbsp;&nbsp;Export
-      Map</button>
-    <p *ngIf="_data.printStatus === 'running'">
-      <mat-spinner [diameter]=35></mat-spinner>Printing...
-    </p>
-    <p class="text-danger" *ngIf="_data.printStatus === 'error'">Error while printing. Please try again</p>
-    <p *ngIf="_data.linkToPDFReport !== ''"><a href="{{_data.linkToPDFReport}}" target="_blank">Untitled.pdf</a></p>
-    <button (click)="ExportDataPdf()" #exportDataPdf class="btn"><span class="fa fa-share-square"> </span>
-      &nbsp;&nbsp;Export List</button>
+    <button (click)="printMapPDF()" #exportmap class="btn" [disabled]="_data.printStatus === 'running'"><span class="fa fa-share-square" > </span>&nbsp;&nbsp;Print
+      Map</button><br>
+    <p *ngIf="_data.printStatus === 'running'"><br>
+      <mat-spinner [diameter]=35 color="green" class='progresSpinner'></mat-spinner>Printing map... <br>
+    <i>  After the printing complete, link to your PDF will appear here.</i></p>
+    <p class="text-danger italics" *ngIf="_data.printStatus === 'error'">Error while printing. Please try again</p><br>
+    <p *ngIf="_data.linkToPDFReport !== ''"><a href="{{_data.linkToPDFReport}}" target="_blank">Map.pdf</a></p>
+
+    <button (click)="exportDataPDF()" #exportDataPdf class="btn" [disabled]="printingPDFStatus === 'running'"><span class="fa fa-share-square"> </span>
+      &nbsp;&nbsp;Export Table as PDF</button>
+      <p *ngIf="printingPDFStatus === 'running'"><br>
+        <mat-spinner [diameter]=35 color="green" class='progresSpinner'></mat-spinner>Exporting list... <br>
+      <i>  After the export complete, link to your PDF will appear here.</i></p>
+      <p class="text-danger italics" *ngIf="printingPDFStatus === 'error'">Error while exporting. Please try again</p><br>
+      <p *ngIf="linkToPDFReport !== ''"><a href="{{linkToPDFReport}}" target="_blank">Exported List.pdf</a></p>
+
+        <br>
+      <button (click)="exportDataXLS()" #exportDataExcel  class='btn '> 
+          <span class="fa fa-file-excel-o"> </span>
+          &nbsp;&nbsp;Export Table as XLS</button>
 
   </mat-expansion-panel>
 </mat-accordion>

@@ -297,7 +297,7 @@ export class EsrimapComponent implements OnInit {
           this.mapView = new EsriMapView(_mapViewProperties);
           this.mapView.ui.move('zoom', 'top-right');
           this.printTask = new PrintTask({
-            url: 'https://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/ForestProductsDirectory/ExportToPDFClientSideLegend/GPServer/ExportToPDF'
+            url: 'http://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/FPD/FPDPrint/GPServer/FPDPrintService'
           });
 
           this.printTemplate = new PrintTemplate({
