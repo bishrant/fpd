@@ -72,6 +72,7 @@ mat-header-row {
 
 }
 
+
 @media (min-width: 1200px) {
   #featureTable {
     min-height: 420px;
@@ -118,7 +119,7 @@ mat-header-row {
 }
 
 .featureTableMaximized {
-  // transform: translateY(0%) !important;
+  transform: translateY(0%) !important;
   margin-bottom: 5px;
   overflow: auto;
   //    -webkit-transition: all 1s;
@@ -127,11 +128,24 @@ mat-header-row {
 }
 
 .featureTableMinimized {
-  //  transform: translateY(140%) !important;
+   transform: translateY(140%) !important;
   margin-bottom: 0;
   //  -webkit-transition: all 1s;
-  /* Safari */
   //   transition: all 1s;
+}
+.animate{
+  -webkit-transition: all 1s;
+  transition: all 1s;
+}
+.maximizeBtn{
+  position: absolute;
+  bottom: 10px;
+  background: white;
+  font-weight: bold;
+}
+.unsetAnimation{
+  -webkit-transition: unset;
+  transition: unset;
 }
 
 
@@ -162,7 +176,13 @@ mat-header-row {
 .mat-select-arrow {
   color: white !important;
 }
-
+.minimizeBtn{
+  text-align: left !important;
+}
+.minimizeIcon{
+  font-size: 40px;
+    vertical-align: text-bottom !important;
+}
 span.ui-column-resizer {
   display: block;
   position: absolute;
@@ -186,7 +206,7 @@ span.ui-column-resizer {
 
 .featureList {
   min-width: 830px;
-  max-height: 305px;
+  max-height: 240px;
   overflow: auto;
 }
 @media(max-height: 600px){

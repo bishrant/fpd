@@ -27,7 +27,7 @@
 <!-- </div> -->
 
 <mat-drawer-container class="sidenav-container"  [hasBackdrop]="sliderBackdrop" (backdropClick)="getSliderBackdrop();" >
-    <mat-drawer #drawer [mode]="over" class="sidenav" [opened]="!sliderBackdrop" >
+    <mat-drawer #drawer [mode]='drawerMode' class="sidenav" [opened]="!sliderBackdrop" >
         <app-sidebar (hideSidebarEvent)="drawer.close()"></app-sidebar>
     </mat-drawer>
     <mat-drawer-content class="drawerContent">

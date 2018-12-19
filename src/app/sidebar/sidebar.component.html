@@ -33,7 +33,8 @@
       </ng-select>
     </span> -->
     <hr>
-    <button (click)="resetData()" class="btn fa fa-eraser">Clear Search</button>
+    <button (click)="resetData()" class="btn">
+        <i class="esri-icon-trash"></i>Clear Search</button>
   </mat-expansion-panel>
 
   <mat-expansion-panel>
@@ -56,8 +57,8 @@
         class="esri-icon-trash"></i>Clear</button> -->
         <button (click)='clickedSpatialQuery($event)' class="btn">
           <i class="esri-icon-search"></i>Query</button>
-        &nbsp;&nbsp; <button (click)="activateSpatialControl('clear')" class="btn"><i
-            class="esri-icon-trash"></i>Clear</button>
+        &nbsp;&nbsp; <button (click)="activateSpatialControl('clear')" class="btn">
+          <i class="esri-icon-trash"></i>Clear</button>
     
   </mat-expansion-panel>
 
@@ -67,7 +68,7 @@
         Export
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <button (click)="printMapPDF()" #exportmap class="btn" [disabled]="_data.printStatus === 'running'"><span class="fa fa-share-square" > </span>&nbsp;&nbsp;Print
+    <button (click)="printMapPDF()" #exportmap class="btn" [disabled]="_data.printStatus === 'running'"><span class="fa fa-map-o" > </span>&nbsp;&nbsp;Print
       Map</button><br>
     <p *ngIf="_data.printStatus === 'running'"><br>
       <mat-spinner [diameter]=35 color="green" class='progresSpinner'></mat-spinner>Printing map... <br>
@@ -75,7 +76,7 @@
     <p class="text-danger italics" *ngIf="_data.printStatus === 'error'">Error while printing. Please try again</p><br>
     <p *ngIf="_data.linkToPDFReport !== ''"><a href="{{_data.linkToPDFReport}}" target="_blank">Map.pdf</a></p>
 
-    <button (click)="exportDataPDF()" #exportDataPdf class="btn" [disabled]="printingPDFStatus === 'running'"><span class="fa fa-share-square"> </span>
+    <button (click)="exportDataPDF()" #exportDataPdf class="btn" [disabled]="printingPDFStatus === 'running'"><span class="fa fa-file-pdf-o"> </span>
       &nbsp;&nbsp;Export Table as PDF</button>
       <p *ngIf="printingPDFStatus === 'running'"><br>
         <mat-spinner [diameter]=35 color="green" class='progresSpinner'></mat-spinner>Exporting list... <br>
@@ -86,7 +87,7 @@
         <br>
       <button (click)="exportDataXLS()" #exportDataExcel  class='btn '> 
           <span class="fa fa-file-excel-o"> </span>
-          &nbsp;&nbsp;Export Table as XLS</button>
+          &nbsp;&nbsp;Download Table as XLS</button>
 
   </mat-expansion-panel>
 </mat-accordion>

@@ -1,4 +1,7 @@
 <div #mapViewNode id="mapViewNode">
+  <div id='tooltipContainer' *ngIf="drawToolActive">
+    <div id='tooltip' #tooltip *ngIf= "drawInstructions != ''">{{ drawInstructions}} </div>
+  </div> 
   <div id="basemapToggle" style="height:100px; width:100px; position: absolute; z-index:100; bottom:0"></div>
   <!-- <button mat-button class="openSidebarButton" >
       <i class="fa fa-search fa-rotate-90"></i>

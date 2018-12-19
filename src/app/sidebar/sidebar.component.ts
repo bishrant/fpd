@@ -188,9 +188,9 @@ export class SidebarComponent implements OnInit {
     const _postdata = this.genetateReportPostData();
     this.printingPDFStatus = 'running';
     this.linkToPDFReport = '';
-    this.http.post('https://localhost/report', _postdata).subscribe(data => {
+    this.http.post('./report', _postdata).subscribe(data => {
       const e: any = data;
-      this.linkToPDFReport = 'http://localhost:5000/report/' + e.fileName;
+      this.linkToPDFReport = './report/' + e.fileName;
       console.log(this.linkToPDFReport);
       this.printingPDFStatus = 'completed';
       // const newWin = this.nativeWindow.open(ur);
@@ -204,12 +204,19 @@ export class SidebarComponent implements OnInit {
       this.printingPDFStatus = 'error';
       this.linkToPDFReport = '';
     });
+
+    this.http.post('http://localhost:5000/test', {name: 'test2'} ).subscribe(d => {
+      console.log(d);
+    }, e => {
+      console.log(e);
+    });
   }
 
   public exportDataXLS() {
-    
+    const _postdataxls = this.genetateReportPostData();
+    this._excelService.exportAsExcelFile(_postdataxls, 'FPD');
   }
-  constructor(private sidebarService: SidebarService, private _data: IndustriesGeojson, private http: HttpClient,
+  constructor(private sidebarService: SidebarService, public _data: IndustriesGeojson, private http: HttpClient,
     private _excelService: ExcelService
   ) { }
 

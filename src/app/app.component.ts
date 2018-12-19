@@ -1,5 +1,6 @@
 import { Component, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { ResizeEvent } from 'angular-resizable-element';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,7 @@ import { ResizeEvent } from 'angular-resizable-element';
 export class AppComponent implements OnInit {
   title = 'Directory of Forest Products Industries';
   featureTableStatus = 'featureTableMinimized';
+  drawerMode = new FormControl('over');
   public innerWidth: any;
   public deviceType: string;
   public sliderBackdrop = false;

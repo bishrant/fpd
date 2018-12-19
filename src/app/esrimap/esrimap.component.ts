@@ -10,6 +10,7 @@ import { IndustriesGeojson } from '../services/industries-geojson.service';
 import { PrintLegendDirective } from '../directives/print-legend.directive';
 import { PointincountyService } from '../services/pointincounty.service';
 import { DatafiltersService } from '../services/datafilters.service';
+import { WindowService } from '../services/window.service';
 
 @Component({
   selector: 'app-esrimap',
@@ -65,6 +66,15 @@ export class EsrimapComponent implements OnInit {
   public setupClickHandler;
   public touchEnabledDisplay = 'ontouchstart' in document.documentElement;
   public activatedSpatialControl = false;
+  public drawToolActive = false;
+  public drawInstructions = '';
+  public Instructions = {buffer: 'Click on the map move your mouse cursor. Click to complete the circle.',
+  polygon: 'Click to add  points to the polygon. Double click to complete.',
+  rectangle: 'Click hold and drag to draw a rectangle.',
+  point: 'Click to select one or more counties. Double click to complete.',
+  clear: ''
+};
+  public nativeWindow: any;
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
   @ViewChild(SidebarComponent) private sideBar: SidebarComponent;
@@ -80,7 +90,6 @@ export class EsrimapComponent implements OnInit {
   public printMap() {
     this.__mapViewStatus.subscribe(_mapStatus => {
       if (_mapStatus) {
-        console.log('print this map');
         this._data.printStatus = '';
         this._data.linkToPDFReport = '';
         const _legendBase64 = this._legendDirective.prepareLegend();
@@ -154,9 +163,11 @@ export class EsrimapComponent implements OnInit {
 
   }
   public activateSpatialControl(control: any) {
+    this.drawToolActive = true;
     this.__mapViewStatus.subscribe(_mapStatus => {
       if (_mapStatus) {
         this.clearDrawGraphics();
+        this.drawInstructions = this.Instructions[control];
         if (control === 'buffer') {
           this.drawBuffer();
           // this.activateBuffer();
@@ -198,7 +209,10 @@ export class EsrimapComponent implements OnInit {
     });
   }
   constructor(private _data: IndustriesGeojson, private _legendDirective: PrintLegendDirective,
-    private pointInCountyService: PointincountyService, private dataFilterService: DatafiltersService) { }
+    private winRef: WindowService,
+    private pointInCountyService: PointincountyService, private dataFilterService: DatafiltersService) {
+      this.nativeWindow = winRef.getNativeWindow();
+     }
 
   public ngOnInit() {
 
@@ -209,6 +223,7 @@ export class EsrimapComponent implements OnInit {
 
     // subscribe to perform query button click from sidebar
     this._data.performSpatialQueryObservable.subscribe(control => {
+      this.drawToolActive = false;
       this.performSpatialQuery(control);
     });
 

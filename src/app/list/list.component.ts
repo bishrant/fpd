@@ -16,7 +16,7 @@ export class ListComponent implements OnInit, AfterViewInit {
   dataSource: ListDataSource;
   public pageLength = 10;
   displayedColumns = ['Id', 'Company', 'County', 'MainIndustryType', 'SpecificIndustryType'];
-
+  featureTableClass = 'featureTableMaximized';
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -58,7 +58,18 @@ export class ListComponent implements OnInit, AfterViewInit {
   getPageLength() {
     return this.pageLength;
   }
-  dockTable() {
+  toggleTable(evt) {
+    this.featureTableClass = this.featureTableClass === 'featureTableMaximized' ? 'featureTableMinimized animate' : 'featureTableMaximized animate';
+    setTimeout(() => {
+      const activeCls = this.featureTableClass.split(' ')[0];
+      if (activeCls !== 'featureTableMinimized') {
+        this.featureTableClass =  'featureTableMaximized unset';
+      } else {
+        
+      }
+      // this.featureTableClass = 'featureTableMinimized';
+      console.log('time');
+    }, 1000);
     // console.log(this.featureTable);
     // this.renderer.setStyle(this.featureTable.nativeElement, 'transform', 'translate3d(0px, 0px, 0px);');
   }
@@ -76,27 +87,17 @@ export class ListComponent implements OnInit, AfterViewInit {
   }
 
   public genetateReportPostData(): any {
-    const dummy: any = [];
     const _postdata: any = [];
     const _reportFields: string[] = ['Company', 'County', 'Address', 'Phone1', 'Homepage', 'Email', 'MainIndustryType', 'SpecificIndustryType', 'Products', 'Species'];
     console.log(this._data.currentTableData);
     this._data.currentTableData.forEach(_d => {
       const _partialArray: any = {};
       _reportFields.forEach(_attr => {
-        //  if (_d['properties'].hasOwnProperty(_attr)) {
         _partialArray[_attr] = _d[_attr];
-        //    }
       });
       _postdata.push(_partialArray);
     });
-    console.log(_postdata);
-    // return [];
     return _postdata;
   }
-
-  private onMouseDown(event) {
-    console.log(event);
-  }
-
 
 }
