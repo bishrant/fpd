@@ -59,13 +59,15 @@ export class ListComponent implements OnInit, AfterViewInit {
     return this.pageLength;
   }
   toggleTable(evt) {
-    this.featureTableClass = this.featureTableClass === 'featureTableMaximized' ? 'featureTableMinimized animate' : 'featureTableMaximized animate';
+    console.log(this.featureTableClass);
+    const activeCls1 = this.featureTableClass.split(' ')[0];
+    this.featureTableClass = activeCls1 === 'featureTableMaximized' ? 'featureTableMinimized animate' : 'featureTableMaximized animate';
     setTimeout(() => {
       const activeCls = this.featureTableClass.split(' ')[0];
       if (activeCls !== 'featureTableMinimized') {
-        this.featureTableClass =  'featureTableMaximized unset';
+        this.featureTableClass =  'featureTableMaximized unsetAnimation';
       } else {
-        
+
       }
       // this.featureTableClass = 'featureTableMinimized';
       console.log('time');

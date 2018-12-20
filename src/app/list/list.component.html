@@ -1,19 +1,29 @@
-<button mat-button (click)="toggleTable($event)" class="maximizeBtn" *ngIf="featureTableClass === 'featureTableMinimized animate'">
-    <mat-icon class="minimizeIcon">expand_less</mat-icon>
+<button mat-raised-button (click)="toggleTable($event)" class="maximizeBtn" *ngIf="featureTableClass === 'featureTableMinimized animate'"
+matTooltip="Show the industries table."
+[matTooltipPosition]= "'above'"
+  aria-label="Show table button"
+>
+    <mat-icon class="maximizeIcon" >expand_less</mat-icon><br>
+    Show Table
    </button>
 
-<div cdkDrag #featureTable >
+<div cdkDrag #featureTable [ngClass]='featureTableClass'>
   <mat-toolbar class="table-toolbar" cdkDragHandle>
     <mat-toolbar-row>
-      <button mat-button (click)="toggleTable($event)" class="minimizeBtn">
+      <button mat-button (click)="toggleTable($event)" class="minimizeBtn"
+      matTooltip="Hide the industries table."
+      [matTooltipPosition]= "'above'"
+        aria-label="Hide table button"
+      >
        <mat-icon class="minimizeIcon">expand_more</mat-icon>
       </button>
+
 
       <span class="fill-remaining-space" style="cursor:move">&nbsp;</span>
       <mat-paginator [disabled]="pageLength === 0" [length]="getPageLength()" [pageSize]="10" [pageSizeOptions]="[3, 5, 10, 375]" id='paginator'></mat-paginator>
     </mat-toolbar-row>
   </mat-toolbar>
-  <div class="featureTableMaximized">
+  <div class="featureTableContainer">
     <span *ngIf="pageLength === 0" class="noIndustries">No industries found. Please try a different search criteria</span>
     
     <mat-table class="feature-table mat-elevation-z8 featureList" [ngClass]="(pageLength !== 0) ? 'visible': 'hidden'" 

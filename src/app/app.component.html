@@ -36,7 +36,11 @@
           </mat-toolbar>
 
           <div class="mainBody">
-            <button mat-button class="openSideBarButton" *ngIf="!drawer.opened" (click)="drawer.open()">
+            <button mat-button class="openSideBarButton" *ngIf="!drawer.opened" (click)="drawer.open()" 
+            matTooltip="Show sidebar for search and export."
+            [matTooltipPosition]= "'right'"
+              aria-label="show sidebar button"
+            >
               <i class="fa fa-chevron-right"></i>
             </button>
             <app-esrimap class="fullpageMap">

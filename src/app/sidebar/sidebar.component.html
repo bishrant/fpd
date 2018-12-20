@@ -1,4 +1,8 @@
-<button mat-button class="sidebarCloseBtn" (click)="hideSidebarFn()">
+<button mat-button class="sidebarCloseBtn" (click)="hideSidebarFn()" fa-border
+matTooltip="Hide the sidebar."
+[matTooltipPosition]= "'right'"
+  aria-label="Hide table button"
+>
   <i class="fa fa-chevron-left"></i>
 </button>
 <mat-accordion>
@@ -43,7 +47,7 @@
         Search on Maps
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <button (click)="activateSpatialControl('buffer')"  class="btn" style='margin-top: 10px;'> <i class="esri-icon-maps"></i>
+    <button (click)="activateSpatialControl('circle')"  class="btn" style='margin-top: 10px;'> <i class="esri-icon-radio-unchecked"></i>
       Buffer</button><br>
     <button (click)="activateSpatialControl('polygon')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-polygon"></i>
       Polygon</button><br>

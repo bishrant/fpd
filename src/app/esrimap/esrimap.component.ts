@@ -68,7 +68,7 @@ export class EsrimapComponent implements OnInit {
   public activatedSpatialControl = false;
   public drawToolActive = false;
   public drawInstructions = '';
-  public Instructions = {buffer: 'Click on the map move your mouse cursor. Click to complete the circle.',
+  public Instructions = {circle: 'Click on the map, hold and drag your mouse cursor. Click to complete the circle.',
   polygon: 'Click to add  points to the polygon. Double click to complete.',
   rectangle: 'Click hold and drag to draw a rectangle.',
   point: 'Click to select one or more counties. Double click to complete.',
@@ -164,6 +164,8 @@ export class EsrimapComponent implements OnInit {
   }
   public activateSpatialControl(control: any) {
     this.drawToolActive = true;
+
+
     this.__mapViewStatus.subscribe(_mapStatus => {
       if (_mapStatus) {
         this.clearDrawGraphics();
@@ -204,6 +206,12 @@ export class EsrimapComponent implements OnInit {
               this.sketchViewModel.create('rectangle');
             }
           });
+        } else if (control === 'circle') {
+          this.__sketchStatus.subscribe(_sketchStatus => {
+            if (_sketchStatus) {
+              this.sketchViewModel.create('circle');
+            }
+          });
         }
       }
     });
@@ -234,14 +242,14 @@ export class EsrimapComponent implements OnInit {
     setTimeout(() => {
       return loadModules([
         'esri/Map', 'esri/views/MapView', 'esri/layers/FeatureLayer',
-        'esri/geometry/geometryEngine', 'esri/views/ui/DefaultUI', 'esri/layers/TileLayer',
+        'esri/geometry/geometryEngine', 'esri/views/ui/DefaultUI', 'esri/layers/TileLayer', 'esri/layers/MapImageLayer',
         'esri/layers/VectorTileLayer', 'esri/views/2d/draw/Draw', 'esri/geometry/Circle',
         'esri/widgets/Sketch/SketchViewModel', 'esri/geometry/Polyline', 'esri/geometry/SpatialReference',
         'esri/Graphic', 'esri/layers/GraphicsLayer', 'esri/geometry/Point', 'esri/tasks/PrintTask',
         'esri/tasks/support/PrintTemplate', 'esri/tasks/support/PrintParameters',
         'esri/widgets/BasemapToggle', 'dojo/domReady!'
       ])
-        .then(([EsriMap, EsriMapView, FeatureLayer, geometryEngine, DefaultUI, TileLayer, VectorTileLayer, Draw, Circle,
+        .then(([EsriMap, EsriMapView, FeatureLayer, geometryEngine, DefaultUI, TileLayer, MapImageLayer, VectorTileLayer, Draw, Circle,
           SketchViewModel, Polyline, SpatialReference, Graphic, GraphicsLayer, Point, PrintTask, PrintTemplate, PrintParameters, BasemapToggle]) => {
           // create a boilerplate graphics layer for adding industries points later on
           this.industriesGraphicsLayer = new GraphicsLayer();
@@ -249,10 +257,11 @@ export class EsrimapComponent implements OnInit {
           this.graphicsLayer = new GraphicsLayer({ id: 'userGraphicsLayer' });
           this.circleGraphicsLayer = new GraphicsLayer({ id: 'circleGraphicsLayer' });
           this.tempGraphicsLayer = new GraphicsLayer({ id: 'tempGraphicsLayer' });
-         // const countyLayer = new VectorTileLayer({url: 'https://tiles.arcgis.com/tiles/ELI1iJkCzTIagHkp/arcgis/rest/services/TexasCounties6/VectorTileServer'});
+
+         const countyLayer = new MapImageLayer({url: 'http://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/FPD/fpd2/MapServer'});
           this.map = new EsriMap({
             basemap: vars._basemap,
-            layers: [this.industriesGraphicsLayer, this.graphicsLayer],
+            layers: [countyLayer, this.industriesGraphicsLayer, this.graphicsLayer],
             spatialReference: new SpatialReference({wkid: 4326})
           });
 
@@ -312,7 +321,7 @@ export class EsrimapComponent implements OnInit {
           this.mapView = new EsriMapView(_mapViewProperties);
           this.mapView.ui.move('zoom', 'top-right');
           this.printTask = new PrintTask({
-            url: 'http://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/FPD/FPDPrint/GPServer/FPDPrintService'
+            url: 'https://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/FPD/FPDPrint/GPServer/FPDPrintService'
           });
 
           this.printTemplate = new PrintTemplate({
@@ -476,7 +485,7 @@ export class EsrimapComponent implements OnInit {
             // this.graphicsLayer.removeAll();
             const graphic = new Graphic({
               geometry: event.geometry,
-              symbol: that.sketchViewModel.graphic.symbol
+             // symbol: that.sketchViewModel.graphic.symbol
             });
             that.graphicsLayer.add(graphic);
             that.editGraphic = null;
@@ -564,7 +573,7 @@ export class EsrimapComponent implements OnInit {
               });
               const _graphic = new Graphic({
                 geometry: _polyline,
-                symbol: this.sketchViewModel.graphic.symbol
+              //  symbol: this.sketchViewModel.graphic.symbol
               });
               this.graphicsLayer.add(_graphic);
               this.createCircle(_polyline.paths[0][0], _polyline.paths[0][1]);
@@ -609,7 +618,7 @@ export class EsrimapComponent implements OnInit {
             console.log(this._data);
             this._data.allDataService.next(_selected);
           };
-          this.setupSketchViewModel = (mapView) => {
+          this.setupSketchViewModel = (mapView, _that = this) => {
             // setup sketch view model for drawing geometries
             this.sketchViewModel = new SketchViewModel({
               view: mapView,
@@ -619,18 +628,26 @@ export class EsrimapComponent implements OnInit {
               polygonSymbol: vars.polygonSymbol
             });
             mapView.map.addMany([this.graphicsLayer, this.circleGraphicsLayer, this.tempGraphicsLayer]);
-            this.setupClickHandler(this);
-            this.sketchViewModel.on('create-complete', this.addGraphic);
-            // Listen to create-complete event to add a newly created graphic to view
-            this.sketchViewModel.on('reshape-complete', this.completeGraphicsForCircle);
-            this.sketchViewModel.on('scale', this.updateGraphicTemp);
-            this.sketchViewModel.on('scale-complete', this.updateGraphic);
-            this.sketchViewModel.on('update', this.updateGraphicTemp);
-            this.sketchViewModel.on('update-complete', this.updateGraphic);
-            this.sketchViewModel.on('rotate-complete', this.completeGraphicsForCircle);
-            this.sketchViewModel.on('move', this.updateGraphicTemp);
-            this.sketchViewModel.on('move-complete', this.completeGraphicsForCircle);
-            this.sketchViewModel.on('update-cancel', this.updateGraphic);
+            this.sketchViewModel.on('create', function(event) {
+              if (event.state === 'complete') {
+                console.log(event);
+                _that.addGraphic(event.graphic.geometry, _that);
+                console.log(event);
+              }
+            });
+
+            // this.setupClickHandler(this);
+            // this.sketchViewModel.on('create-complete', this.addGraphic);
+            // // Listen to create-complete event to add a newly created graphic to view
+            // this.sketchViewModel.on('reshape-complete', this.completeGraphicsForCircle);
+            // this.sketchViewModel.on('scale', this.updateGraphicTemp);
+            // this.sketchViewModel.on('scale-complete', this.updateGraphic);
+            // this.sketchViewModel.on('update', this.updateGraphicTemp);
+            // this.sketchViewModel.on('update-complete', this.updateGraphic);
+            // this.sketchViewModel.on('rotate-complete', this.completeGraphicsForCircle);
+            // this.sketchViewModel.on('move', this.updateGraphicTemp);
+            // this.sketchViewModel.on('move-complete', this.completeGraphicsForCircle);
+            // this.sketchViewModel.on('update-cancel', this.updateGraphic);
             this.__sketchStatus.next(true);
           };
 
@@ -670,7 +687,7 @@ export class EsrimapComponent implements OnInit {
                     });
                     // .subscribe(d => console.log(d));
                   }
-                } else if (control === 'rectangle' || control === 'polygon') {
+                } else if (control === 'rectangle' || control === 'polygon' || control === 'circle') {
                   this.selectFeaturesByGeom(this.graphicsLayer.graphics.getItemAt(0).geometry, this.industriesGraphicsLayer);
                 }
               }

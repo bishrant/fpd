@@ -124,7 +124,9 @@ export class IndustriesGeojson implements OnInit {
     // console.log(d);
     // const d1 = d.sort();
     const _tableData = d.map(f => f.properties);
-    const _t = Object.values(_tableData).sort((a, b) => a['id'] - b['id']);
+    
+    const _t = Object.keys(_tableData).map(e => _tableData[e]).sort((a, b) => a['id'] - b['id']);
+    // const _t = Object.values(_tableData).sort((a, b) => a['id'] - b['id']);
     // console.log(_tableData);
     this.currentTableData = _t;
     this.tableDataService.next(_t);
@@ -132,7 +134,8 @@ export class IndustriesGeojson implements OnInit {
 
   getPagedData(sort= 'asc', sortField= 'Company', index= 0, size= 3) {
     console.log(this.currentTableData);
-    let clonedTableData  = Object.assign([], Object.values(this.currentTableData).sort((a, b) => {
+
+    let clonedTableData  = Object.assign([], Object.keys(this.currentTableData).map(e => this.currentTableData[e]).sort((a, b) => {
       let A;
       let B;
       if (sortField !== 'Id') {
@@ -144,6 +147,19 @@ export class IndustriesGeojson implements OnInit {
       if (A > B) {return 1; }
       return 0; // default return value (no sorting)
     }));
+
+    // let clonedTableData  = Object.assign([], Object.values(this.currentTableData).sort((a, b) => {
+    //   let A;
+    //   let B;
+    //   if (sortField !== 'Id') {
+    //     A = a[sortField].toLowerCase(), B = b[sortField].toLowerCase();
+    //   } else {
+    //     A = a[sortField], B = b[sortField];
+    //   }
+    //   if (A < B) {return -1; } // sort string ascending
+    //   if (A > B) {return 1; }
+    //   return 0; // default return value (no sorting)
+    // }));
    // sort = sortField === 'Id' ? sort: (sort === 'asc')
     if (sort === 'desc') {
       clonedTableData = clonedTableData.reverse();
