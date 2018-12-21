@@ -72,37 +72,7 @@ body {
   display: block;
 }
 
-.appList {
-  z-index: 10;
-}
 
-@media (min-width: 1200px) {
-  .appList {
-    width: 50%;
-    margin: auto;
-    z-index: 10;
-    min-width: 850px;
-    margin-right: 15px;
-
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1200px) {
-  .appList {
-    width: 60%;
-    margin: auto;
-    z-index: 10;
-    min-width: 850px;
-  }
-}
-
-@media (max-width: 768px) {
-  .appList {
-    width: 100%;
-    margin: auto;
-    z-index: 10;
-  }
-}
 
 
 .mat-paginator-page-size-label {

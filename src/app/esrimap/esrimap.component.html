@@ -2,13 +2,10 @@
   <div id='tooltipContainer' *ngIf="drawToolActive">
     <div id='tooltip' #tooltip *ngIf= "drawInstructions != ''">{{ drawInstructions}} </div>
   </div> 
-  <div id="basemapToggle" style="height:100px; width:100px; position: absolute; z-index:100; bottom:0"></div>
-  <!-- <button mat-button class="openSidebarButton" >
-      <i class="fa fa-search fa-rotate-90"></i>
-  </button> -->
- 
- <!--
-     
-    
-  -->
+  <div id="basemapToggle" [ngClass]='basemapWidgetClass'></div>
+  <div id='basemapToggleBtn' (click)= 'toggleBasemaps($event)' matTooltip="Show/Hide basemap gallery" mat-button
+  aria-label="Button shows/hides basemap gallery">
+    <i class='esri-icon-layers'></i>
+  </div>
+  <app-list class="appList"></app-list>
 </div>

@@ -11,6 +11,7 @@ import { PrintLegendDirective } from '../directives/print-legend.directive';
 import { PointincountyService } from '../services/pointincounty.service';
 import { DatafiltersService } from '../services/datafilters.service';
 import { WindowService } from '../services/window.service';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-esrimap',
@@ -27,7 +28,8 @@ export class EsrimapComponent implements OnInit {
   public slideStatus = 'slideIn';
   public slideOpen = true;
   public displayslidebtn = 'nodisplay';
-
+  public basemapWidgetVisible = false;
+  public basemapWidgetClass = 'basemapToggleHidden';
   mapView: esri.MapView;
   map: esri.Map;
   public industriesGraphicsLayer: esri.GraphicsLayer;
@@ -80,6 +82,12 @@ export class EsrimapComponent implements OnInit {
   @ViewChild(SidebarComponent) private sideBar: SidebarComponent;
 
   public addGraphicsToMap;
+
+  public toggleBasemaps(e) {
+    console.log(1);
+    this.basemapWidgetVisible =  this.basemapWidgetVisible ? false : true;
+    this.basemapWidgetClass = this.basemapWidgetVisible ? 'basemapToggleVisible' : 'basemapToggleHidden';
+  }
 
   public onShowHideSideNav() {
     this.slideStatus = (this.slideOpen === true) ? 'slideOut' : 'slideIn';
@@ -246,11 +254,11 @@ export class EsrimapComponent implements OnInit {
         'esri/layers/VectorTileLayer', 'esri/views/2d/draw/Draw', 'esri/geometry/Circle',
         'esri/widgets/Sketch/SketchViewModel', 'esri/geometry/Polyline', 'esri/geometry/SpatialReference',
         'esri/Graphic', 'esri/layers/GraphicsLayer', 'esri/geometry/Point', 'esri/tasks/PrintTask',
-        'esri/tasks/support/PrintTemplate', 'esri/tasks/support/PrintParameters',
+        'esri/tasks/support/PrintTemplate', 'esri/tasks/support/PrintParameters', 'esri/widgets/BasemapGallery',
         'esri/widgets/BasemapToggle', 'dojo/domReady!'
       ])
         .then(([EsriMap, EsriMapView, FeatureLayer, geometryEngine, DefaultUI, TileLayer, MapImageLayer, VectorTileLayer, Draw, Circle,
-          SketchViewModel, Polyline, SpatialReference, Graphic, GraphicsLayer, Point, PrintTask, PrintTemplate, PrintParameters, BasemapToggle]) => {
+          SketchViewModel, Polyline, SpatialReference, Graphic, GraphicsLayer, Point, PrintTask, PrintTemplate, PrintParameters, BasemapGallery, BasemapToggle]) => {
           // create a boilerplate graphics layer for adding industries points later on
           this.industriesGraphicsLayer = new GraphicsLayer();
 
@@ -287,7 +295,7 @@ export class EsrimapComponent implements OnInit {
                   geometry: _industryPt,
                   symbol: fn.getSymbol(_industry.properties),
                   attributes: _industry.properties,
-                  popupTemplate: { title: '{Company}', content: '{Company}<br>County: {County}' }
+                  popupTemplate: { title: '{Company}', content: 'County: {County}' }
                 });
                 graphicsArray.push(_industryGraphic);
               });
@@ -335,6 +343,13 @@ export class EsrimapComponent implements OnInit {
             view: this.mapView,
             template: this.printTemplate
           });
+
+          const basemapGallery = new BasemapGallery({
+            view: this.mapView,
+            container: 'basemapToggle'
+          });
+          this.mapView.ui.add(basemapGallery);
+
           const _addBuffer = (mapView, evt, that, mouseMove) => {
             // add a line as you move your mouse
             const tempEndPt = mapView.toMap({ x: mouseMove.x, y: mouseMove.y });
