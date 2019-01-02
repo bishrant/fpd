@@ -15,21 +15,21 @@
     <ul class="navbar-nav mr-auto"> </ul>
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href="http://tfsgis.maps.arcgis.com/apps/webappviewer/index.html?id=f4fe341ee68e403bb35c434711aad9a5"
-          target="_blank">Admin</a>
-      </li>
-
+          <a class="nav-link" (click)="openDialogFn({page: 'aboutpage', evt: $event})">About</a>
+        </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Add/Update Business</a>
+        <a class="nav-link" (click)="openDialogFn({page: 'addupdatepage', evt: $event})">Add/Update Business</a>
       </li>
       <li class="nav-item dropdown">
         <div ngbDropdown class="d-inline-block" >
-          <a class="nav-link dropdown-toggle" id="dropdownBasic01" ngbDropdownToggle>About</a>
+          <a class="nav-link dropdown-toggle" id="dropdownBasic01" ngbDropdownToggle><span class="navbar-toggler-icon"></span></a>
           <div ngbDropdownMenu aria-labelledby="dropdownBasic01" class="dropdownSubmenu" >
-            <button class="dropdown-item">Help</button>
-            <button class="dropdown-item">Contact Us</button>
-            <button class="dropdown-item">TFS Home</button>
-            <button class="dropdown-item">TexasForestInfo.com</button>
+            <button class="dropdown-item" (click)="openDialogFn({page: 'helppage', evt: $event})">Help</button>
+            <button class="dropdown-item" (click)="openDialogFn({page: 'contactus', evt: $event})">Contact Us</button>
+            <a class="dropdown-item" href="http://tfsgis.maps.arcgis.com/apps/webappviewer/index.html?id=f4fe341ee68e403bb35c434711aad9a5"
+            target="_blank">Admin</a>
+            <a class="dropdown-item" href="https://tfsweb.tamu.edu/" target="_blank">TFS Home</a>
+              <a class="dropdown-item" href="http://texasforestinfo.tamu.edu/" target="_blank">TexasForestInfo.com</a>
           </div>
         </div>
       </li>

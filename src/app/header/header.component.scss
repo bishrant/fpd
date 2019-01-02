@@ -31,6 +31,7 @@ a.navbar-dark{
 .dropdown-item{
     color: white !important;
     background-color: #2E7D32;
+    cursor: pointer;
 }
 .dropdown-item:hover{
     color: black !important;
@@ -45,3 +46,6 @@ a.navbar-dark{
     }
 }
 
+li.nav-item {
+    cursor: pointer;
+}

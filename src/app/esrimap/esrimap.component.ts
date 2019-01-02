@@ -70,6 +70,7 @@ export class EsrimapComponent implements OnInit {
   public activatedSpatialControl = false;
   public drawToolActive = false;
   public drawInstructions = '';
+  public _tempZoomPt;
   public Instructions = {circle: 'Click on the map, hold and drag your mouse cursor. Click to complete the circle.',
   polygon: 'Click to add  points to the polygon. Double click to complete.',
   rectangle: 'Click hold and drag to draw a rectangle.',
@@ -170,6 +171,36 @@ export class EsrimapComponent implements OnInit {
     });
 
   }
+
+  public zoomIntoRowMap(evt) {
+    const industryId =  evt.industryId;
+    const isSingleClick = evt.isSingleClick;
+  // just open popup and pan if single click, otherwise zoom into it
+    this.__mapViewStatus.subscribe(_mapStatus => {
+      if (_mapStatus) {
+        const iii = this.allIndustries.filter(__i => __i.properties.Id === industryId)[0];
+        this.industriesGraphicsLayer.when(() => {
+          let ind: any;
+          this.industriesGraphicsLayer.graphics.forEach(_i => {
+            if (_i.attributes.Id === industryId) {
+              ind = _i;
+            }
+          });
+        this._tempZoomPt.x = iii.geometry.coordinates[0];
+        this._tempZoomPt.y = iii.geometry.coordinates[1];
+        if (!isSingleClick) {
+          this.mapView.goTo({center: iii.geometry.coordinates, zoom: 13});
+        }
+        this.mapView.popup.open({
+          location: this._tempZoomPt,
+          features: [ind]
+        });
+        },
+        (err) => console.log('load failed', err));
+      }
+    });
+  }
+
   public activateSpatialControl(control: any) {
     this.drawToolActive = true;
 
@@ -251,14 +282,14 @@ export class EsrimapComponent implements OnInit {
       return loadModules([
         'esri/Map', 'esri/views/MapView', 'esri/layers/FeatureLayer',
         'esri/geometry/geometryEngine', 'esri/views/ui/DefaultUI', 'esri/layers/TileLayer', 'esri/layers/MapImageLayer',
-        'esri/layers/VectorTileLayer', 'esri/views/2d/draw/Draw', 'esri/geometry/Circle',
-        'esri/widgets/Sketch/SketchViewModel', 'esri/geometry/Polyline', 'esri/geometry/SpatialReference',
+        'esri/layers/VectorTileLayer', 'esri/views/2d/draw/Draw', 'esri/geometry/Circle', 'esri/widgets/Home',
+        'esri/widgets/Sketch/SketchViewModel', 'esri/geometry/Polyline', 'esri/geometry/SpatialReference', 'esri/geometry/Extent',
         'esri/Graphic', 'esri/layers/GraphicsLayer', 'esri/geometry/Point', 'esri/tasks/PrintTask',
         'esri/tasks/support/PrintTemplate', 'esri/tasks/support/PrintParameters', 'esri/widgets/BasemapGallery',
         'esri/widgets/BasemapToggle', 'dojo/domReady!'
       ])
-        .then(([EsriMap, EsriMapView, FeatureLayer, geometryEngine, DefaultUI, TileLayer, MapImageLayer, VectorTileLayer, Draw, Circle,
-          SketchViewModel, Polyline, SpatialReference, Graphic, GraphicsLayer, Point, PrintTask, PrintTemplate, PrintParameters, BasemapGallery, BasemapToggle]) => {
+        .then(([EsriMap, EsriMapView, FeatureLayer, geometryEngine, DefaultUI, TileLayer, MapImageLayer, VectorTileLayer, Draw, Circle, Home,
+          SketchViewModel, Polyline, SpatialReference, Extent, Graphic, GraphicsLayer, Point, PrintTask, PrintTemplate, PrintParameters, BasemapGallery, BasemapToggle]) => {
           // create a boilerplate graphics layer for adding industries points later on
           this.industriesGraphicsLayer = new GraphicsLayer();
 
@@ -273,10 +304,18 @@ export class EsrimapComponent implements OnInit {
             spatialReference: new SpatialReference({wkid: 4326})
           });
 
+          // set a empty point geometry for zoom in later
+          this._tempZoomPt = new Point({
+            x: 0,
+            y: 0,
+            spatialReference: {wkid: 4326}
+          });
+          const fullExtent = new Extent({xmin: -106.645646, ymin: 25.837377, xmax: -93.508292, ymax: 36.500704})
           const _mapViewProperties = {
             container: this.mapViewEl.nativeElement,
-            center: vars._center,
-            zoom: vars._zoom,
+            extent: fullExtent,
+            // center: vars._center,
+            // zoom: vars._zoom,
             map: this.map,
             constraints: {
               snapToZoom: false
@@ -306,52 +345,7 @@ export class EsrimapComponent implements OnInit {
                   symbol: fn.getSymbol(_industry.properties),
                   attributes: _industry.properties,
                   // popupTemplate: { title: '{Company}', content: 'County: {County}' }
-                  popupTemplate: { // autocasts as new PopupTemplate()
-                    title: "{Company}",
-                    content: [{
-                      // It is also possible to set the fieldInfos outside of the content
-                      // directly in the popupTemplate. If no fieldInfos is specifically set
-                      // in the content, it defaults to whatever may be set within the popupTemplate.
-                      type: "fields",
-                      fieldInfos: [{
-                        fieldName: "County",
-                        label: "County",
-                        visible: true
-                      }, {
-                        fieldName: "Address",
-                        label: "Address",
-                        visible: true,
-                      }, {
-                        fieldName: "Phone1",
-                        label: "Phone",
-                        visible: true,
-                      }, {
-                        fieldName: "Homepage",
-                        label: "Website",
-                        visible: true,
-                      }, {
-                        fieldName: "Email",
-                        label: "Email",
-                        visible: true,
-                      }, {
-                        fieldName: "MainIndustryType",
-                        label: "Main Industry Type",
-                        visible: true,
-                      }, {
-                        fieldName: "SpecificIndustryType",
-                        label: "Industry Type",
-                        visible: true,
-                      }, {
-                        fieldName: "Products",
-                        label: "Products",
-                        visible: true,
-                      }, {
-                        fieldName: "Species",
-                        label: "Species",
-                        visible: true,
-                      }]
-                    }]
-                  }
+                  popupTemplate: vars.industriesPopupTemplate
                 });
                 graphicsArray.push(_industryGraphic);
               });
@@ -372,7 +366,11 @@ export class EsrimapComponent implements OnInit {
                     this.mapView.extent = cloneExt.expand(1.5);
                   } else {
                     console.log('from default extent');
-                    this.mapView.goTo(graphicsArray); // .then(function () {this.mapView.scale = this.mapView.scale * 0.5;         });
+                    console.log(this.industriesGraphicsLayer);
+                    console.log(this.graphicsLayer);
+                    this.mapView.goTo(graphicsArray).then(() => {
+                      this.mapView.goTo({extent: this.mapView.extent.expand(1.5)});
+                      console.log(this.mapView.extent); });
                   }
               } else {
                 this.mapView.goTo(graphicsArray).then(function () {
@@ -405,6 +403,12 @@ export class EsrimapComponent implements OnInit {
             container: 'basemapToggle'
           });
           this.mapView.ui.add(basemapGallery);
+
+          const homeBtn = new Home({
+            view: this.mapView
+          });
+          // Add the home button to the top left corner of the view
+          this.mapView.ui.add(homeBtn, 'top-right');
 
           const _addBuffer = (mapView, evt, that, mouseMove) => {
             // add a line as you move your mouse

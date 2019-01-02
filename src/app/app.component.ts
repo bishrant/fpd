@@ -1,6 +1,11 @@
 import { Component, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { ResizeEvent } from 'angular-resizable-element';
 import { FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material';
+import { AboutpageComponent} from './aboutpage/aboutpage.component';
+import { AddupdatepageComponent } from './addupdatepage/addupdatepage.component';
+import { ContactuspageComponent } from './contactuspage/contactuspage.component';
+import { HelppageComponent } from './helppage/helppage.component';
 
 @Component({
   selector: 'app-root',
@@ -11,9 +16,11 @@ export class AppComponent implements OnInit {
   title = 'Directory of Forest Products Industries';
   featureTableStatus = 'featureTableMinimized';
   drawerMode = new FormControl('over');
+  public openPage: string;
   public innerWidth: any;
   public deviceType: string;
   public sliderBackdrop = false;
+  pageList = {aboutpage: AboutpageComponent, addupdatepage: AddupdatepageComponent, contactus: ContactuspageComponent, helppage: HelppageComponent };
   @ViewChild ('drawer') drawer: any;
   public showHideFeatureTable(evt) {
     this.featureTableStatus = this.featureTableStatus === 'featureTableMaximized' ? 'featureTableMinimized' : 'featureTableMaximized';
@@ -62,9 +69,21 @@ export class AppComponent implements OnInit {
 
   }
 
-  getSliderBackdrop() {
-    console.log(1);
-    // $event.stopPropagation();
-    // return true;
+  openDialogs(evt) {
+    console.log(evt);
+    const dialogRef = this.dialog.open(this.pageList[evt], {
+      height: '70vh',
+      width: '80vh',
+      autoFocus: false,
+      panelClass: 'custom-modalbox',
+    });
+    dialogRef.afterClosed().subscribe(page => {
+      console.log(page);
+     if (page !== '' && typeof page !== 'undefined') {
+       this.openDialogs(page);
+     }
+    });
   }
+
+  constructor(public dialog: MatDialog) {}
 }

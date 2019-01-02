@@ -59,7 +59,7 @@ matTooltip="Show the industries table."
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
-      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns" (click)="selectRow(row)" (dblclick)="doubleClick($event, row)" [ngClass]="{'highlight': selectedRowIndex == row.Id}"></mat-row>
 
     </mat-table>
 

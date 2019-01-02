@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild, AfterViewInit, Renderer2, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Renderer2, ElementRef, Output, EventEmitter } from '@angular/core';
 import { ListDataSource } from './list.datasource';
 import { MatPaginator, MatSort, MatIcon } from '@angular/material';
 import { IndustriesGeojson } from '../services/industries-geojson.service';
 import { merge } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ExcelService } from '../services/excel.service';
+import { WindowService } from '../services/window.service';
 
 @Component({
   selector: 'app-list',
@@ -12,16 +13,17 @@ import { ExcelService } from '../services/excel.service';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit, AfterViewInit {
-
+  public isSingleClick = true;
+  public selectedRowIndex;
   dataSource: ListDataSource;
   public pageLength = 10;
   displayedColumns = ['Id', 'Company', 'County', 'MainIndustryType', 'SpecificIndustryType'];
   featureTableClass = 'featureTableMaximized';
   @ViewChild(MatPaginator) paginator: MatPaginator;
-
+  @Output() zoomIntoRow = new EventEmitter<any>();
   @ViewChild(MatSort) sort: MatSort;
   // @ViewChild('featureTable') featureTable: ElementRef;
-  constructor(private _data: IndustriesGeojson, private _excelService: ExcelService) { }
+  constructor(private _data: IndustriesGeojson, private _excelService: ExcelService, private winRef: WindowService) { }
 
   ngOnInit() {
     this.dataSource = new ListDataSource(this._data, this.paginator, this.sort);
@@ -33,6 +35,31 @@ export class ListComponent implements OnInit, AfterViewInit {
       this.dataSource.loadTable('asc', 'Id', 0, 10);
       console.log(this.pageLength);
     });
+  }
+
+  public selectRow(row) {
+    this.isSingleClick = true;
+    setTimeout(() => {
+      if (this.isSingleClick) {
+        console.log(row);
+        this._data.selectedRowService.next(row);
+        this.selectedRowIndex = row.Id;
+        this.zoomIntoRow.emit({industryId: this.selectedRowIndex, isSingleClick: true});
+      }
+    }, 250);
+  }
+  public doubleClick(evt, row) {
+    console.log(evt, row);
+    this.isSingleClick = false;
+    this.selectedRowIndex = row.Id;
+    console.log(row.Id);
+    this.zoomIntoRow.emit({industryId: this.selectedRowIndex, isSingleClick: false});
+    evt.stopPropagation();
+  }
+  public openUrl(url: any) {
+    console.log(233);
+    const _x = this.winRef.getNativeWindow();
+    _x.open(url);
   }
 
   ngAfterViewInit() {

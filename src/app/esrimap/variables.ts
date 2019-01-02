@@ -1,6 +1,6 @@
 export const _basemap = 'topo';
-export const _center: Array<number> = [-100, 32];
-export const _zoom = 8;
+export const _center: Array<number> = [-100, 31];
+export const _zoom = 7;
 export const ptSymbol = {
     type: 'simple-marker',
     color: [10, 10, 10],
@@ -62,3 +62,49 @@ export const masterLegend = [{ name: 'Biomass, wood pellet or landscape organic 
 { name: 'Panel or wood pellet plant', type: 'Secondary', color: '#adad3a', order: 4 },
 { name: 'Preservative treating plant', type: 'Secondary', color: '#680944', order: 5 },
 { name: 'Other Secondary Industry', type: 'Secondary', color: '#bbbdc1', order: 6 }];
+
+export const industriesPopupTemplate = { // autocasts as new PopupTemplate()
+  title: '{Company}',
+  content: [{
+    // It is also possible to set the fieldInfos outside of the content
+    // directly in the popupTemplate. If no fieldInfos is specifically set
+    // in the content, it defaults to whatever may be set within the popupTemplate.
+    type: 'fields',
+    fieldInfos: [{
+      fieldName: 'County',
+      label: 'County',
+      visible: true
+    }, {
+      fieldName: 'Address',
+      label: 'Address',
+      visible: true,
+    }, {
+      fieldName: 'Phone1',
+      label: 'Phone',
+      visible: true,
+    }, {
+      fieldName: 'Homepage',
+      label: 'Website',
+      visible: true,
+    }, {
+      fieldName: 'Email',
+      label: 'Email',
+      visible: true,
+    }, {
+      fieldName: 'MainIndustryType',
+      label: 'Main Industry Type',
+      visible: true,
+    }, {
+      fieldName: 'SpecificIndustryType',
+      label: 'Industry Type',
+      visible: true,
+    }, {
+      fieldName: 'Products',
+      label: 'Products',
+      visible: true,
+    }, {
+      fieldName: 'Species',
+      label: 'Species',
+      visible: true,
+    }]
+  }]};

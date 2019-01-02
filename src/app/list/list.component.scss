@@ -14,6 +14,7 @@
   /* Ensure that your app's content doesn't overlap the toolbar */
 }
 
+
 .mat-cell {
   font-size: 13px;
   font-family: Verdana, Sans-Serif;
@@ -240,7 +241,9 @@ span.ui-column-resizer {
     overflow: auto;
   }
 }
-
+.highlight {
+  background: green !important;
+}
 
 .mat-paginator {
   display: block

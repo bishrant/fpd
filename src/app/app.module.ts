@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { MatSortModule, MatPaginatorModule} from '@angular/material';
+import { MatSortModule, MatPaginatorModule, MatDialog, MatDialogModule} from '@angular/material';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import { MatTableModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatIconModule, MatToolbarModule, MatButtonModule  } from '@angular/material';
@@ -26,7 +26,10 @@ import { VirtualScrollComponent } from './virtual-scroll/virtual-scroll.componen
 import { ListComponent } from './list/list.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatExpansionModule} from '@angular/material/expansion';
-// import { DataTableComponent } from './data-table/data-table.component';
+import { AboutpageComponent } from './aboutpage/aboutpage.component';
+import { AddupdatepageComponent } from './addupdatepage/addupdatepage.component';
+import { ContactuspageComponent } from './contactuspage/contactuspage.component';
+import { HelppageComponent } from './helppage/helppage.component';
 
 @NgModule({
   declarations: [
@@ -38,13 +41,18 @@ import {MatExpansionModule} from '@angular/material/expansion';
     PrintLegendDirective,
     VirtualScrollComponent,
     ListComponent,
+    AboutpageComponent,
+    AddupdatepageComponent,
+    ContactuspageComponent,
+    HelppageComponent,
   ],
   imports: [
-    MatSortModule, MatPaginatorModule, ResizableModule, BrowserModule, BrowserAnimationsModule,  NgbModule, MatTableModule, AngularDraggableModule, NgSelectModule,
+    MatSortModule, MatPaginatorModule, ResizableModule, MatDialogModule, BrowserModule, BrowserAnimationsModule,  NgbModule, MatTableModule, AngularDraggableModule, NgSelectModule,
     HttpClientModule, MatSidenavModule, MatExpansionModule, AngularFontAwesomeModule, DragDropModule, MatProgressSpinnerModule, FormsModule,
     MatFormFieldModule, MatInputModule, MatSelectModule, MatTooltipModule, MatIconModule, MatToolbarModule, MatButtonModule
   ],
   providers: [HttpClient],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [AboutpageComponent, AddupdatepageComponent, ContactuspageComponent, HelppageComponent]
 })
 export class AppModule { }

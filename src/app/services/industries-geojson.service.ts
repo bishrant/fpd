@@ -124,7 +124,6 @@ export class IndustriesGeojson implements OnInit {
     // console.log(d);
     // const d1 = d.sort();
     const _tableData = d.map(f => f.properties);
-    
     const _t = Object.keys(_tableData).map(e => _tableData[e]).sort((a, b) => a['id'] - b['id']);
     // const _t = Object.values(_tableData).sort((a, b) => a['id'] - b['id']);
     // console.log(_tableData);

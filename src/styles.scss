@@ -21,6 +21,21 @@ ui-select-choices.dropdown-menu {
   display: block;
 }
 
+.mat-dialog-container {
+  display: block;
+  padding: 10px !important;
+  overflow-x: hidden !important;
+}
+.mat-dialog-title[_ngcontent-c22] {
+  margin: 0 0 5px;
+}
+
+.mat-dialog-content{
+  text-align: justify;
+  margin-right: -24px !important;
+}
+
+
 // without global styles, material paginator's css could not be overidden
 
 @media (max-width: 768px) {
@@ -51,6 +66,24 @@ ui-select-choices.dropdown-menu {
 
 .mat-paginator-range-label {
   margin: 0 10px 0 10px !important;
+}
+
+.mat-dialog-title {
+  margin: 0 0 20px;
+  display: block;
+  background-color: #2E7D32;
+  position: sticky;
+  color: white;
+}
+
+.mat-dialog-actions {
+  float: right;
+  padding: 0 !important;
+  min-height: 0 !important;
+  margin-bottom: -24px;
+}
+.nopadding {
+  padding: 0 !important;
 }
 
 //fix navbar for smaller screen sizes
@@ -113,6 +146,14 @@ ui-select-choices.dropdown-menu {
     color: white !important;
 }
 
+.flatLink{
+  text-decoration: underline !important;
+  color: #007bff !important;
+  background: transparent;
+  min-width: unset;
+  width: auto;
+  padding: 0 !important;
+}
 
 
 .navbar-dark .navbar-nav .nav-link {

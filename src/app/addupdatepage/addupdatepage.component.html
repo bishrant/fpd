@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>Add/Update Business
+  <div mat-dialog-actions>
+    <button mat-button mat-dialog-close><i class="material-icons">
+        close
+      </i></button>
+  </div>
+</h2>
+
+<div mat-dialog-content>
+  <b>Add a Business</b><br>
+
+  If you wish to add a business to this directory, please send an email to
+  <a href="mailto:edougal@tfs.tamu.edu?Subject=Directory of Forest Products Industries - Add a Business&body=Name of Company:  %0DFull Physical address, including zip code of manufacturing facility:%0DTexas county in which the manufacturing is located: %0D
+Contact Name: %0DContact Telephone number:%0DContact email:   %0DWeb Address:   %0DType of wood products manufactured:   %0DWood species used:       %0DLatitude/longitude coordinates (if available):%0D
+    "
+    target="_top">edougal@tfs.tamu.edu</a>
+  and provide information for as many of the following items as possible:
+  <br><br>
+  Name of company<i class='error'>*</i> <br>
+  Full physical address, including zip code of manufacturing facility<i class='error'>*</i><br>
+  Texas county in which the manufacturing facility is located<i class='error'>*</i><br>
+  Contact name<i class='error'>*</i><br>
+  Contact telephone number<i class='error'>*</i><br>
+  Contact email<br>
+  Web address<br>
+  Type of wood products manufactured<i class='error'>*</i><br>
+  Wood species used<i class='error'>*</i><br>
+  Latitude/longitude coordinates<br>
+  <br>
+  <i class='error'>*</i> Required fields
+
+  Following receipt of this email, contact will be made using the telephone number provided to verify the request,
+  clarify information as needed, and, if necessary, discuss suitability of the request for this directory.
+  If you wish to call first or to submit information by telephone you may do so using the telephone number provided on
+  the <button href="#" mat-button [mat-dialog-close]="contactUs" class='flatLink'>Contact Us</button> page.
+  <br>
+  <hr><b>
+    Update a Business
+  </b><br>
+
+
+  If you would like to update the information on your business, or believe the information for a business listed in the
+  directory is incomplete or innacurate, please send an email to
+  <a href="mailto:edougal@tfs.tamu.edu?Subject=Directory of Forest Products Industries - Update&body=Name%0DPhone Number:%0DInformation to be Updated:%0D
+        "
+    target="_top">edougal@tfs.tamu.edu</a>
+
+  , and provide the updated information including a contact name and telephone number. Following receipt of this email,
+  contact will be made using the telephone number provided to verify the request prior to revisions being made. If you
+  wish to call first or to submit information by telephone you may do so using the telephone number provided on the
+  <button href="#" mat-button [mat-dialog-close]="contactUs" class='flatLink'>Contact Us</button> page.
+</div>
