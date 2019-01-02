@@ -280,7 +280,17 @@ export class EsrimapComponent implements OnInit {
             map: this.map,
             constraints: {
               snapToZoom: false
-            }
+            },
+            popup: {
+              dockEnabled: false,
+              dockOptions: {
+                // Disables the dock button from the popup
+                buttonEnabled: true,
+                // Ignore the default sizes that trigger responsive docking
+                breakpoint: false,
+                position: 'top-center'
+              }
+            },
           };
           this.addGraphicsToMap = () => {
             this._data.currentData.subscribe(d => {
@@ -295,7 +305,53 @@ export class EsrimapComponent implements OnInit {
                   geometry: _industryPt,
                   symbol: fn.getSymbol(_industry.properties),
                   attributes: _industry.properties,
-                  popupTemplate: { title: '{Company}', content: 'County: {County}' }
+                  // popupTemplate: { title: '{Company}', content: 'County: {County}' }
+                  popupTemplate: { // autocasts as new PopupTemplate()
+                    title: "{Company}",
+                    content: [{
+                      // It is also possible to set the fieldInfos outside of the content
+                      // directly in the popupTemplate. If no fieldInfos is specifically set
+                      // in the content, it defaults to whatever may be set within the popupTemplate.
+                      type: "fields",
+                      fieldInfos: [{
+                        fieldName: "County",
+                        label: "County",
+                        visible: true
+                      }, {
+                        fieldName: "Address",
+                        label: "Address",
+                        visible: true,
+                      }, {
+                        fieldName: "Phone1",
+                        label: "Phone",
+                        visible: true,
+                      }, {
+                        fieldName: "Homepage",
+                        label: "Website",
+                        visible: true,
+                      }, {
+                        fieldName: "Email",
+                        label: "Email",
+                        visible: true,
+                      }, {
+                        fieldName: "MainIndustryType",
+                        label: "Main Industry Type",
+                        visible: true,
+                      }, {
+                        fieldName: "SpecificIndustryType",
+                        label: "Industry Type",
+                        visible: true,
+                      }, {
+                        fieldName: "Products",
+                        label: "Products",
+                        visible: true,
+                      }, {
+                        fieldName: "Species",
+                        label: "Species",
+                        visible: true,
+                      }]
+                    }]
+                  }
                 });
                 graphicsArray.push(_industryGraphic);
               });
