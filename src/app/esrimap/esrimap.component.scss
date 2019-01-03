@@ -21,6 +21,13 @@ body {
 .row {
   height: 100%;
 }
+.mapbusySpinner{
+  position: absolute;
+  z-index: 100;
+  margin: auto;
+  top: 60px;
+  left: 50%;
+}
 
 #tooltipContainer {
   position: absolute;

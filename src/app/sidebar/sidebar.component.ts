@@ -80,11 +80,9 @@ export class SidebarComponent implements OnInit {
         const _specRegex = new RegExp('Sawmill', 'i');
         this._data.allDataService.next(d1.filter(f => selected.toLowerCase() === (f.properties[attribute]).toLowerCase()
         && _specRegex.test(f.properties['SpecificIndustryType']) ));
-       // console.log(d1.filter(f => reg.test(f.properties[attribute])));
       });
     } else {
       this._data.orginalDataObservable.subscribe(d => {
-        // reset the data from original data source
         const d1 = d as any[];
         this._data.allDataService.next(d1.filter(f => reg.test(f.properties[attribute])));
       });
@@ -113,35 +111,27 @@ export class SidebarComponent implements OnInit {
         }
         break;
     }
+    this.selectedValues = {'Company': null, 'County': null, 'SpecificIndustryType': null, 'MainIndustryType': null};
     this.applyFilter(attribute, value);
   }
   }
 
-  public removed(value: any): void {
-    console.log('Removed value is: ', value);
+  public attributeSearch(evt): void {
+    console.log(this.selectedValues);
   }
 
-  public typed(value: any): void {
-    console.log('New search input: ', value);
-  }
 
   public refreshValue(value: any): void {
     this.value = value;
   }
 
-  public updateItems() {
-    this.counties = ['test1', 'test3', 'something else very long'];
-  }
   public resetData() {
-    console.log('rest', this.ccc, this.cc);
+    console.log('reset from button', this.ccc, this.cc);
     this.selectedValues = {'Company': null, 'County': null, 'SpecificIndustryType': null, 'MainIndustryType': null};
-    // //this.ccc.select(null);
     this._data.orginalDataObservable.subscribe(d => {
       // reset the data from original data source
       this._data.allDataService.next(d);
       this._data.featureLoaded(d);
-
-    //  this.ccc.active = [];
     });
   }
 

@@ -24,25 +24,31 @@
 <!-- </div> 
 [opened]="!sliderBackdrop" 
 -->
-
+<!-- <button mat-button style="position: absolute; z-index: 10000; top: 70px; background-color:red">Hide Slider</button> -->
+  <button mat-button class="openSideBarButton" *ngIf="!drawer.opened" (click)="drawer.open()" matTooltip="Show sidebar for search and export."
+  [matTooltipPosition]="'right'" aria-label="show sidebar button">
+  <i class="fa fa-chevron-right"></i>
+</button>
 <mat-drawer-container class="sidenav-container" [hasBackdrop]="sliderBackdrop">
   <mat-drawer #drawer [mode]='drawerMode' class="sidenav" [opened]="!sliderBackdrop">
     <app-sidebar (hideSidebarEvent)="drawer.close()"></app-sidebar>
   </mat-drawer>
+
+
   <mat-drawer-content class="drawerContent">
     <mat-toolbar>
       <app-header class="headerBar" (openDialog)="openDialogs($event)"></app-header>
     </mat-toolbar>
-
+    
     <div class="mainBody">
       <div id='legendOverlay' style="height: 200px; width:200px; z-index:1000; display: none">
         <canvas id='canvasPrimaryLegend' appPrintLegend style="height: inherit; width: auto"></canvas>
         <canvas id='canvasSecondayLegend' appPrintLegend style="height: inherit; width: auto"></canvas>
-      </div>
-      <button mat-button class="openSideBarButton" *ngIf="!drawer.opened" (click)="drawer.open()" matTooltip="Show sidebar for search and export."
-        [matTooltipPosition]="'right'" aria-label="show sidebar button">
-        <i class="fa fa-chevron-right">12</i>
-      </button>
+
+       
+      test
+      </div>  
+
       <app-esrimap class="fullpageMap">
 
       </app-esrimap>

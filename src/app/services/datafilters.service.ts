@@ -17,15 +17,21 @@ export class DatafiltersService {
       });
   }
   public resetData() {
-    console.log('rest');
-    // this.selectedValues = {'Company': null, 'County': null, 'SpecificIndustryType': null, 'MainIndustryType': null};
-    // //this.ccc.select(null);
+    console.time('reset time2');
     this._data.orginalDataObservable.subscribe(d => {
       // reset the data from original data source
+      console.time('reset time a');
       this._data.allDataService.next(d);
       this._data.featureLoaded(d);
-
+      console.timeEnd('reset time a');
     //  this.ccc.active = [];
+    });
+    console.timeEnd('reset time2');
+  }
+
+  public resetDataSpatial() {
+    this._data.orginalDataObservable.subscribe(d => {
+      this._data.allDataService.next(d);
     });
   }
 }

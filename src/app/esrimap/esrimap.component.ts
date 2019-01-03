@@ -11,7 +11,7 @@ import { PrintLegendDirective } from '../directives/print-legend.directive';
 import { PointincountyService } from '../services/pointincounty.service';
 import { DatafiltersService } from '../services/datafilters.service';
 import { WindowService } from '../services/window.service';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-esrimap',
@@ -71,12 +71,14 @@ export class EsrimapComponent implements OnInit {
   public drawToolActive = false;
   public drawInstructions = '';
   public _tempZoomPt;
-  public Instructions = {circle: 'Click on the map, hold and drag your mouse cursor. Click to complete the circle.',
-  polygon: 'Click to add  points to the polygon. Double click to complete.',
-  rectangle: 'Click hold and drag to draw a rectangle.',
-  point: 'Click to select one or more counties. Double click to complete.',
-  clear: ''
-};
+  public mapBusy = false;
+  public Instructions = {
+    circle: 'Click on the map, hold and drag your mouse cursor. Click to complete the circle.',
+    polygon: 'Click to add  points to the polygon. Double click to complete.',
+    rectangle: 'Click hold and drag to draw a rectangle.',
+    multipoint: 'Click to select one or more counties. Double click to complete.',
+    clear: ''
+  };
   public nativeWindow: any;
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
@@ -86,7 +88,7 @@ export class EsrimapComponent implements OnInit {
 
   public toggleBasemaps(e) {
     console.log(1);
-    this.basemapWidgetVisible =  this.basemapWidgetVisible ? false : true;
+    this.basemapWidgetVisible = this.basemapWidgetVisible ? false : true;
     this.basemapWidgetClass = this.basemapWidgetVisible ? 'basemapToggleVisible' : 'basemapToggleHidden';
   }
 
@@ -120,62 +122,10 @@ export class EsrimapComponent implements OnInit {
     });
   }
 
-
-  public activateBuffer() {
-    const that = this;
-    console.log('This is a touch screen device: ', this.touchEnabledDisplay);
-    this.mapView.on('click', function (evt) {
-      console.log(evt);
-      that.addBufferGraphic(that, evt, that.mapView);
-      // evt.stopPropagation();
-      if (!that.touchEnabledDisplay) {
-        that.mapView.on('click', function (evt1) {
-          evt1.stopPropagation();
-          evt.stopPropagation();
-          that.mapView.on('click', function (ee) { ee.stopPropagation(); });
-          that.mapView.on('pointer-move', function (eee) { eee.stopPropagation(); });
-          that.mapView.map.remove(that.bufferLineGraphic);
-          that.bufferLineGraphicLayer.removeAll();
-          //  that.selectFeaturesByGeom(that.buffer, that.grp);
-        });
-      }
-      // } else {
-      //   that.mapView.on('click', function (evt1) {
-      //     evt1.stopPropagation();
-      //     evt.stopPropagation();
-      //   });
-      //   that.mapView.on('drag', function (evt1) {
-      //     evt1.stopPropagation();
-      //     evt.stopPropagation();
-      //   });
-      // }
-      // that.addGraphic(evt);
-    });
-  }
-
-  public drawBuffer() {
-    // function to draw buffer using native draw action
-    const disableViewDragEvt = this.mapView.on('drag', (viewEvt) => {    // prevents panning with the mouse drag event
-      viewEvt.stopPropagation();
-    });
-    this.action = this.draw.create('polyline', { mode: 'click' });
-    // focus the view to activate keyboard shortcuts for drawing polygons
-    this.mapView.focus();
-    this.action.on('vertex-add', this.addVertices);
-    this.action.on('cursor-update', this.drawLine);
-    this.action.on('vertex-remove', this.drawLine);
-    this.action.on('draw-complete', () => {
-      this.sketchViewModel.complete();
-      console.log('draw complete');
-      disableViewDragEvt.remove();
-    });
-
-  }
-
   public zoomIntoRowMap(evt) {
-    const industryId =  evt.industryId;
+    const industryId = evt.industryId;
     const isSingleClick = evt.isSingleClick;
-  // just open popup and pan if single click, otherwise zoom into it
+    // just open popup and pan if single click, otherwise zoom into it
     this.__mapViewStatus.subscribe(_mapStatus => {
       if (_mapStatus) {
         const iii = this.allIndustries.filter(__i => __i.properties.Id === industryId)[0];
@@ -186,71 +136,47 @@ export class EsrimapComponent implements OnInit {
               ind = _i;
             }
           });
-        this._tempZoomPt.x = iii.geometry.coordinates[0];
-        this._tempZoomPt.y = iii.geometry.coordinates[1];
-        if (!isSingleClick) {
-          this.mapView.goTo({center: iii.geometry.coordinates, zoom: 13});
-        }
-        this.mapView.popup.open({
-          location: this._tempZoomPt,
-          features: [ind]
-        });
+          this._tempZoomPt.x = iii.geometry.coordinates[0];
+          this._tempZoomPt.y = iii.geometry.coordinates[1];
+          if (!isSingleClick) {
+            this.mapView.goTo({ center: iii.geometry.coordinates, zoom: 13 });
+          }
+          this.mapView.popup.open({
+            location: this._tempZoomPt,
+            features: [ind]
+          });
         },
-        (err) => console.log('load failed', err));
+          (err) => console.log('load failed', err));
       }
     });
   }
 
   public activateSpatialControl(control: any) {
     this.drawToolActive = true;
-
-
+    this.mapBusy = true;
     this.__mapViewStatus.subscribe(_mapStatus => {
       if (_mapStatus) {
-        this.clearDrawGraphics();
-        this.drawInstructions = this.Instructions[control];
-        if (control === 'buffer') {
-          this.drawBuffer();
-          // this.activateBuffer();
-          // const that = this;
-          // this.mapView.on('key-down', function (evt) {
-          //   console.log('key-down', evt);
-          //   if (evt.key === 'Escape') {
-          //     that.mapView.on('click', function (ee) { ee.stopPropagation(); });
-          //     that.mapView.on('pointer-move', function (eee) { eee.stopPropagation(); });
-          //     if (typeof (that.bufferGraphicsLayer) !== 'undefined') {
-          //       that.bufferGraphicsLayer.removeAll();
-          //       that.bufferLineGraphicLayer.removeAll();
-          //       that.tempGraphicsLayer.removeAll();
-          //     }
-          //     that.sideBar.activatedSpatialControl = false;
+        if (['polygon', 'multipoint', 'rectangle', 'circle'].indexOf(control) !== -1) {
+          if (control === 'multipoint') {
+            // clear graphics for county selection
+            this.clearDrawGraphics(true);
+            this.drawInstructions = this.Instructions[control];
+            this.mapBusy = false;
+          } else {
+            this.clearDrawGraphics(false);
+            this.drawInstructions = this.Instructions[control];
+            this.mapBusy = false;
+          }
+            this.__sketchStatus.subscribe(_sketchStatus => {
+              if (_sketchStatus) {
+                this.sketchViewModel.create(control);
+              }
+            });
 
-          //   }
-          // });
-        } else if (control === 'polygon') {
-          this.__sketchStatus.subscribe(_sketchStatus => {
-            if (_sketchStatus) {
-              this.sketchViewModel.create('polygon');
-            }
-          });
-        } else if (control === 'point') {
-          this.__sketchStatus.subscribe(_sketchStatus => {
-            if (_sketchStatus) {
-              this.sketchViewModel.create('multipoint');
-            }
-          });
-        } else if (control === 'rectangle') {
-          this.__sketchStatus.subscribe(_sketchStatus => {
-            if (_sketchStatus) {
-              this.sketchViewModel.create('rectangle');
-            }
-          });
-        } else if (control === 'circle') {
-          this.__sketchStatus.subscribe(_sketchStatus => {
-            if (_sketchStatus) {
-              this.sketchViewModel.create('circle');
-            }
-          });
+        } else {
+          this.clearDrawGraphics(true);
+          this.drawInstructions = this.Instructions[control];
+          this.mapBusy = false;
         }
       }
     });
@@ -258,12 +184,12 @@ export class EsrimapComponent implements OnInit {
   constructor(private _data: IndustriesGeojson, private _legendDirective: PrintLegendDirective,
     private winRef: WindowService,
     private pointInCountyService: PointincountyService, private dataFilterService: DatafiltersService) {
-      this.nativeWindow = winRef.getNativeWindow();
-     }
+    this.nativeWindow = winRef.getNativeWindow();
+  }
 
   public ngOnInit() {
 
-    this._data.activeSpatialControlObservable.subscribe( control => {
+    this._data.activeSpatialControlObservable.subscribe(control => {
       console.log('activated this control ', control);
       this.activateSpatialControl(control);
     });
@@ -297,20 +223,20 @@ export class EsrimapComponent implements OnInit {
           this.circleGraphicsLayer = new GraphicsLayer({ id: 'circleGraphicsLayer' });
           this.tempGraphicsLayer = new GraphicsLayer({ id: 'tempGraphicsLayer' });
 
-         const countyLayer = new MapImageLayer({url: 'http://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/FPD/fpd2/MapServer'});
+          const countyLayer = new MapImageLayer({ url: 'https://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/FPD/fpd2/MapServer' });
           this.map = new EsriMap({
             basemap: vars._basemap,
             layers: [countyLayer, this.industriesGraphicsLayer, this.graphicsLayer],
-            spatialReference: new SpatialReference({wkid: 4326})
+            spatialReference: new SpatialReference({ wkid: 4326 })
           });
 
           // set a empty point geometry for zoom in later
           this._tempZoomPt = new Point({
             x: 0,
             y: 0,
-            spatialReference: {wkid: 4326}
+            spatialReference: { wkid: 4326 }
           });
-          const fullExtent = new Extent({xmin: -106.645646, ymin: 25.837377, xmax: -93.508292, ymax: 36.500704})
+          const fullExtent = new Extent({ xmin: -106.645646, ymin: 25.837377, xmax: -93.508292, ymax: 36.500704 }).expand(1.2);
           const _mapViewProperties = {
             container: this.mapViewEl.nativeElement,
             extent: fullExtent,
@@ -352,26 +278,23 @@ export class EsrimapComponent implements OnInit {
               // add them to the map
               this.industriesGraphicsLayer.addMany(graphicsArray);
               if (typeof (this.graphicsLayer) !== 'undefined' || typeof (this.circleGraphicsLayer) !== 'undefined') {
-                  if (this.circleGraphicsLayer.graphics.length > 0) {
-                    console.log('from cicle extent');
-                    console.log(this.graphicsLayer);
-                   // console.log(this.circleGraphicsLayer.fullExtent.expand(1.3));
-                    const ext = this.circleGraphicsLayer.graphics.getItemAt(0).geometry.extent;
-                    const cloneExt = ext.clone();
-                    this.mapView.extent = cloneExt.expand(1.5);
-                   // this.mapView.goTo({target: this.circleGraphicsLayer.graphics, extent: cloneExt}); // .then(() => {this.mapView.scale = this.mapView.scale * 0.5; });
-                  } else if (this.graphicsLayer.graphics.length > 0) {
-                    const ext = this.graphicsLayer.graphics.getItemAt(0).geometry.extent;
-                    const cloneExt = ext.clone();
-                    this.mapView.extent = cloneExt.expand(1.5);
-                  } else {
-                    console.log('from default extent');
-                    console.log(this.industriesGraphicsLayer);
-                    console.log(this.graphicsLayer);
-                    this.mapView.goTo(graphicsArray).then(() => {
-                      this.mapView.goTo({extent: this.mapView.extent.expand(1.5)});
-                      console.log(this.mapView.extent); });
-                  }
+                if (this.circleGraphicsLayer.graphics.length > 0) {
+                  console.log('from cicle extent');
+                  console.log(this.graphicsLayer);
+                  // console.log(this.circleGraphicsLayer.fullExtent.expand(1.3));
+                  const ext = this.circleGraphicsLayer.graphics.getItemAt(0).geometry.extent;
+                  const cloneExt = ext.clone();
+                  this.mapView.extent = cloneExt.expand(1.5);
+                  // this.mapView.goTo({target: this.circleGraphicsLayer.graphics, extent: cloneExt}); // .then(() => {this.mapView.scale = this.mapView.scale * 0.5; });
+                } else if (this.graphicsLayer.graphics.length > 0) {
+                  const ext = this.graphicsLayer.graphics.getItemAt(0).geometry.extent;
+                  const cloneExt = ext.clone();
+                  this.mapView.extent = cloneExt.expand(1.5);
+                } else {
+                  this.mapView.goTo(graphicsArray).then(() => {
+                    this.mapView.goTo({ extent: this.mapView.extent.expand(1.5) });
+                  });
+                }
               } else {
                 this.mapView.goTo(graphicsArray).then(function () {
                   this.mapView.scale = this.mapView.scale * 0.5;
@@ -448,7 +371,7 @@ export class EsrimapComponent implements OnInit {
             that.tempGraphicsLayer.add(labelGraphic);
             that.tempGraphicsLayer.add(bufferGraphic);
             that.tempGraphicsLayer.add(_newLine);
-           this.activatedSpatialControl = true;
+            this.activatedSpatialControl = true;
           };
           this.addBufferGraphic = (that, evt, mapView) => {
             // function to add a buffer graphic to the map
@@ -475,12 +398,10 @@ export class EsrimapComponent implements OnInit {
             if (!that.touchEnabledDisplay) {
               mapView.on('pointer-move', function (mouseMove) {
                 _addBuffer(mapView, evt, _that, mouseMove);
-                // s
               });
             } else {
               mapView.on('drag', function (mouseMove) {
                 _addBuffer(mapView, evt, _that, mouseMove);
-                // mouseMove.preventDefault();
                 mouseMove.stopPropagation();
               });
             }
@@ -505,7 +426,6 @@ export class EsrimapComponent implements OnInit {
                       }
                       that.activatedSpatialControl = (that.editGraphic === null);
                       // Save a reference to the graphic we intend to update
-                      // that.editGraphic = results[i].graphic;
                       // Remove the graphic from the GraphicsLayer
                       // Sketch will handle displaying the graphic while being updated
                       that.graphicsLayer.remove(that.editGraphic);
@@ -557,10 +477,8 @@ export class EsrimapComponent implements OnInit {
           this.addGraphic = (event, that = this) => {
             // Create a new graphic and set its geometry to
             // `create-complete` event geometry.
-            // this.graphicsLayer.removeAll();
             const graphic = new Graphic({
               geometry: event.geometry,
-             // symbol: that.sketchViewModel.graphic.symbol
             });
             that.graphicsLayer.add(graphic);
             that.editGraphic = null;
@@ -648,7 +566,6 @@ export class EsrimapComponent implements OnInit {
               });
               const _graphic = new Graphic({
                 geometry: _polyline,
-              //  symbol: this.sketchViewModel.graphic.symbol
               });
               this.graphicsLayer.add(_graphic);
               this.createCircle(_polyline.paths[0][0], _polyline.paths[0][1]);
@@ -666,7 +583,6 @@ export class EsrimapComponent implements OnInit {
           this.updateGraphic = (event) => {
             // Create a new graphic and set its geometry event.geometry
             this.updateGraphicTemp(event);
-
             // set the editGraphic to null update is complete or cancelled.
             this.editGraphic = null;
             this.activatedSpatialControl = (this.editGraphic === null);
@@ -677,10 +593,6 @@ export class EsrimapComponent implements OnInit {
             const _selected = [];
             gras.map(function (_g) {
               if (inputgeom.contains(_g.geometry)) {
-                // const __gp = _g.clone();
-                // zoom to that point and also remove the old one
-                // _zooms(__gp);
-                // _remove(_g);
                 _selected.push({
                   'type': 'Feature', 'id': _g.uid, 'geometry': {
                     'type': 'Point',
@@ -703,33 +615,23 @@ export class EsrimapComponent implements OnInit {
               polygonSymbol: vars.polygonSymbol
             });
             mapView.map.addMany([this.graphicsLayer, this.circleGraphicsLayer, this.tempGraphicsLayer]);
-            this.sketchViewModel.on('create', function(event) {
+            this.sketchViewModel.on('create', function (event) {
               if (event.state === 'complete') {
                 console.log(event);
                 _that.addGraphic(event.graphic.geometry, _that);
                 console.log(event);
               }
             });
-
-            // this.setupClickHandler(this);
-            // this.sketchViewModel.on('create-complete', this.addGraphic);
-            // // Listen to create-complete event to add a newly created graphic to view
-            // this.sketchViewModel.on('reshape-complete', this.completeGraphicsForCircle);
-            // this.sketchViewModel.on('scale', this.updateGraphicTemp);
-            // this.sketchViewModel.on('scale-complete', this.updateGraphic);
-            // this.sketchViewModel.on('update', this.updateGraphicTemp);
-            // this.sketchViewModel.on('update-complete', this.updateGraphic);
-            // this.sketchViewModel.on('rotate-complete', this.completeGraphicsForCircle);
-            // this.sketchViewModel.on('move', this.updateGraphicTemp);
-            // this.sketchViewModel.on('move-complete', this.completeGraphicsForCircle);
-            // this.sketchViewModel.on('update-cancel', this.updateGraphic);
             this.__sketchStatus.next(true);
           };
 
-          this.clearDrawGraphics = () => {
+          this.clearDrawGraphics = (isResetData) => {
             // function to clear all active graphics in the map along with the view and graphcis layer
             // also resets the sketchviewmodel is that is active so that next drawing could be initialized properly
-            this.dataFilterService.resetData();
+            console.time('clear');
+            if (isResetData) {
+              this.dataFilterService.resetDataSpatial();
+            }
             this.__sketchStatus.subscribe(_sketchStatus => {
               if (_sketchStatus) {
                 this.sketchViewModel.reset();
@@ -739,6 +641,8 @@ export class EsrimapComponent implements OnInit {
                 this.editGraphic = null;
                 this.sketchViewModel.complete();
                 this.sketchViewModel.reset();
+                this.mapView.goTo({ extent: fullExtent });
+                console.timeEnd('clear');
               }
             });
           };
@@ -749,23 +653,23 @@ export class EsrimapComponent implements OnInit {
               if (this.sketchViewModel.state === 'creating' || this.sketchViewModel.state === 'updating') {
                 this.sketchViewModel.complete();
               }
-                if (control === 'buffer') {
-                  this.selectFeaturesByGeom(this.circleGraphicsLayer.graphics.getItemAt(0).geometry, this.industriesGraphicsLayer);
-                } else if (control === 'point') {
-                  const totalPt = (this.graphicsLayer.graphics.length);
-                  console.log(totalPt);
-                  if (totalPt > 0) {
-                   const geoj = JSON.stringify(this.graphicsLayer.graphics.getItemAt(0).geometry.toJSON());
-                    this.pointInCountyService.getCountyNameFromPoint(geoj);
-                    this.pointInCountyService.pointInCountyDataService.subscribe(d => {
-                      this.dataFilterService.applyFilterArray('County', d);
-                    });
-                    // .subscribe(d => console.log(d));
-                  }
-                } else if (control === 'rectangle' || control === 'polygon' || control === 'circle') {
-                  this.selectFeaturesByGeom(this.graphicsLayer.graphics.getItemAt(0).geometry, this.industriesGraphicsLayer);
+              if (control === 'buffer') {
+                this.selectFeaturesByGeom(this.circleGraphicsLayer.graphics.getItemAt(0).geometry, this.industriesGraphicsLayer);
+              } else if (control === 'multipoint') {
+                const totalPt = (this.graphicsLayer.graphics.length);
+                console.log(totalPt);
+                if (totalPt > 0) {
+                  const geoj = JSON.stringify(this.graphicsLayer.graphics.getItemAt(0).geometry.toJSON());
+                  this.pointInCountyService.getCountyNameFromPoint(geoj);
+                  this.pointInCountyService.pointInCountyDataService.subscribe(d => {
+                    this.dataFilterService.applyFilterArray('County', d);
+                  });
+                  // .subscribe(d => console.log(d));
                 }
+              } else if (control === 'rectangle' || control === 'polygon' || control === 'circle') {
+                this.selectFeaturesByGeom(this.graphicsLayer.graphics.getItemAt(0).geometry, this.industriesGraphicsLayer);
               }
+            }
           };
 
           this.mapView.when(() => {
@@ -776,7 +680,6 @@ export class EsrimapComponent implements OnInit {
             this.draw = new Draw({
               view: this.mapView
             });
-            console.log('setup view of map');
           }, (err) => {
             this.__mapViewStatus.next(false);
             console.log(err);

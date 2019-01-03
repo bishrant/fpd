@@ -147,19 +147,6 @@ export class IndustriesGeojson implements OnInit {
       return 0; // default return value (no sorting)
     }));
 
-    // let clonedTableData  = Object.assign([], Object.values(this.currentTableData).sort((a, b) => {
-    //   let A;
-    //   let B;
-    //   if (sortField !== 'Id') {
-    //     A = a[sortField].toLowerCase(), B = b[sortField].toLowerCase();
-    //   } else {
-    //     A = a[sortField], B = b[sortField];
-    //   }
-    //   if (A < B) {return -1; } // sort string ascending
-    //   if (A > B) {return 1; }
-    //   return 0; // default return value (no sorting)
-    // }));
-   // sort = sortField === 'Id' ? sort: (sort === 'asc')
     if (sort === 'desc') {
       clonedTableData = clonedTableData.reverse();
       console.log(clonedTableData);
