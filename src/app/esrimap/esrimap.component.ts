@@ -226,6 +226,9 @@ export class EsrimapComponent implements OnInit {
             constraints: {
               snapToZoom: false
             },
+            spatialReference: {
+              wkid: 3857
+            },
             popup: {
               dockEnabled: false,
               dockOptions: {
