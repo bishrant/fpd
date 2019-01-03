@@ -8,7 +8,7 @@ export class PrintLegendDirective implements OnInit {
   element: ElementRef;
   constructor(private el: ElementRef, private _data: IndustriesGeojson) {
     // console.log(el.nativeElement);
-    this.element = el.nativeElement;
+    this.element = this.el.nativeElement;
   }
   public convertCanvasToWhite(ctx, canvas) {
     // change non-opaque pixels to white

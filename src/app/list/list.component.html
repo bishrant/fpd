@@ -10,7 +10,7 @@ matTooltip="Show the industries table."
 <div cdkDrag #featureTable [ngClass]='featureTableClass'>
   <mat-toolbar class="table-toolbar" cdkDragHandle>
     <mat-toolbar-row>
-      <button mat-button (click)="toggleTable($event)" class="minimizeBtn"
+      <button mat-button (click)="toggleTable()" class="minimizeBtn"
       matTooltip="Hide the industries table."
       [matTooltipPosition]= "'above'"
         aria-label="Hide table button"

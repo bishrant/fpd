@@ -1,5 +1,4 @@
-import { Component, OnInit, NgModule, ViewEncapsulation, Output, EventEmitter, ElementRef, ViewChildren, ViewChild } from '@angular/core';
-import { SelectModule, SelectComponent } from 'ng2-select';
+import { Component, OnInit, ViewEncapsulation, Output, EventEmitter, ElementRef, ViewChildren, ViewChild } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { Rest, SidebarService } from './sidebar.service';
 import { IndustriesGeojson } from '../services/industries-geojson.service';
@@ -116,7 +115,7 @@ export class SidebarComponent implements OnInit {
   }
   }
 
-  public attributeSearch(evt): void {
+  public attributeSearch(): void {
     console.log(this.selectedValues);
   }
 
@@ -137,11 +136,7 @@ export class SidebarComponent implements OnInit {
 
   public printMapPDF() {
     this.exportButtonClicked.emit('clickedExport');
-    console.log('here');
-    // this._exportPDFSubject.next('clicked');
     this._data.printMapSubject.next('clicked');
-    //  this._esrimap.executePrint();
-    // this._legend.prepareLegend();
   }
   public activateSpatialControl(control: string) {
     this.activeControl = control;
@@ -149,18 +144,13 @@ export class SidebarComponent implements OnInit {
     console.log(control);
     this._data.activeSpataiControl.next(control);
   }
-  public clickedSpatialQuery(evt) {
-    console.log('active control to do qyuery', this.activeControl);
+  public clickedSpatialQuery() {
     this._data.performSpatailQuery.next(this.activeControl);
-    // this.performSpatialQuery.emit(this.activeControl);
-    // this.spatialControlClicked.emit(this.activeControl);
   }
   public genetateReportPostData(): any {
-    const dummy: any = [];
     const _postdata: any = [];
     const _reportFields: string[] = ['Company', 'County', 'Address', 'Phone1', 'Homepage', 'Email', 'MainIndustryType', 'SpecificIndustryType', 'Products', 'Species'];
     console.log(this.tableData);
-    // console.log(this.)
     this.tableData.forEach(_d => {
       const _partialArray: any = {};
       _reportFields.forEach(_attr => {
@@ -215,7 +205,7 @@ export class SidebarComponent implements OnInit {
       this.tableData = d;
     });
     this._data.currentCountyList.subscribe(d => {
-      console.log('got distinct ');
+//       console.log('got distinct ');
       this.counties = d;
     });
 
@@ -232,7 +222,6 @@ export class SidebarComponent implements OnInit {
     });
 
     this._data.currentSawmillSpecies.subscribe(d => {
-      // console.log(d);
       this.sawmillMajorSpecies = d;
     });
   }

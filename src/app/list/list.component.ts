@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, AfterViewInit, Renderer2, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { ListDataSource } from './list.datasource';
-import { MatPaginator, MatSort, MatIcon } from '@angular/material';
+import { MatPaginator, MatSort } from '@angular/material';
 import { IndustriesGeojson } from '../services/industries-geojson.service';
 import { merge } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -26,14 +26,14 @@ export class ListComponent implements OnInit, AfterViewInit {
   constructor(private _data: IndustriesGeojson, private _excelService: ExcelService, private winRef: WindowService) { }
 
   ngOnInit() {
-    this.dataSource = new ListDataSource(this._data, this.paginator, this.sort);
+    this.dataSource = new ListDataSource(this._data);
     this.dataSource.loadTable('asc', 'Id', 0, 10);
     // this.paginator.length = this.dataSource.length;
     this._data.tableDataService.subscribe(f => {
       this.pageLength = f.length;
       this.paginator.pageIndex = 0;
       this.dataSource.loadTable('asc', 'Id', 0, 10);
-      console.log(this.pageLength);
+//       console.log(this.pageLength);
     });
   }
 
@@ -85,7 +85,7 @@ export class ListComponent implements OnInit, AfterViewInit {
   getPageLength() {
     return this.pageLength;
   }
-  toggleTable(evt) {
+  toggleTable() {
     console.log(this.featureTableClass);
     const activeCls1 = this.featureTableClass.split(' ')[0];
     this.featureTableClass = activeCls1 === 'featureTableMaximized' ? 'featureTableMinimized animate' : 'featureTableMaximized animate';

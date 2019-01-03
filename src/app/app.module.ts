@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { MatSortModule, MatPaginatorModule, MatDialog, MatDialogModule} from '@angular/material';
+import { MatSortModule, MatPaginatorModule, MatDialogModule} from '@angular/material';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import { MatTableModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatIconModule, MatToolbarModule, MatButtonModule  } from '@angular/material';
@@ -15,9 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { EsrimapComponent } from './esrimap/esrimap.component';
 import { HeaderComponent } from './header/header.component';
-import { FeaturetableComponent } from './featuretable/featuretable.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-// import { SelectModule } from 'ng2-select';
 import { PrintLegendDirective } from './directives/print-legend.directive';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -36,7 +34,6 @@ import { HelppageComponent } from './helppage/helppage.component';
     AppComponent,
     EsrimapComponent,
     HeaderComponent,
-    FeaturetableComponent,
     SidebarComponent,
     PrintLegendDirective,
     VirtualScrollComponent,

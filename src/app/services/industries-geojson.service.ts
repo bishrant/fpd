@@ -1,9 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {ReplaySubject, Subscription, BehaviorSubject, Observable, from } from 'rxjs';
-import {pluck} from 'rxjs/operators';
-import { map } from 'rxjs/operators';
-import esri = __esri;
+import {ReplaySubject, BehaviorSubject, from } from 'rxjs';
 
 export interface FeatureTemplate {
   type: string;
@@ -132,7 +129,7 @@ export class IndustriesGeojson implements OnInit {
   }
 
   getPagedData(sort= 'asc', sortField= 'Company', index= 0, size= 3) {
-    console.log(this.currentTableData);
+//     console.log(this.currentTableData);
 
     let clonedTableData  = Object.assign([], Object.keys(this.currentTableData).map(e => this.currentTableData[e]).sort((a, b) => {
       let A;

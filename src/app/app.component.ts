@@ -1,5 +1,4 @@
-import { Component, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
-import { ResizeEvent } from 'angular-resizable-element';
+import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { AboutpageComponent} from './aboutpage/aboutpage.component';
@@ -36,7 +35,7 @@ export class AppComponent implements OnInit {
     }
   }
   @HostListener('window:resize', ['$event'])
-  onresize(event) {
+  onresize() {
     this.innerWidth = window.innerWidth;
     console.log(this.innerWidth);
     this.deviceType = this.findSceenType(window.innerWidth);

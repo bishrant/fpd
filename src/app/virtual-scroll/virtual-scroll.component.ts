@@ -1,6 +1,4 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
     selector: 'app-virtualscrolls1',
@@ -15,7 +13,7 @@ export class VirtualScrollComponent implements OnInit {
     numberOfItemsFromEndBeforeFetchingMore = 10;
     loading = false;
 
-    constructor(private http: HttpClient) {
+    constructor() {
     }
     public makeid() {
       let text = '';

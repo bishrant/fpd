@@ -1,6 +1,6 @@
-import { Injectable, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { ReplaySubject, Subscription } from 'rxjs';
+import { Injectable} from '@angular/core';
+import { HttpClient} from '@angular/common/http';
+import { ReplaySubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +10,6 @@ export class PointincountyService {
   pointInCountyData = new ReplaySubject<object>(1);
   constructor(private http: HttpClient) { }
   public getCountyNameFromPoint(geom) {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    };
     const body = `f=geojson&where=1=1&outfields=name&geometry=${geom}&spatialRel=esriSpatialRelIntersects&geometryType=esriGeometryMultipoint&returnGeometry=false`;
 
     this.http.post('https://services5.arcgis.com/ELI1iJkCzTIagHkp/ArcGIS/rest/services/rwhrtntgr_y54tr/FeatureServer/1/query', body, {

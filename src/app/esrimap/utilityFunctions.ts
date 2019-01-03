@@ -9,7 +9,6 @@ const getColor = (attributes) => {
     });
     return _color;
 };
-const gBorder = {color: [250, 250, 250], width: 1};
 export const getSymbol = (attributes) => {
     return {
         type: 'simple-marker',
