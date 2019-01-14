@@ -40,6 +40,15 @@ a.navbar-dark{
 .dropdownSubmenu {
     margin-bottom: 10px;
 }
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    // IE10+ CSS here
+    .dropdownSubmenu {
+    position: -ms-page !important;
+    right: 0px !important;
+    left: auto !important;
+    }
+}
 @media(max-height: 350px){
     .dropdownSubmenu {
         margin-bottom: 100px;

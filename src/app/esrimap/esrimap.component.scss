@@ -86,6 +86,21 @@ body {
   cursor: pointer;
 }
 
+#legendToggleBtn {
+  height: 32px;
+  width: 32px;
+  position: absolute;
+  z-index: 100;
+  right: 15px;
+  background-color: green;
+  top: 155px;
+  border-top: 1px solid white;
+  color: white;
+  text-align: center;
+  padding: 6px;
+  cursor: pointer;
+}
+
 div#tooltip {
   width: 100%;
   margin: 0 auto;
@@ -174,8 +189,9 @@ div#tooltip {
 .appList {
     z-index: 10;
     position: absolute;
-    bottom: 0;
+    bottom: 55px;
     right: 0;
+    margin-bottom: 10px;
   }
   
   @media (min-width: 1200px) {
@@ -203,6 +219,7 @@ div#tooltip {
       width: 100%;
       margin: auto;
       z-index: 10;
+      margin-bottom: 0px;
     }
   }
 

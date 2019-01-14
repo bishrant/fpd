@@ -37,6 +37,10 @@ ngb-accordion .card-header > a{
     padding: 0; /* Just to make sure the <a> fills the whole card header */
     }
 
+    .mat-expansion-panel-header {
+        border-radius: 0 !important;
+    }
+
     .mat-expansion-panel-header:not([aria-disabled=true]) {
         cursor: pointer;
         border: 1px solid lightgray;

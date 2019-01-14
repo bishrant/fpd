@@ -26,7 +26,7 @@ ui-select-choices.dropdown-menu {
   padding: 10px !important;
   overflow-x: hidden !important;
 }
-.mat-dialog-title[_ngcontent-c22] {
+.mat-dialog-title {
   margin: 0 0 5px;
 }
 
@@ -35,6 +35,22 @@ ui-select-choices.dropdown-menu {
   margin-right: -24px !important;
 }
 
+.cdk-overlay-backdrop {
+  background: black;
+  pointer-events: none;
+}
+
+.welcomeDialogBg {
+  opacity: 0.65 !important;
+}
+
+.closeDialogBtn{
+  line-height: 30px !important;
+}
+
+.mat-menu-panel {
+  max-width: 450px !important;
+}
 
 // without global styles, material paginator's css could not be overidden
 
@@ -43,7 +59,9 @@ ui-select-choices.dropdown-menu {
     margin: 0 4px;
     display: none !important;
   }
-
+  .mat-menu-panel {
+    max-width: 300px !important;
+  }
   .mat-paginator-page-size {
     display: flex;
     align-items: baseline;
@@ -74,6 +92,7 @@ ui-select-choices.dropdown-menu {
   background-color: #2E7D32;
   position: sticky;
   color: white;
+  text-indent: 10px;
 }
 
 .mat-dialog-actions {

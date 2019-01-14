@@ -34,7 +34,7 @@ export class PrintLegendDirective implements OnInit {
     ctx.strokeStyle = '#003300';
     ctx.stroke();
   }
-  public prepareLegend() {
+  public prepareLegend(isSmall= false) {
     this._data.currentData.subscribe(d => {
       const totalLegend = this._data.getDataForComboBox(d, 'SpecificIndustryType');
       const activeLegend = vars.masterLegend.filter(n => {
@@ -46,34 +46,40 @@ export class PrintLegendDirective implements OnInit {
       const secondaryLegend = activeLegend.filter(a => {
         return a.type === 'Secondary';
       });
-
+      const fontSize = isSmall ? '12pt Arial' : '30pt Arial';
+      const rectSize = isSmall ? 20 : 30;
+      const circleX = isSmall ? 20 : 30;
+      const canvasWidth = isSmall ? 400 : 1000;
+      const rowHeight = isSmall ? 30 : 80;
       console.log(activeLegend);
-      const rowHeight = 80;
+      // const rowHeight = 80;
       let primaryLegendImg = null;
       let secondaryLegendImg = null;
       // only show legend if there is at least one primary industry
       const canvas: any = document.getElementById('canvasPrimaryLegend');
       const ctx = canvas.getContext('2d');
-      canvas.height = (secondaryLegend.length > primaryLegend.length) ? (secondaryLegend.length + 1) * 80 : (primaryLegend.length + 1) * 80;
-        canvas.width = 1000;
+      canvas.height = (secondaryLegend.length > primaryLegend.length) ? (secondaryLegend.length + 1) * rowHeight : (primaryLegend.length + 1) * rowHeight;
+        canvas.width = canvasWidth;
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
       if (primaryLegend.length > 0) {
         let _i = 0;
-        ctx.font = '30pt Arial';
+        ctx.font = fontSize;
         ctx.imageSmoothingEnabled = true;
         ctx.webkitImageSmoothingEnabled = true;
         ctx.strokeStyle = 'black';
         ctx.textAlign = 'start';
+        ctx.fillStyle = 'black';
         ctx.fillText('Primary Industries', 10, 50);
       for (_i = 0; _i < primaryLegend.length; _i++) {
         ctx.fillStyle = primaryLegend[_i].color;
         ctx.strokeStyle = 'black';
         ctx.textAlign = 'start';
-        // const i = _i === 0 ? 0.1 : _i;
         const i = _i + 1;
-        this.drawCircle(ctx, 30, rowHeight * i, rowHeight * 0.3, primaryLegend[_i].color);
+        this.drawCircle(ctx, circleX, rowHeight * i, rowHeight * 0.25, primaryLegend[_i].color);
         ctx.fillStyle = 'black';
         ctx.textBaseline = 'top';
-        ctx.fillText(primaryLegend[_i].name, 80, rowHeight * i);
+        ctx.fillText(primaryLegend[_i].name, rowHeight, rowHeight * i);
       }
       const imgData = this.convertCanvasToWhite(ctx, canvas);
         ctx.putImageData(imgData, 0, 0);
@@ -86,25 +92,28 @@ export class PrintLegendDirective implements OnInit {
       // same with secondary legend
       const canvas2: any = document.getElementById('canvasSecondayLegend');
       const ctx2 = canvas2.getContext('2d');
-      canvas2.height = (secondaryLegend.length + 1) * 80;
-      canvas2.width = 1000;
+      canvas2.height = (secondaryLegend.length + 1) * rowHeight;
+      canvas2.width = canvasWidth;
+      ctx2.fillStyle = 'white';
+        ctx2.fillRect(0, 0, canvas2.width, canvas2.height);
       if (secondaryLegend.length > 0) {
         let __i = 0;
-        ctx2.font = '30pt Arial';
+        ctx2.font = fontSize;
         ctx2.imageSmoothingEnabled = true;
         ctx2.webkitImageSmoothingEnabled = true;
         ctx2.strokeStyle = 'black';
         ctx2.textAlign = 'start';
+        ctx2.fillStyle = 'black';
         ctx2.fillText('Secondary Industries', 10, 50);
         for (__i = 0; __i < secondaryLegend.length; __i++) {
           ctx2.fillStyle = secondaryLegend[__i].color;
           ctx2.strokeStyle = 'black';
           ctx2.textAlign = 'start';
           const ii = __i + 1;
-          ctx2.fillRect(10, rowHeight * ii, 50 * 0.8, 50 * 0.8);
+          ctx2.fillRect(10, rowHeight * ii, rectSize, rectSize);
           ctx2.fillStyle = 'black';
           ctx2.textBaseline = 'top';
-          ctx2.fillText(secondaryLegend[__i].name, 80, rowHeight * ii);
+          ctx2.fillText(secondaryLegend[__i].name, rowHeight, rowHeight * ii);
         }
         const imgData2 = this.convertCanvasToWhite(ctx2, canvas2);
         ctx2.putImageData(imgData2, 0, 0);

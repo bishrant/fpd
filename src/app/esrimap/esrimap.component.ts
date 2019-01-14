@@ -1,5 +1,5 @@
 
-import { Component, OnInit, ViewChild, ElementRef, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
 import { loadModules } from 'esri-loader';
 import { ReplaySubject } from 'rxjs';
 import * as vars from './variables';
@@ -10,6 +10,7 @@ import { PrintLegendDirective } from '../directives/print-legend.directive';
 import { PointincountyService } from '../services/pointincounty.service';
 import { DatafiltersService } from '../services/datafilters.service';
 import { WindowService } from '../services/window.service';
+import { TourService } from 'ngx-tour-core';
 
 @Component({
   selector: 'app-esrimap',
@@ -70,6 +71,7 @@ export class EsrimapComponent implements OnInit {
   public nativeWindow: any;
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
+  @Output() toggleLegendEvent = new EventEmitter();
 
   public addGraphicsToMap;
 
@@ -88,7 +90,7 @@ export class EsrimapComponent implements OnInit {
       if (_mapStatus) {
         this._data.printStatus = '';
         this._data.linkToPDFReport = '';
-        const _legendBase64 = this._legendDirective.prepareLegend();
+        const _legendBase64 = this._legendDirective.prepareLegend(false);
         console.log(_legendBase64);
         this.printParams.extraParameters = { Primary_Legend: _legendBase64.primaryLegend, Secondary_Legend: _legendBase64.secondaryLegend };
         this.printParams.set('Primary_Legend', _legendBase64.primaryLegend);
@@ -105,6 +107,13 @@ export class EsrimapComponent implements OnInit {
         });
       }
     });
+  }
+
+  public toggleLegend() {
+    this.toggleLegendEvent.emit();
+  }
+  public showHelp() {
+    this.tourService.start();
   }
 
   public zoomIntoRowMap(evt) {
@@ -167,7 +176,7 @@ export class EsrimapComponent implements OnInit {
     });
   }
   constructor(private _data: IndustriesGeojson, private _legendDirective: PrintLegendDirective,
-    private winRef: WindowService,
+    private winRef: WindowService, public tourService: TourService,
     private pointInCountyService: PointincountyService, private dataFilterService: DatafiltersService) {
     this.nativeWindow = this.winRef.getNativeWindow();
   }
@@ -208,7 +217,7 @@ export class EsrimapComponent implements OnInit {
           this.circleGraphicsLayer = new GraphicsLayer({ id: 'circleGraphicsLayer' });
           this.tempGraphicsLayer = new GraphicsLayer({ id: 'tempGraphicsLayer' });
 
-          const countyLayer = new MapImageLayer({ url: 'https://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/FPD/fpd2/MapServer' });
+          const countyLayer = new MapImageLayer({ url: 'http://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/FPD/fpd2/MapServer' });
           this.map = new EsriMap({
             basemap: vars._basemap,
             layers: [countyLayer, this.industriesGraphicsLayer, this.graphicsLayer],
@@ -280,7 +289,7 @@ export class EsrimapComponent implements OnInit {
           this.mapView = new EsriMapView(_mapViewProperties);
           this.mapView.ui.move('zoom', 'top-right');
           this.printTask = new PrintTask({
-            url: 'https://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/FPD/FPDPrint/GPServer/FPDPrintService'
+            url: 'http://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/FPD/FPDPrint/GPServer/FPDPrintService'
           });
 
           this.printTemplate = new PrintTemplate({

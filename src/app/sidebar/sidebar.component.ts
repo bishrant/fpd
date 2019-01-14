@@ -7,6 +7,7 @@ import { ReplaySubject } from 'rxjs';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { HttpClient } from '@angular/common/http';
 import { ExcelService } from '../services/excel.service';
+import { TourService } from 'ngx-tour-md-menu';
 
 @Component({
   selector: 'app-sidebar',
@@ -48,9 +49,14 @@ export class SidebarComponent implements OnInit {
   @ViewChild('companiess') public ccc: NgSelectComponent;
   @ViewChild('ngSpecificIndustry') public ngSpecificIndustry: NgSelectComponent;
   @ViewChild('ngCounty') public ngCounty: NgSelectComponent;
-  // sendMessage() {
-  //   this.messageEvent.emit('btn clicked');
-  // }
+  @ViewChild ('sidebarMaps') sidebarMaps: any;
+  @ViewChild('sidebarSearch') sidebarSearch: any;
+  @ViewChild('sidebarExport') sidebarExport: any;
+
+  public sidebarSearchExpanded =  true;
+  public sidebarMapSearchExpanded = false;
+  public sidebarExportExpanded = false;
+
   hideSidebarFn() {
     this.hideSidebarEvent.next(true);
   }
@@ -168,7 +174,7 @@ export class SidebarComponent implements OnInit {
     const _postdata = this.genetateReportPostData();
     this.printingPDFStatus = 'running';
     this.linkToPDFReport = '';
-    this.http.post('https://localhost:44327/report', _postdata).subscribe(data => {
+    this.http.post('./report', _postdata).subscribe(data => {
       const e: any = data;
       this.linkToPDFReport = './report/' + e.fileName;
       console.log(this.linkToPDFReport);
@@ -184,12 +190,6 @@ export class SidebarComponent implements OnInit {
       this.printingPDFStatus = 'error';
       this.linkToPDFReport = '';
     });
-
-    this.http.post('https://localhost:5000/test', {name: 'test2'} ).subscribe(d => {
-      console.log(d);
-    }, e => {
-      console.log(e);
-    });
   }
 
   public exportDataXLS() {
@@ -197,7 +197,7 @@ export class SidebarComponent implements OnInit {
     this._excelService.exportAsExcelFile(_postdataxls, 'FPD');
   }
   constructor(private sidebarService: SidebarService, public _data: IndustriesGeojson, private http: HttpClient,
-    private _excelService: ExcelService
+    private _excelService: ExcelService, public tourService: TourService
   ) { }
 
   ngOnInit() {
@@ -223,6 +223,32 @@ export class SidebarComponent implements OnInit {
 
     this._data.currentSawmillSpecies.subscribe(d => {
       this.sawmillMajorSpecies = d;
+    });
+
+    this.tourService.stepShow$.subscribe((res: any) => {
+      console.log(res.anchorId);
+      switch (res.anchorId) {
+        case ('sidebar-search'):
+          this.sidebarSearchExpanded = true;
+          break;
+        case ('sidebar-mapsearch'):
+          this.sidebarMapSearchExpanded = true;
+          break;
+      }
+      // this.sidebarMaps._element.nativeElement.click();
+    });
+    this.tourService.stepShow$.subscribe((res: any) => {
+      switch (res.anchorId) {
+        case('sidebar-search'):
+          this.sidebarMapSearchExpanded = true;
+          break;
+        case('sidebar-mapsearch'):
+          this.sidebarExportExpanded = true;
+          break;
+      }
+    });
+    this.tourService.initialize$.subscribe((r) => {
+      console.log(r);
     });
   }
 }

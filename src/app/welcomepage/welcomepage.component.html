@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>About Directory of Forest Products Industries
+<h2 mat-dialog-title class='center'>Welcome to the Directory of Forest Products Industries
   <div mat-dialog-actions>
     <button mat-button mat-dialog-close class="closeDialogBtn"><i class="material-icons">
         close
@@ -7,23 +7,23 @@
 </h2>
 
 <div mat-dialog-content>
-  The Directory of Forest Products Industries is an interactive application that allows users to search the forest
-  products directory maintained by Texas A&M Forest Service.
+  The Directory of Forest Products Industries is an interactive application developed and maintained by Texas A&M Forest Service.
   The application includes a suite of tools that allows users to find information about wood-manufacturing industries
   through a spatial search using mapping tools or a text search with drop-down menus. The results of both searches are
   displayed on a map. Additional tools allow users to preview and print the map and to save the results to PDF or excel
   files.
-  Information in the directory is provided for both the primary and secondary industries. In this directory, the
-  primary industries are those that process logs removed from the forests into products such as lumber and plywood as
-  well as industries that utilize forest and urban residues such as tops and branches. The secondary wood using
-  industries are those that make use of lumber and plywood, etc., to further manufacture products such as furniture,
-  cabinets, and moldings.
-  If you wish to add a business to this directory or would like to update or believe the information for a business
-  listed in the directory is incomplete or innacurate, please
-  <button href="#" mat-button [mat-dialog-close]="addupdatepage" class='flatLink'>click here</button>.
   <br>
-  <br>
-  <i>
+
+  <hr>
+  <div class='center'>
+    <button mat-raised-button  [mat-dialog-close]="'startHelpTour'">Start Tour</button><br><br>
+  
+    <mat-checkbox class="example-margin" [(ngModel)]="disableHelpCheckbox" >Do no show this again ?</mat-checkbox> <br>
+    
+    <button mat-raised-button [mat-dialog-close]="'skipHelpTour'" (click)="hideHelp()">Skip</button>
+  </div>
+  <hr>
+  <i class="disclaimer">
     <b> Disclaimer:</b> The website is provided by the Texas A&M Forest Service to allow users to search and locate
     companies and organizations that provide products or services relating to the forest products industries in Texas.
     In providing information on this site, we attempt to be as accurate as possible. However, the Texas A&M Forest
@@ -31,3 +31,4 @@
     Information contained on this site should not be construed as giving business, legal, or other advice.
   </i>
 </div>
+

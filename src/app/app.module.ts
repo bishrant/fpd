@@ -28,6 +28,11 @@ import { AboutpageComponent } from './aboutpage/aboutpage.component';
 import { AddupdatepageComponent } from './addupdatepage/addupdatepage.component';
 import { ContactuspageComponent } from './contactuspage/contactuspage.component';
 import { HelppageComponent } from './helppage/helppage.component';
+import { TourMatMenuModule } from 'ngx-tour-md-menu';
+import { RouterModule } from '@angular/router';
+import { WelcomepageComponent } from './welcomepage/welcomepage.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -42,14 +47,17 @@ import { HelppageComponent } from './helppage/helppage.component';
     AddupdatepageComponent,
     ContactuspageComponent,
     HelppageComponent,
+    WelcomepageComponent,
   ],
   imports: [
+    TourMatMenuModule.forRoot(),
+    RouterModule.forRoot([{ path: '', component: AppComponent}]),
     MatSortModule, MatPaginatorModule, ResizableModule, MatDialogModule, BrowserModule, BrowserAnimationsModule,  NgbModule, MatTableModule, AngularDraggableModule, NgSelectModule,
     HttpClientModule, MatSidenavModule, MatExpansionModule, AngularFontAwesomeModule, DragDropModule, MatProgressSpinnerModule, FormsModule,
-    MatFormFieldModule, MatInputModule, MatSelectModule, MatTooltipModule, MatIconModule, MatToolbarModule, MatButtonModule
+    MatFormFieldModule, MatInputModule, MatSelectModule, MatTooltipModule, MatIconModule, MatToolbarModule, MatButtonModule, MatCheckboxModule
   ],
-  providers: [HttpClient],
+  providers: [HttpClient, CookieService ],
   bootstrap: [AppComponent],
-  entryComponents: [AboutpageComponent, AddupdatepageComponent, ContactuspageComponent, HelppageComponent]
+  entryComponents: [AboutpageComponent, AddupdatepageComponent, ContactuspageComponent, HelppageComponent, WelcomepageComponent]
 })
 export class AppModule { }

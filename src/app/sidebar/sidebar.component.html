@@ -2,8 +2,8 @@
   [matTooltipPosition]="'right'" aria-label="Hide table button">
   <i class="fa fa-chevron-left"></i>
 </button>
-<mat-accordion>
-  <mat-expansion-panel>
+<!-- <mat-accordion> -->
+  <mat-expansion-panel [expanded]="sidebarSearchExpanded" tourAnchor="sidebar-search" #sidebarSearch>
     <mat-expansion-panel-header>
       <mat-panel-title>Search by Attributes</mat-panel-title>
     </mat-expansion-panel-header>
@@ -36,8 +36,8 @@
       <i class="esri-icon-trash"></i>Clear Search</button>
   </mat-expansion-panel>
 
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
+  <mat-expansion-panel tourAnchor="sidebar-mapsearch" #sidebarMaps [expanded]="sidebarMapSearchExpanded"> 
+    <mat-expansion-panel-header >
       <mat-panel-title>
         Search on Maps
       </mat-panel-title>
@@ -61,7 +61,7 @@
 
   </mat-expansion-panel>
 
-  <mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel tourAnchor="sidebar-export" #sidebarExport [expanded]="sidebarExportExpanded">
     <mat-expansion-panel-header>
       <mat-panel-title>
         Export
@@ -93,4 +93,4 @@
       &nbsp;&nbsp;Download Table as XLS</button>
 
   </mat-expansion-panel>
-</mat-accordion>
+<!-- </mat-accordion> -->
