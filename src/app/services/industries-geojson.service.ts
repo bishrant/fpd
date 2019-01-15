@@ -174,8 +174,7 @@ export class IndustriesGeojson implements OnInit {
   }
   // function to get unique values for drop down boxes
   constructor(private http: HttpClient) {
-    // const urls = 'https://services5.arcgis.com/ELI1iJkCzTIagHkp/arcgis/rest/services/rwhrtntgr_y54tr/FeatureServer/0/query?returnGeometry=true&outFields=%2A&f=geojson&outSR=4326&where=1=1';
-    const urls = 'https://services5.arcgis.com/ELI1iJkCzTIagHkp/ArcGIS/rest/services/Forest_Products_Industries_ViewOnly/FeatureServer/0/query?returnGeometry=true&outFields=%2A&f=geojson&outSR=4326&where=1=1&orderByFields=Id';
+    const urls = 'https://services5.arcgis.com/ELI1iJkCzTIagHkp/ArcGIS/rest/services/Forest_Products_Industries_ViewOnly/FeatureServer/0/query?returnGeometry=true&outFields=%2A&f=geojson&outSR=4326&where=Status+%3D+%27Active%27&orderByFields=Id';
     this.http.get(urls).subscribe(data => {
      // console.log(data['features']);
       this.allDataService.next(data['features']);

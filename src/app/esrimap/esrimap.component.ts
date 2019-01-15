@@ -205,19 +205,26 @@ export class EsrimapComponent implements OnInit {
         'esri/views/2d/draw/Draw', 'esri/widgets/Home',
         'esri/widgets/Sketch/SketchViewModel', 'esri/geometry/SpatialReference', 'esri/geometry/Extent',
         'esri/Graphic', 'esri/layers/GraphicsLayer', 'esri/geometry/Point', 'esri/tasks/PrintTask',
-        'esri/tasks/support/PrintTemplate', 'esri/tasks/support/PrintParameters', 'esri/widgets/BasemapGallery',
+        'esri/tasks/support/PrintTemplate', 'esri/tasks/support/PrintParameters', 'esri/widgets/BasemapGallery',  'esri/core/urlUtils',
         'dojo/domReady!'
       ])
         .then(([EsriMap, EsriMapView, MapImageLayer, Draw, Home,
           SketchViewModel, SpatialReference, Extent, Graphic, GraphicsLayer,
-          Point, PrintTask, PrintTemplate, PrintParameters, BasemapGallery]) => {
+          Point, PrintTask, PrintTemplate, PrintParameters, BasemapGallery, urlUtils]) => {
+            // setup proxy 'esri/config',  esriConfig, 
+         //   esriConfig.request.proxyUrl = 'https://txfipdev.tfs.tamu.edu/mylandmanagementconnector/proxy/proxy.ashx';
+            urlUtils.addProxyRule({
+              urlPrefix: 'tfsgis-dfe02.tfs.tamu.edu',
+              proxyUrl: 'https://txfipdev.tfs.tamu.edu/mylandmanagementconnector/proxy/proxy.ashx'
+            });
+
           // create a boilerplate graphics layer for adding industries points later on
           this.industriesGraphicsLayer = new GraphicsLayer();
           this.graphicsLayer = new GraphicsLayer({ id: 'userGraphicsLayer' });
           this.circleGraphicsLayer = new GraphicsLayer({ id: 'circleGraphicsLayer' });
           this.tempGraphicsLayer = new GraphicsLayer({ id: 'tempGraphicsLayer' });
 
-          const countyLayer = new MapImageLayer({ url: 'http://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/FPD/fpd2/MapServer' });
+          const countyLayer = new MapImageLayer({ url: 'https://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/ForestProductsDirectory/FPDMapService/MapServer' });
           this.map = new EsriMap({
             basemap: vars._basemap,
             layers: [countyLayer, this.industriesGraphicsLayer, this.graphicsLayer],
@@ -289,7 +296,7 @@ export class EsrimapComponent implements OnInit {
           this.mapView = new EsriMapView(_mapViewProperties);
           this.mapView.ui.move('zoom', 'top-right');
           this.printTask = new PrintTask({
-            url: 'http://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/FPD/FPDPrint/GPServer/FPDPrintService'
+            url: 'https://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/FPD/FPDPrint/GPServer/FPDPrintService'
           });
 
           this.printTemplate = new PrintTemplate({

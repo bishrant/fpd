@@ -56,6 +56,7 @@ export class SidebarComponent implements OnInit {
   public sidebarSearchExpanded =  true;
   public sidebarMapSearchExpanded = false;
   public sidebarExportExpanded = false;
+  public _reportFields: string[] = ['Id', 'Company', 'County', 'Address', 'Phone1', 'Phone2', 'Homepage', 'Email', 'MainIndustryType', 'SpecificIndustryType', 'SawMillType', 'Products', 'Species', 'Status', 'City', 'Lat', 'Lon'];
 
   hideSidebarFn() {
     this.hideSidebarEvent.next(true);
@@ -155,11 +156,10 @@ export class SidebarComponent implements OnInit {
   }
   public genetateReportPostData(): any {
     const _postdata: any = [];
-    const _reportFields: string[] = ['Company', 'County', 'Address', 'Phone1', 'Homepage', 'Email', 'MainIndustryType', 'SpecificIndustryType', 'Products', 'Species'];
     console.log(this.tableData);
     this.tableData.forEach(_d => {
       const _partialArray: any = {};
-      _reportFields.forEach(_attr => {
+      this._reportFields.forEach(_attr => {
         if (_d['properties'].hasOwnProperty(_attr)) {
           _partialArray[_attr] = _d['properties'][_attr];
         }
@@ -179,12 +179,6 @@ export class SidebarComponent implements OnInit {
       this.linkToPDFReport = './report/' + e.fileName;
       console.log(this.linkToPDFReport);
       this.printingPDFStatus = 'completed';
-      // const newWin = this.nativeWindow.open(ur);
-      // if (!newWin || newWin.closed || typeof newWin.closed === 'undefined') {
-      //   // POPUP BLOCKED
-      //   this.popupVisibility = 'visible';
-      //   this.reportUrl = ur;
-      // }
     }, err => {
       console.log(err);
       this.printingPDFStatus = 'error';
@@ -205,7 +199,6 @@ export class SidebarComponent implements OnInit {
       this.tableData = d;
     });
     this._data.currentCountyList.subscribe(d => {
-//       console.log('got distinct ');
       this.counties = d;
     });
 
@@ -235,7 +228,6 @@ export class SidebarComponent implements OnInit {
           this.sidebarMapSearchExpanded = true;
           break;
       }
-      // this.sidebarMaps._element.nativeElement.click();
     });
     this.tourService.stepShow$.subscribe((res: any) => {
       switch (res.anchorId) {

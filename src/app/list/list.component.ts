@@ -17,23 +17,27 @@ export class ListComponent implements OnInit, AfterViewInit {
   public selectedRowIndex;
   dataSource: ListDataSource;
   public pageLength = 10;
+  public pageSizeOptions = [10, 20, 50];
   displayedColumns = ['Id', 'Company', 'County', 'MainIndustryType', 'SpecificIndustryType'];
   featureTableClass = 'featureTableMaximized';
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @Output() zoomIntoRow = new EventEmitter<any>();
   @ViewChild(MatSort) sort: MatSort;
-  // @ViewChild('featureTable') featureTable: ElementRef;
   constructor(private _data: IndustriesGeojson, private _excelService: ExcelService, private winRef: WindowService) { }
 
   ngOnInit() {
     this.dataSource = new ListDataSource(this._data);
     this.dataSource.loadTable('asc', 'Id', 0, 10);
-    // this.paginator.length = this.dataSource.length;
     this._data.tableDataService.subscribe(f => {
       this.pageLength = f.length;
+      this.selectedRowIndex = -99999;
       this.paginator.pageIndex = 0;
+      if (this.pageSizeOptions.indexOf(f.length) === -1 && f.length !== 0) {
+        this.pageSizeOptions.push(f.length);
+        this.paginator.pageSizeOptions = this.pageSizeOptions;
+      }
       this.dataSource.loadTable('asc', 'Id', 0, 10);
-//       console.log(this.pageLength);
+      this.paginator.length = f.length;
     });
   }
 
@@ -49,26 +53,18 @@ export class ListComponent implements OnInit, AfterViewInit {
     }, 250);
   }
   public doubleClick(evt, row) {
-    console.log(evt, row);
     this.isSingleClick = false;
     this.selectedRowIndex = row.Id;
-    console.log(row.Id);
     this.zoomIntoRow.emit({industryId: this.selectedRowIndex, isSingleClick: false});
     evt.stopPropagation();
   }
   public openUrl(url: any) {
-    console.log(233);
     const _x = this.winRef.getNativeWindow();
     _x.open(url);
   }
 
   ngAfterViewInit() {
     // reset page if sorting is enabled
-    this.sort.sortChange.subscribe(() => {
-      console.log(this.sort.direction);
-      console.log(this.sort.active);
-    });
-
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
@@ -86,7 +82,6 @@ export class ListComponent implements OnInit, AfterViewInit {
     return this.pageLength;
   }
   toggleTable() {
-    console.log(this.featureTableClass);
     const activeCls1 = this.featureTableClass.split(' ')[0];
     this.featureTableClass = activeCls1 === 'featureTableMaximized' ? 'featureTableMinimized animate' : 'featureTableMaximized animate';
     setTimeout(() => {
@@ -96,11 +91,7 @@ export class ListComponent implements OnInit, AfterViewInit {
       } else {
 
       }
-      // this.featureTableClass = 'featureTableMinimized';
-      console.log('time');
     }, 1000);
-    // console.log(this.featureTable);
-    // this.renderer.setStyle(this.featureTable.nativeElement, 'transform', 'translate3d(0px, 0px, 0px);');
   }
   loadTable() {
     this.dataSource.loadTable(
@@ -108,6 +99,7 @@ export class ListComponent implements OnInit, AfterViewInit {
       this.sort.active,
       this.paginator.pageIndex,
       this.paginator.pageSize);
+      this.selectedRowIndex = -9999;
   }
   public exportAsExcel(evt) {
     console.log(evt);
@@ -117,7 +109,7 @@ export class ListComponent implements OnInit, AfterViewInit {
 
   public genetateReportPostData(): any {
     const _postdata: any = [];
-    const _reportFields: string[] = ['Company', 'County', 'Address', 'Phone1', 'Homepage', 'Email', 'MainIndustryType', 'SpecificIndustryType', 'Products', 'Species'];
+    const _reportFields: string[] = ['Id', 'Company', 'County', 'Address', 'Phone1', 'Phone2', 'Homepage', 'Email', 'MainIndustryType', 'SpecificIndustryType', 'SawMillType', 'Products', 'Species', 'Status', 'City', 'Lat', 'Lon'];
     console.log(this._data.currentTableData);
     this._data.currentTableData.forEach(_d => {
       const _partialArray: any = {};
