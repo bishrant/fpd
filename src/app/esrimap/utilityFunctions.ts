@@ -18,3 +18,12 @@ export const getSymbol = (attributes) => {
       //  outline: gBorder
     };
 };
+
+export const getHighlightSymbol = (attributes) => {
+    return {
+        type: 'simple-marker',
+        color: '#0bd9e8',
+        style: (attributes['MainIndustryType'] === 'Primary') ? 'circle' : 'square',
+        size: 9
+    };
+};

@@ -139,6 +139,7 @@ export class EsrimapComponent implements OnInit {
           if (!isSingleClick) {
             this.mapView.goTo({ center: iii.geometry.coordinates, zoom: 13 });
           }
+          console.log(ind);
           this.mapView.popup.open({
             location: this._tempZoomPt,
             features: [ind]
@@ -202,7 +203,7 @@ export class EsrimapComponent implements OnInit {
 
     setTimeout(() => {
       return loadModules([
-        'esri/Map', 'esri/views/MapView',
+        'esri/Map', 'esri/views/MapView', 'esri/core/watchUtils',
         'esri/layers/MapImageLayer',
         'esri/views/2d/draw/Draw', 'esri/widgets/Home',
         'esri/widgets/Sketch/SketchViewModel', 'esri/geometry/SpatialReference', 'esri/geometry/Extent',
@@ -211,7 +212,7 @@ export class EsrimapComponent implements OnInit {
         'esri/tasks/support/PrintTemplate', 'esri/tasks/support/PrintParameters', 'esri/widgets/BasemapGallery',
         'esri/core/urlUtils', 'dojo/domReady!'
       ])
-        .then(([EsriMap, EsriMapView, MapImageLayer, Draw, Home,
+        .then(([EsriMap, EsriMapView, watchUtils, MapImageLayer, Draw, Home,
           SketchViewModel, SpatialReference, Extent, Graphic, GraphicsLayer,
           Point, Polygon, PrintTask, geometryEngine, PrintTemplate, PrintParameters, BasemapGallery, urlUtils]) => {
           // setup proxy 'esri/config',  esriConfig,
@@ -521,6 +522,35 @@ export class EsrimapComponent implements OnInit {
             }
           };
 
+          const getGraphics = (response, mapPt) => {
+            if (response.results.length > 0) {
+              const highlightGraphic = new Graphic({
+                geometry: response.results[0].graphic.geometry,
+                symbol: fn.getHighlightSymbol(response.results[0].graphic.attributes),
+                attributes: response.results[0].graphic.attributes,
+                popupTemplate: vars.industriesPopupTemplate
+              });
+              this.tempGraphicsLayer.removeAll();
+              this.tempGraphicsLayer.add(highlightGraphic);
+              this.mapView.popup.open({
+                location: mapPt,
+                features: [response.results[0].graphic]
+              });
+
+            }
+          };
+          this.mapView.popup.on('trigger-action', function(f) {
+            console.log(f);
+          });
+          const removeTempGraphics = () => {
+            this.tempGraphicsLayer.removeAll();
+          };
+          this.mapView.popup.watch('visible', function(visible) {
+            if (!visible) {
+              removeTempGraphics();
+            }
+          });
+
           this.mapView.when(() => {
             this.__mapViewStatus.next(true);
             this.addGraphicsToMap();
@@ -528,6 +558,41 @@ export class EsrimapComponent implements OnInit {
             // initialize a draw action for creating a buffer polygon
             this.draw = new Draw({
               view: this.mapView
+            });
+
+
+            const mapV = this.mapView;
+            this.mapView.whenLayerView(this.industriesGraphicsLayer).then(function(lView) {
+              watchUtils.whenFalseOnce(lView, 'updating', function() {
+                mapV.on('pointer-move', function(evt) {
+                  const screenPt = {
+                    x: evt.x,
+                    y: evt.y
+                  };
+                  if (mapV.scale < 1529770) {
+                    const mapPt = mapV.toMap(screenPt);
+                    mapV.hitTest(screenPt)
+                    .then(function(response) {
+                     getGraphics(response, mapPt);
+                    });
+                  }
+                });
+                mapV.on('click', function(evt) {
+                  const screenPt = {
+                    x: evt.x,
+                    y: evt.y
+                  };
+                    const mapPt = mapV.toMap(screenPt);
+                    mapV.hitTest(screenPt)
+                    .then(function(response) {
+                     getGraphics(response, mapPt);
+                    }).catch(function(error) {
+                      console.log(error);
+                    });
+                });
+              });
+            }).catch(function(error) {
+              console.log(error);
             });
           }, (err) => {
             this.__mapViewStatus.next(false);

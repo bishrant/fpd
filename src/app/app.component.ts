@@ -73,7 +73,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       anchorId: 'basemap-tour',
       content: 'Use layers button to select between different basemaps. Zoom icons and zoom to home eases map navigation.',
       title: 'Map Controls',
-      enableBackdrop: false,
+      enableBackdrop: true,
     },
     {
       anchorId: 'industries-list',
@@ -148,7 +148,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       _dType = 'mobile-xs';
     }
     return _dType;
-
   }
 
   openDialogs(evt) {

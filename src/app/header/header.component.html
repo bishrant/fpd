@@ -18,9 +18,29 @@
           <a class="nav-link" (click)="openDialogFn({page: 'aboutpage', evt: $event})">About</a>
         </li>
       <li class="nav-item">
-        <a class="nav-link" (click)="openDialogFn({page: 'addupdatepage', evt: $event})">Add/Update Business</a>
+      <a class="nav-link" (click)="openDialogFn({page: 'addupdatepage', evt: $event})">Add/Update Business</a>
       </li>
-      <li class="nav-item dropdown" tourAnchor= 'more-menu'>
+<span *ngIf="!collapsed">
+    <li class="nav-item">
+        <a class="nav-link" (click)="openDialogFn({page: 'helppage', evt: $event})">Help</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" (click)="openDialogFn({page: 'contactus', evt: $event})">Contact Us</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="https://tfsgis.maps.arcgis.com/apps/webappviewer/index.html?id=f4fe341ee68e403bb35c434711aad9a5"
+        target="_blank">Admin</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="https://tfsweb.tamu.edu/" target="_blank">TFS Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="http://texasforestinfo.tamu.edu/" target="_blank">Texas Forest Info</a>
+    </li>
+</span>
+
+
+      <li class="nav-item dropdown" tourAnchor= 'more-menu' *ngIf='collapsed'>
         <div ngbDropdown class="d-inline-block" >
           <a class="nav-link dropdown-toggle" id="dropdownBasic01" ngbDropdownToggle><span class="navbar-toggler-icon" ></span></a>
           <div ngbDropdownMenu aria-labelledby="dropdownBasic01" class="dropdownSubmenu" >

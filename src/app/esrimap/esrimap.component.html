@@ -4,10 +4,13 @@
     <div id='tooltip' #tooltip *ngIf= "drawInstructions != ''">{{ drawInstructions}} </div>
   </div> 
   <div id="basemapToggle" [ngClass]='basemapWidgetClass'></div>
-  <div id='basemapToggleBtn' (click)= 'toggleBasemaps()' matTooltip="Show/Hide basemap gallery" mat-button tourAnchor="basemap-tour"
+  <div id='basemapToggleBtn' (click)= 'toggleBasemaps()' matTooltip="Show/Hide basemap gallery" mat-button 
   aria-label="Button shows/hides basemap gallery">
     <i class='esri-icon-layers'></i>
   </div>
+
+  <div tourAnchor="basemap-tour" style="position: absolute; right: 13px; top: 15px; width: 35px; height: 175px"></div>
+
   <div id='legendToggleBtn' (click)= 'toggleLegend()' matTooltip="Show/Hide Legend" mat-button
   aria-label="Button shows/hides legend">
     <i class='esri-icon-documentation'></i>
