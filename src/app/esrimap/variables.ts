@@ -31,6 +31,13 @@ export const pointSymbol = {
   size: '4px',
 };
 
+export const emptypointSymbol = {
+  type: 'simple-marker', // autocasts as new SimpleMarkerSymbol()
+  style: 'circle',
+  color: '#8A2BE2',
+  size: '0px',
+};
+
 export const polylineSymbol = {
   type: 'simple-line', // autocasts as new SimpleLineSymbol()
   color: '#8A2BE2',

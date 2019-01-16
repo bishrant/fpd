@@ -54,9 +54,6 @@ export class IndustriesGeojson implements OnInit {
   public activeSpataiControl = new ReplaySubject<string>(1);
   public activeSpatialControlObservable = this.activeSpataiControl.asObservable();
 
-  public performSpatailQuery = new ReplaySubject<string>(1);
-  public performSpatialQueryObservable = this.performSpatailQuery.asObservable();
-
   public printMapSubject = new ReplaySubject<string>(1);
   public printMapObservable = this.printMapSubject.asObservable();
 

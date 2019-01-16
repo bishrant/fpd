@@ -24,7 +24,7 @@ matTooltip="Show the industries table."
     </mat-toolbar-row>
   </mat-toolbar>
   <div class="featureTableContainer">
-    <span *ngIf="pageLength === 0" class="noIndustries">No industries found. Please try a different search criteria</span>
+    <span *ngIf="pageLength === 0" class="noIndustries">No industries found. Please search from the left sidebar a try a different search criteria</span>
     
     <mat-table class="feature-table mat-elevation-z8 featureList" [ngClass]="(pageLength !== 0) ? 'visible': 'hidden'" 
     [dataSource]="dataSource" matSort matSortActive="Id" matSortDirection="asc">

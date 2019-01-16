@@ -22,7 +22,7 @@
       placeholder="Main industry type.." class="otherCls" [(ngModel)]="selectedValues.MainIndustryType">
     </ng-select>
     <ng-select #ngSpecificIndustry [selectOnTab]="true" [virtualScroll]="true" [items]="specificIndustryType" (change)="selected($event, 'SpecificIndustryType')"
-      placeholder="Specific industry type.." class="otherCls" [(ngModel)]="selectedValues.SpecificIndustryType">
+      placeholder="Specific industry type.." class="otherCls" [(ngModel)]="selectedValues.SpecificIndustryType" style="margin-top: 15px">
     </ng-select>
     <!-- only show additional filter if the industry type is sawmill -->
     <!-- <span *ngIf='showSawMillSpecies === true'>
@@ -42,22 +42,22 @@
         Search on Maps
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <button (click)="activateSpatialControl('circle')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-radio-unchecked"></i>
-      Buffer</button><br>
-    <button (click)="activateSpatialControl('polygon')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-polygon"></i>
+    <button (click)="activateSpatialControl('point')" class="btn" > <i class="esri-icon-radio-unchecked"></i>
+      Buffer</button>
+      <div class="bufferDistanceDiv" *ngIf="activeControl === 'point'">
+       Radius: <input id='bufferDistance' type="text" value="50"/> Miles
+      </div><br>
+    <button (click)="activateSpatialControl('polygon')" class="btn" > <i class="esri-icon-polygon"></i>
       Polygon</button><br>
-    <button (click)="activateSpatialControl('rectangle')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-checkbox-unchecked"></i>
+    <button (click)="activateSpatialControl('rectangle')" class="btn" > <i class="esri-icon-checkbox-unchecked"></i>
       Rectangle</button><br>
-    <button (click)="activateSpatialControl('multipoint')" class="btn" style='margin-top: 10px;'> <i class="esri-icon-map-pin"></i>
+    <button (click)="activateSpatialControl('multipoint')" class="btn" > <i class="esri-icon-map-pin"></i>
       Select by counties</button><br>
     <hr>
-    <!-- <button *ngIf='activatedSpatialControl === true' (click)='clickedSpatialQuery($event)' class="btn"><i class="esri-icon-search"></i>Query</button>
-    &nbsp;&nbsp; <button *ngIf='activatedSpatialControl === true' (click)="activateSpatialControl('clear')" class="btn"><i
-        class="esri-icon-trash"></i>Clear</button> -->
-    <button (click)='clickedSpatialQuery()' class="btn">
-      <i class="esri-icon-search"></i>Query</button>
-    &nbsp;&nbsp; <button (click)="activateSpatialControl('clear')" class="btn">
-      <i class="esri-icon-trash"></i>Clear</button>
+    <!-- <button (click)='clickedSpatialQuery()' class="btn">
+      <i class="esri-icon-search"></i>Query</button> 
+    &nbsp;&nbsp; --><button (click)="activateSpatialControl('clear')" class="btn btnLg">
+      <i class="esri-icon-trash"></i>Clear Spatial Search</button>
 
   </mat-expansion-panel>
 
@@ -67,28 +67,27 @@
         Export
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <button (click)="printMapPDF()" #exportmap class="btn" [disabled]="_data.printStatus === 'running'"><span class="fa fa-map-o">
-      </span>&nbsp;&nbsp;Print
-      Map</button><br>
+    <button (click)="printMapPDF()" #exportmap class="btn btnLg" [disabled]="_data.printStatus === 'running'"><span class="fa fa-map-o">
+      </span>&nbsp;&nbsp;Export Map as PDF </button><br>
     <p *ngIf="_data.printStatus === 'running'"><br>
-      <mat-spinner [diameter]=35 color="green" class='progresSpinner'></mat-spinner>Printing map... <br>
-      <i> After the printing complete, link to your PDF will appear here.</i>
+      <mat-spinner [diameter]=35 color="green" class='progresSpinner'></mat-spinner>Exporting map... <br>
+      <i> After the export complete, link to your PDF map will appear here.</i>
     </p>
     <p class="text-danger italics" *ngIf="_data.printStatus === 'error'">Error while printing. Please try again</p><br>
-    <p *ngIf="_data.linkToPDFReport !== ''"><a href="{{_data.linkToPDFReport}}" target="_blank">Map.pdf</a></p>
+    <p *ngIf="_data.linkToPDFReport !== ''"><a href="{{_data.linkToPDFReport}}" target="_blank">Exported Map.pdf</a></p>
 
-    <button (click)="exportDataPDF()" #exportDataPdf class="btn" [disabled]="printingPDFStatus === 'running'"><span
+    <button (click)="exportDataPDF()" #exportDataPdf class="btn btnLg" [disabled]="printingPDFStatus === 'running'"><span
         class="fa fa-file-pdf-o"> </span>
       &nbsp;&nbsp;Export Table as PDF</button>
     <p *ngIf="printingPDFStatus === 'running'"><br>
-      <mat-spinner [diameter]=35 color="green" class='progresSpinner'></mat-spinner>Exporting list... <br>
-      <i> After the export complete, link to your PDF will appear here.</i>
+      <mat-spinner [diameter]=35 color="green" class='progresSpinner'></mat-spinner>Exporting table... <br>
+      <i> After the export complete, link to your PDF table will appear here.</i>
     </p>
     <p class="text-danger italics" *ngIf="printingPDFStatus === 'error'">Error while exporting. Please try again</p><br>
-    <p *ngIf="linkToPDFReport !== ''"><a href="{{linkToPDFReport}}" target="_blank">Exported List.pdf</a></p>
+    <p *ngIf="linkToPDFReport !== ''"><a href="{{linkToPDFReport}}" target="_blank">Exported Table.pdf</a></p>
 
     <br>
-    <button (click)="exportDataXLS()" #exportDataExcel class='btn '>
+    <button (click)="exportDataXLS()" #exportDataExcel class='btn btnLg'>
       <span class="fa fa-file-excel-o"> </span>
       &nbsp;&nbsp;Download Table as XLS</button>
 

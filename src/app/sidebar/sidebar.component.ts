@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, Output, EventEmitter, ElementRef, ViewChildren, ViewChild } from '@angular/core';
 import { Injectable } from '@angular/core';
-import { Rest, SidebarService } from './sidebar.service';
 import { IndustriesGeojson } from '../services/industries-geojson.service';
 // import { _CdkTextareaAutosize } from '@angular/material';
 import { ReplaySubject } from 'rxjs';
@@ -14,7 +13,6 @@ import { TourService } from 'ngx-tour-md-menu';
   templateUrl: './sidebar.component.html',
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['./sidebar.component.scss'],
-  providers: [SidebarService]
 })
 
 @Injectable()
@@ -62,10 +60,6 @@ export class SidebarComponent implements OnInit {
     this.hideSidebarEvent.next(true);
   }
 
-  getData() {
-    this.sidebarService.getInitialRestData()
-      .subscribe((data: Rest) => console.log(data));
-  }
   public get disabledV(): string {
     return this._disabledV;
   }
@@ -151,9 +145,7 @@ export class SidebarComponent implements OnInit {
     console.log(control);
     this._data.activeSpataiControl.next(control);
   }
-  public clickedSpatialQuery() {
-    this._data.performSpatailQuery.next(this.activeControl);
-  }
+
   public genetateReportPostData(): any {
     const _postdata: any = [];
     console.log(this.tableData);
@@ -190,7 +182,7 @@ export class SidebarComponent implements OnInit {
     const _postdataxls = this.genetateReportPostData();
     this._excelService.exportAsExcelFile(_postdataxls, 'FPD');
   }
-  constructor(private sidebarService: SidebarService, public _data: IndustriesGeojson, private http: HttpClient,
+  constructor(public _data: IndustriesGeojson, private http: HttpClient,
     private _excelService: ExcelService, public tourService: TourService
   ) { }
 

@@ -1,4 +1,5 @@
 <div #mapViewNode id="mapViewNode" >
+    <app-list class="appList" (zoomIntoRow)= "zoomIntoRowMap($event)" tourAnchor="industries-list" *ngIf="!drawToolActive"></app-list>
   <div id='tooltipContainer' *ngIf="drawToolActive">
     <div id='tooltip' #tooltip *ngIf= "drawInstructions != ''">{{ drawInstructions}} </div>
   </div> 
@@ -11,7 +12,7 @@
   aria-label="Button shows/hides legend">
     <i class='esri-icon-documentation'></i>
   </div>
-  <div *ngIf="mapBusy === true"><mat-spinner [diameter]=45 color="green" class='mapbusySpinner' ></mat-spinner></div>
-  <app-list class="appList" (zoomIntoRow)= "zoomIntoRowMap($event)" tourAnchor="industries-list"></app-list>
+  <div *ngIf="mapBusy"><mat-spinner [diameter]=45 color="green" class='mapbusySpinner' ></mat-spinner></div>
+  
   
 </div>

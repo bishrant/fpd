@@ -11,6 +11,7 @@ import { PointincountyService } from '../services/pointincounty.service';
 import { DatafiltersService } from '../services/datafilters.service';
 import { WindowService } from '../services/window.service';
 import { TourService } from 'ngx-tour-core';
+import { ListComponent } from '../list/list.component';
 
 @Component({
   selector: 'app-esrimap',
@@ -43,12 +44,14 @@ export class EsrimapComponent implements OnInit {
   public createGraphic;
   public drawLine;
   public editGraphic;
+  public selectedCountiesGraphicsLayer;
   public sketchViewModel: esri.SketchViewModel;
   public setupSketchViewModel;
   public graphicsLayer: esri.GraphicsLayer;
   public tempGraphicsLayer: esri.GraphicsLayer;
-  public circleGraphicsLayer: esri.GraphicsLayer;
   public addGraphic;
+  public addBuffer;
+  public selectCounties;
   public clearDrawGraphics;
   public draw: esri.Draw;
   public updateGraphic;
@@ -62,7 +65,7 @@ export class EsrimapComponent implements OnInit {
   public _tempZoomPt;
   public mapBusy = false;
   public Instructions = {
-    circle: 'Click on the map, hold and drag your mouse cursor. Click to complete the circle.',
+    point: 'Click on the map to add a buffer with your specified radius.',
     polygon: 'Click to add  points to the polygon. Double click to complete.',
     rectangle: 'Click hold and drag to draw a rectangle.',
     multipoint: 'Click to select one or more counties. Double click to complete.',
@@ -72,6 +75,7 @@ export class EsrimapComponent implements OnInit {
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
   @Output() toggleLegendEvent = new EventEmitter();
+  @ViewChild(ListComponent) listComponent: ListComponent;
 
   public addGraphicsToMap;
 
@@ -146,19 +150,23 @@ export class EsrimapComponent implements OnInit {
   }
 
   public activateSpatialControl(control: any) {
-    this.drawToolActive = true;
-    this.mapBusy = true;
+    if (!this.drawToolActive) {
+      this.listComponent.toggleTable();
+      this.drawToolActive = true;
+    } else {
+    }
     this.__mapViewStatus.subscribe(_mapStatus => {
       if (_mapStatus) {
-        if (['polygon', 'multipoint', 'rectangle', 'circle'].indexOf(control) !== -1) {
+        if (['polygon', 'multipoint', 'rectangle', 'point'].indexOf(control) !== -1) {
           if (control === 'multipoint') {
-            // clear graphics for county selection
-            this.clearDrawGraphics(true);
+           // this.clearDrawGraphics(true, false);
+           this.selectedCountiesGraphicsLayer.removeAll();
             this.drawInstructions = this.Instructions[control];
             this.mapBusy = false;
           } else {
             this.clearDrawGraphics(false);
             this.drawInstructions = this.Instructions[control];
+            console.log(this.drawInstructions);
             this.mapBusy = false;
           }
           this.__sketchStatus.subscribe(_sketchStatus => {
@@ -188,12 +196,6 @@ export class EsrimapComponent implements OnInit {
       this.activateSpatialControl(control);
     });
 
-    // subscribe to perform query button click from sidebar
-    this._data.performSpatialQueryObservable.subscribe(control => {
-      this.drawToolActive = false;
-      this.performSpatialQuery(control);
-    });
-
     this._data.printMapObservable.subscribe(() => {
       this.printMap();
     });
@@ -204,37 +206,40 @@ export class EsrimapComponent implements OnInit {
         'esri/layers/MapImageLayer',
         'esri/views/2d/draw/Draw', 'esri/widgets/Home',
         'esri/widgets/Sketch/SketchViewModel', 'esri/geometry/SpatialReference', 'esri/geometry/Extent',
-        'esri/Graphic', 'esri/layers/GraphicsLayer', 'esri/geometry/Point', 'esri/tasks/PrintTask',
-        'esri/tasks/support/PrintTemplate', 'esri/tasks/support/PrintParameters', 'esri/widgets/BasemapGallery',  'esri/core/urlUtils',
-        'dojo/domReady!'
+        'esri/Graphic', 'esri/layers/GraphicsLayer', 'esri/geometry/Point', 'esri/geometry/Polygon',
+        'esri/tasks/PrintTask', 'esri/geometry/geometryEngine',
+        'esri/tasks/support/PrintTemplate', 'esri/tasks/support/PrintParameters', 'esri/widgets/BasemapGallery',
+        'esri/core/urlUtils', 'dojo/domReady!'
       ])
         .then(([EsriMap, EsriMapView, MapImageLayer, Draw, Home,
           SketchViewModel, SpatialReference, Extent, Graphic, GraphicsLayer,
-          Point, PrintTask, PrintTemplate, PrintParameters, BasemapGallery, urlUtils]) => {
-            // setup proxy 'esri/config',  esriConfig, 
-         //   esriConfig.request.proxyUrl = 'https://txfipdev.tfs.tamu.edu/mylandmanagementconnector/proxy/proxy.ashx';
-            urlUtils.addProxyRule({
-              urlPrefix: 'tfsgis-dfe02.tfs.tamu.edu',
-              proxyUrl: 'https://txfipdev.tfs.tamu.edu/mylandmanagementconnector/proxy/proxy.ashx'
-            });
+          Point, Polygon, PrintTask, geometryEngine, PrintTemplate, PrintParameters, BasemapGallery, urlUtils]) => {
+          // setup proxy 'esri/config',  esriConfig,
+          //   esriConfig.request.proxyUrl = 'https://txfipdev.tfs.tamu.edu/mylandmanagementconnector/proxy/proxy.ashx';
+          urlUtils.addProxyRule({
+            urlPrefix: 'tfsgis-dfe02.tfs.tamu.edu',
+            proxyUrl: 'https://txfipdev.tfs.tamu.edu/mylandmanagementconnector/proxy/proxy.ashx'
+          });
 
           // create a boilerplate graphics layer for adding industries points later on
           this.industriesGraphicsLayer = new GraphicsLayer();
           this.graphicsLayer = new GraphicsLayer({ id: 'userGraphicsLayer' });
-          this.circleGraphicsLayer = new GraphicsLayer({ id: 'circleGraphicsLayer' });
           this.tempGraphicsLayer = new GraphicsLayer({ id: 'tempGraphicsLayer' });
+          this.selectedCountiesGraphicsLayer = new GraphicsLayer({id: 'selectedCountiesGraphicsLayer'});
 
-          const countyLayer = new MapImageLayer({ url: 'https://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/ForestProductsDirectory/FPDMapService/MapServer' });
+          // const countyLayer = new MapImageLayer({ url: 'https://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/ForestProductsDirectory/FPDMapService/MapServer' });
+          const countyLayer = new MapImageLayer({ url: 'https://tfsgis02.tfs.tamu.edu/arcgis/rest/services/ForestProductsDirectory/FPDMapService/MapServer' });
           this.map = new EsriMap({
             basemap: vars._basemap,
-            layers: [countyLayer, this.industriesGraphicsLayer, this.graphicsLayer],
+            layers: [countyLayer, this.industriesGraphicsLayer, this.graphicsLayer, this.selectedCountiesGraphicsLayer],
             spatialReference: new SpatialReference({ wkid: 4326 })
           });
 
           // set a empty point geometry for zoom in later
-          this._tempZoomPt = new Point({x: 0, y: 0, spatialReference: { wkid: 4326 }
+          this._tempZoomPt = new Point({
+            x: 0, y: 0, spatialReference: { wkid: 4326 }
           });
-          const fullExtent = new Extent({ xmin: -106.645646, ymin: 25.837377, xmax: -93.508292, ymax: 36.500704 }).expand(1.2);
+          const fullExtent = new Extent({ xmin: -106.645646, ymin: 24.837377, xmax: -93.508292, ymax: 37.500704 }).expand(1.2);
           const _mapViewProperties = {
             container: this.mapViewEl.nativeElement,
             extent: fullExtent,
@@ -272,15 +277,11 @@ export class EsrimapComponent implements OnInit {
               });
               // add them to the map
               this.industriesGraphicsLayer.addMany(graphicsArray);
-              if (typeof (this.graphicsLayer) !== 'undefined' || typeof (this.circleGraphicsLayer) !== 'undefined') {
-                if (this.circleGraphicsLayer.graphics.length > 0) {
-                  const ext = this.circleGraphicsLayer.graphics.getItemAt(0).geometry.extent;
-                  const cloneExt = ext.clone();
-                  this.mapView.extent = cloneExt.expand(1.5);
-                } else if (this.graphicsLayer.graphics.length > 0) {
-                  const ext = this.graphicsLayer.graphics.getItemAt(0).geometry.extent;
-                  const cloneExt = ext.clone();
-                  this.mapView.extent = cloneExt.expand(1.5);
+              if (typeof (this.graphicsLayer) !== 'undefined' ) {
+                if (this.graphicsLayer.graphics.length > 0) {
+                  this.mapView.goTo(this.graphicsLayer.graphics, {animate: true, duration: 500}).then(() => {
+                    this.mapView.goTo({ extent: this.mapView.extent.expand(1.5) });
+                  });
                 } else {
                   this.mapView.goTo(graphicsArray).then(() => {
                     this.mapView.goTo({ extent: this.mapView.extent.expand(1.5) });
@@ -296,7 +297,7 @@ export class EsrimapComponent implements OnInit {
           this.mapView = new EsriMapView(_mapViewProperties);
           this.mapView.ui.move('zoom', 'top-right');
           this.printTask = new PrintTask({
-            url: 'https://tfsgis-dfe02.tfs.tamu.edu/arcgis/rest/services/FPD/FPDPrint/GPServer/FPDPrintService'
+            url: 'https://tfsgis02.tfs.tamu.edu/arcgis/rest/services/ForestProductsDirectory/FPDPrintMapService/GPServer/FPDPrintService'
           });
 
           this.printTemplate = new PrintTemplate({
@@ -330,9 +331,83 @@ export class EsrimapComponent implements OnInit {
             const graphic = new Graphic({
               geometry: event.geometry,
             });
+            console.log(graphic);
             that.graphicsLayer.add(graphic);
             that.editGraphic = null;
             that.activatedSpatialControl = true;
+          };
+
+          this.addBuffer = (geom, that = this) => {
+            const graphic = new Graphic({
+              geometry: geom,
+              symbol: vars.polygonSymbol
+            });
+            that.graphicsLayer.add(graphic);
+            that.editGraphic = null;
+            that.activatedSpatialControl = true;
+            this.performSpatialQuery('point');
+          };
+
+          this.selectCounties = (inputGeom) => {
+          // this.sketchViewModel.pointSymbol = vars.emptypointSymbol;
+          console.log(inputGeom);
+          console.log('called this ... select counties');
+          this.mapBusy = true;
+          const clonePtGeom = inputGeom.points[inputGeom.points.length - 1];
+            const newlyaddedPt = new Point({
+              x: clonePtGeom[0],
+              y: clonePtGeom[1],
+              spatialReference: {'wkid': 3857}
+            });
+            // ;
+            const existingCounties = [];
+            const countiesToAdd = [];
+            const countiesToRemove = [];
+            this.selectedCountiesGraphicsLayer.graphics.forEach(g => {
+              existingCounties.push(g['attributes']['NAME']);
+            });
+            const existingGraphics = this.selectedCountiesGraphicsLayer.graphics.clone();
+            console.log('Existing counties ', existingCounties);
+            this.pointInCountyService.getCountiesGeometry(JSON.stringify(newlyaddedPt.toJSON())).subscribe(d => {
+              console.log(d);
+              const features = d['features'];
+              const newCountyNames = [];
+              if (features.length > 0) {
+                features.forEach((f) => {
+                  newCountyNames.push(f['properties']['NAME']);
+                  const _g = new Graphic({
+                    geometry: new Polygon({
+                      rings: f['geometry']['coordinates'],
+                      spatialReference: { wkid: 3857 }
+                    }),
+                    symbol: vars.polygonSymbol,
+                    attributes: f['properties']
+                  });
+                  if (existingCounties.indexOf(f['properties']['NAME']) !== -1 && existingCounties.length !== 0) {
+                    console.log('need to remove ', _g);
+                    countiesToRemove.push(_g);
+                    // just remove it
+                    console.log('existing graphics', existingGraphics);
+                    existingGraphics.forEach((item, index, object) => {
+                      console.log(item);
+                      if (typeof item !== 'undefined') {
+                        if (item['attributes']['NAME'] === f['properties']['NAME']) {
+                          object.splice(index, 1);
+                        }
+                      }
+                    });
+
+                  } else {
+                    countiesToAdd.push(_g);
+                    existingGraphics.push(_g);
+                    console.log('need to add ', _g);
+                  }
+                });
+              }
+              console.log(existingCounties, newCountyNames);
+              this.selectedCountiesGraphicsLayer.graphics = existingGraphics;
+              this.mapBusy = false;
+            });
           };
 
           // select features
@@ -352,44 +427,65 @@ export class EsrimapComponent implements OnInit {
             console.log(_selected);
             console.log(this._data);
             this._data.allDataService.next(_selected);
+            this.drawToolActive = false;
+            console.timeEnd('spatial');
           };
           this.setupSketchViewModel = (mapView, _that = this) => {
             // setup sketch view model for drawing geometries
             this.sketchViewModel = new SketchViewModel({
               view: mapView,
               layer: this.graphicsLayer,
-              pointSymbol: vars.pointSymbol,
+              pointSymbol: vars.emptypointSymbol,
+              // pointSymbol: vars.pointSymbol,
               polylineSymbol: vars.polylineSymbol,
               polygonSymbol: vars.polygonSymbol
             });
-            mapView.map.addMany([this.graphicsLayer, this.circleGraphicsLayer, this.tempGraphicsLayer]);
+            mapView.map.addMany([this.graphicsLayer, this.tempGraphicsLayer]);
             this.sketchViewModel.on('create', function (event) {
+              console.log(event);
               if (event.state === 'complete') {
+                console.log('event completed ');
+                if (event.tool === 'point') {
+                  const bufferedPt = geometryEngine.geodesicBuffer(event.graphic.geometry, parseInt((<HTMLInputElement>document.getElementById('bufferDistance')).value, 10), 'miles');
+                  _that.addBuffer(bufferedPt, _that);
+                } else if (event.tool === 'multipoint') {
+                  _that.performSpatialQuery('multipoint');
+                 // _that.selectCounties(event.graphic.geometry);
+                } else {
+                  _that.addGraphic(event.graphic.geometry, _that);
+                  _that.performSpatialQuery(event.tool);
+                }
                 console.log(event);
-                _that.addGraphic(event.graphic.geometry, _that);
-                console.log(event);
+              } else if (event.state === 'start' || event.state === 'active') {
+                if (event.tool === 'multipoint') {
+                  _that.selectCounties(event.graphic.geometry);
+                }
               }
+            });
+            this.sketchViewModel.on('update', function(event) {
+              console.log('update event', event);
             });
             this.__sketchStatus.next(true);
           };
 
-          this.clearDrawGraphics = (isResetData) => {
+          this.clearDrawGraphics = (isResetData, resetZoom = true) => {
             // function to clear all active graphics in the map along with the view and graphcis layer
             // also resets the sketchviewmodel is that is active so that next drawing could be initialized properly
             console.time('clear');
             if (isResetData) {
+              this.drawToolActive = false;
               this.dataFilterService.resetDataSpatial();
             }
             this.__sketchStatus.subscribe(_sketchStatus => {
               if (_sketchStatus) {
                 this.sketchViewModel.reset();
                 this.graphicsLayer.removeAll();
-                this.circleGraphicsLayer.removeAll();
+                this.selectedCountiesGraphicsLayer.removeAll();
                 this.tempGraphicsLayer.removeAll();
                 this.editGraphic = null;
                 this.sketchViewModel.complete();
                 this.sketchViewModel.reset();
-                this.mapView.goTo({ extent: fullExtent });
+                if (resetZoom) {this.mapView.goTo({ extent: fullExtent }); }
                 console.timeEnd('clear');
               }
             });
@@ -397,6 +493,7 @@ export class EsrimapComponent implements OnInit {
 
           this.performSpatialQuery = (control) => {
             console.log('received this control in esir map', control);
+            console.time('spatial');
             if (this.sketchViewModel) {
               if (this.sketchViewModel.state === 'creating' || this.sketchViewModel.state === 'updating') {
                 this.sketchViewModel.complete();
@@ -409,11 +506,17 @@ export class EsrimapComponent implements OnInit {
                   this.pointInCountyService.getCountyNameFromPoint(geoj);
                   this.pointInCountyService.pointInCountyDataService.subscribe(d => {
                     this.dataFilterService.applyFilterArray('County', d);
+                    this.drawToolActive = false;
+                    this.mapView.extent = this.selectedCountiesGraphicsLayer.extent;
                   });
                   // .subscribe(d => console.log(d));
                 }
-              } else if (control === 'rectangle' || control === 'polygon' || control === 'circle') {
+              } else if (control === 'rectangle' || control === 'polygon') {
+                console.log(this.graphicsLayer.graphics.getItemAt(0).geometry);
                 this.selectFeaturesByGeom(this.graphicsLayer.graphics.getItemAt(0).geometry, this.industriesGraphicsLayer);
+                this.drawToolActive = false;
+              } else if (control === 'point') {
+                this.selectFeaturesByGeom(this.graphicsLayer.graphics.getItemAt(1).geometry, this.industriesGraphicsLayer);
               }
             }
           };

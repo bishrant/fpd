@@ -81,7 +81,7 @@ export class ListComponent implements OnInit, AfterViewInit {
   getPageLength() {
     return this.pageLength;
   }
-  toggleTable() {
+ public toggleTable() {
     const activeCls1 = this.featureTableClass.split(' ')[0];
     this.featureTableClass = activeCls1 === 'featureTableMaximized' ? 'featureTableMinimized animate' : 'featureTableMaximized animate';
     setTimeout(() => {
