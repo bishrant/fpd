@@ -48,7 +48,6 @@ export class ListComponent implements OnInit, AfterViewInit {
     this.isSingleClick = true;
     setTimeout(() => {
       if (this.isSingleClick) {
-        console.log(row);
         this._data.selectedRowService.next(row);
         this.selectedRowIndex = row.Id;
         this.zoomIntoRow.emit({industryId: this.selectedRowIndex, isSingleClick: true});
@@ -73,14 +72,11 @@ export class ListComponent implements OnInit, AfterViewInit {
       .pipe(
         tap(() => {
           this.loadTable();
-          console.log(this.sort.direction);
-          console.log(this.paginator);
         })
       )
       .subscribe();
 
       this.tourService.stepShow$.subscribe((res: any) => {
-        console.log(res.anchorId);
         if (res.anchorId === 'industries-list') {
           this.toggleTable();
         } else if (res.anchorId === 'mainmap') {
@@ -113,8 +109,7 @@ export class ListComponent implements OnInit, AfterViewInit {
       this.paginator.pageSize);
       this.selectedRowIndex = -9999;
   }
-  public exportAsExcel(evt) {
-    console.log(evt);
+  public exportAsExcel() {
     const y = this.genetateReportPostData();
     this._excelService.exportAsExcelFile(y, 'FPD');
   }
@@ -122,7 +117,6 @@ export class ListComponent implements OnInit, AfterViewInit {
   public genetateReportPostData(): any {
     const _postdata: any = [];
     const _reportFields: string[] = ['Id', 'Company', 'County', 'Address', 'Phone1', 'Phone2', 'Homepage', 'Email', 'MainIndustryType', 'SpecificIndustryType', 'SawMillType', 'Products', 'Species', 'Status', 'City', 'Lat', 'Lon'];
-    console.log(this._data.currentTableData);
     this._data.currentTableData.forEach(_d => {
       const _partialArray: any = {};
       _reportFields.forEach(_attr => {

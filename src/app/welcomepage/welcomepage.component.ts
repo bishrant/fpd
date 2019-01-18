@@ -13,7 +13,6 @@ export class WelcomepageComponent implements OnInit {
   public msg;
 
   hideHelp() {
-    console.log(this.disableHelpCheckbox);
     if (this.disableHelpCheckbox === true) {
       this.cookieService.set('disableHelp', 'true');
     }

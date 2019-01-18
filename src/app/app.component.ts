@@ -6,9 +6,9 @@ import { AddupdatepageComponent } from './addupdatepage/addupdatepage.component'
 import { ContactuspageComponent } from './contactuspage/contactuspage.component';
 import { HelppageComponent } from './helppage/helppage.component';
 import { WelcomepageComponent } from './welcomepage/welcomepage.component';
-// import { TourService } from 'ngx-tour-core';
 import { TourService } from 'ngx-tour-md-menu';
 import { CookieService } from 'ngx-cookie-service';
+import * as vars from './esrimap/variables';
 
 @Component({
   selector: 'app-root',
@@ -48,51 +48,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.openSideBarButtonVisible = (this.deviceType === 'mobile' || this.deviceType === 'mobile-xs') ? true : false;
     if (this.sliderBackdrop) {
       this.drawer.close();
-      // this.openSideBarButtonVisible = true;
     }
     this.drawer.openedChange.subscribe((e) => {
-      console.log(e);
       this.openSideBarButtonVisible = !e;
     });
-    this.tourService.initialize([{
-      anchorId: 'sidebar-search',
-      content: 'Search by attributes allows users to find industries by their name, county that they are located in, along with their main category (i.e. Primary and Secondary) as well as specific industry type',
-      title: 'Search by Attributes',
-      enableBackdrop: true
-    }, {
-      anchorId: 'sidebar-mapsearch',
-      content: 'Industries could be selected directly on the map by drawing buffer(circle), polygon, rectangle as well as counties.',
-      title: 'Search on the map',
-      enableBackdrop: true
-    }, {
-      anchorId: 'sidebar-export',
-      content: 'Selected and/or complete list and map of industries could be exported as PDF as well as excel file formats.',
-      title: 'Export maps and tables',
-      enableBackdrop: true,
-      preventScrolling: false
-    }, {
-      anchorId: 'mainmap',
-      content: 'Use your mouse/keyboard to interact with the map. Click on the dots/squares for industires to view their detail information.',
-      title: 'Interacting with map',
-      enableBackdrop: true,
-    }, {
-      anchorId: 'basemap-tour',
-      content: 'Use layers button to select between different basemaps. Zoom icons and zoom to home eases map navigation.',
-      title: 'Map Controls',
-      enableBackdrop: true,
-    },
-    {
-      anchorId: 'industries-list',
-      content: 'Single click to select industries and double-click to zoom and center map on them. Navigate to different pages using buttons on top bar. Entries could be sorted by clicking on header row.',
-      title: 'List of industries',
-      enableBackdrop: true,
-    }, {
-      anchorId: 'more-menu',
-      content: 'More menu icons such as Help and links to  Texas A&M Forest Service are located here.',
-      title: 'More menu',
-      enableBackdrop: true,
-    },
-    ]);
+    this.tourService.initialize(vars.tourRoutes);
 
 
 
@@ -102,18 +62,16 @@ export class AppComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       if (this.cookieService.get('disableHelp') !== 'true') {
         const dialogReference = this.dialog.open(WelcomepageComponent, {
-        //  maxHeight: '90vh',
+          //  maxHeight: '90vh',
           minWidth: '320px',
           height: 'auto',
           maxWidth: '80vh',
           autoFocus: false,
           hasBackdrop: true,
           backdropClass: 'welcomeDialogBg',
-          // exitAnimationDuration: '2ms',
           panelClass: 'custom-modalbox',
         });
         dialogReference.afterClosed().subscribe(m => {
-          console.log(m);
           dialogReference.close();
           if (m === 'startHelpTour') {
             dialogReference.close();
@@ -124,7 +82,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     }, 50);
 
     this.tourService.stepShow$.subscribe((res: any) => {
-      console.log(res.anchorId);
       if (['sidebar-export', 'sidebar-mapsearch', 'sidebar-search'].indexOf(res.anchorId) !== -1) {
         this.openSidebar();
       }
@@ -137,11 +94,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   @HostListener('window:resize', ['$event'])
   onresize() {
     this.innerWidth = window.innerWidth;
-    console.log(this.innerWidth);
     this.deviceType = this.findSceenType(window.innerWidth);
     this.sliderBackdrop = (this.deviceType === 'mobile' || this.deviceType === 'mobile-xs') ? true : false;
-    // this.drawer.toggle();
-    // #drawerContainer.
   }
 
   closeSidebar() {
@@ -168,11 +122,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   openDialogs(evt) {
-    console.log(evt);
     const dialogRef = this.dialog.open(this.pageList[evt], {
       minWidth: '320px',
-          height: 'auto',
-          maxWidth: '80vh',
+      height: 'auto',
+      maxWidth: '80vh',
       autoFocus: false,
       hasBackdrop: true,
       backdropClass: 'welcomeDialogBg',
@@ -180,9 +133,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       panelClass: 'custom-modalbox',
     });
     dialogRef.afterClosed().subscribe(page => {
-      console.log(page);
-      if (page !== '' && typeof page !== 'undefined' ) {
-        console.log(page);
+      if (page !== '' && typeof page !== 'undefined') {
         if (page !== 'starttour') {
           this.openDialogs(page);
         } else {

@@ -11,7 +11,7 @@
     Search by Company: <br />
     <ng-select #companiess id='companiess' [searchable]="true" [selectOnTab]="true" [virtualScroll]="true" [items]="companies"
       class="otherCls" placeholder="Company name.." notFoundText="No companies found.." (change)="selected($event, 'Company')"
-      [(ngModel)]="selectedValues.Company">
+      [(ngModel)]="selectedValues.Company"  >
     </ng-select>
     <hr /> Search by County: <br>
     <ng-select #ngCounty [searchable]="true" [selectOnTab]="true" [virtualScroll]="true" [items]="counties" (change)="selected($event, 'County')"
@@ -22,7 +22,9 @@
       placeholder="Main industry type.." class="otherCls" [(ngModel)]="selectedValues.MainIndustryType">
     </ng-select>
     <ng-select #ngSpecificIndustry [selectOnTab]="true" [virtualScroll]="true" [items]="specificIndustryType" (change)="selected($event, 'SpecificIndustryType')"
-      placeholder="Specific industry type.." class="otherCls" [(ngModel)]="selectedValues.SpecificIndustryType" style="margin-top: 15px">
+      placeholder="Specific industry type.." class="otherCls" [(ngModel)]="selectedValues.SpecificIndustryType" style="margin-top: 15px"
+      
+      >
     </ng-select>
     <!-- only show additional filter if the industry type is sawmill -->
     <!-- <span *ngIf='showSawMillSpecies === true'>
@@ -54,9 +56,8 @@
     <button (click)="activateSpatialControl('multipoint')" class="btn" > <i class="esri-icon-map-pin"></i>
       Select by counties</button><br>
     <hr>
-    <!-- <button (click)='clickedSpatialQuery()' class="btn">
-      <i class="esri-icon-search"></i>Query</button> 
-    &nbsp;&nbsp; --><button (click)="activateSpatialControl('clear')" class="btn btnLg">
+    
+    <button (click)="activateSpatialControl('clear')" class="btn btnLg">
       <i class="esri-icon-trash"></i>Clear Spatial Search</button>
 
   </mat-expansion-panel>
@@ -92,4 +93,3 @@
       &nbsp;&nbsp;Download Table as XLS</button>
 
   </mat-expansion-panel>
-<!-- </mat-accordion> -->

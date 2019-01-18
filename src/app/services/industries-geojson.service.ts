@@ -9,11 +9,6 @@ export interface FeatureTemplate {
   properties: object;
 }
 
-export interface TableTemplate {
-  id: number;
- // Company: string;
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -92,9 +87,6 @@ export class IndustriesGeojson implements OnInit {
   public getDataForSpecificIndustry(primaryValue) {
     const _filtered = this.mappingMainSpecificIndustryType[primaryValue];
     this.filteredSpecificIndustryType.next(_filtered.sort());
-    console.log(_filtered);
-    // console.log(this.filteredIndustryType);
-    console.log('user selected this industry type ', primaryValue);
   }
 
   // function to generate specific and main industry mapping
@@ -110,24 +102,16 @@ export class IndustriesGeojson implements OnInit {
       }
     }
     this.mappingMainSpecificIndustryType = result;
-   // console.log(result);
-  //  return result;
   }
 
   getTableData(d): void {
-    // console.log(d);
-    // const d1 = d.sort();
     const _tableData = d.map(f => f.properties);
     const _t = Object.keys(_tableData).map(e => _tableData[e]).sort((a, b) => a['id'] - b['id']);
-    // const _t = Object.values(_tableData).sort((a, b) => a['id'] - b['id']);
-    // console.log(_tableData);
     this.currentTableData = _t;
     this.tableDataService.next(_t);
   }
 
   getPagedData(sort= 'asc', sortField= 'Company', index= 0, size= 3) {
-//     console.log(this.currentTableData);
-
     let clonedTableData  = Object.assign([], Object.keys(this.currentTableData).map(e => this.currentTableData[e]).sort((a, b) => {
       let A;
       let B;
@@ -143,7 +127,6 @@ export class IndustriesGeojson implements OnInit {
 
     if (sort === 'desc') {
       clonedTableData = clonedTableData.reverse();
-      console.log(clonedTableData);
     }
     return from([clonedTableData.slice(index * size, index * size + size)]);
   }
@@ -173,7 +156,6 @@ export class IndustriesGeojson implements OnInit {
   constructor(private http: HttpClient) {
     const urls = 'https://services5.arcgis.com/ELI1iJkCzTIagHkp/ArcGIS/rest/services/Forest_Products_Industries_ViewOnly/FeatureServer/0/query?returnGeometry=true&outFields=%2A&f=geojson&outSR=4326&where=Status+%3D+%27Active%27&orderByFields=Id';
     this.http.get(urls).subscribe(data => {
-     // console.log(data['features']);
       this.allDataService.next(data['features']);
       this.originalData.next(data['features']);
       this.featureLoaded(data['features']);
@@ -185,12 +167,6 @@ export class IndustriesGeojson implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.allDataService.subscribe(data => {
-      // apply filter to format data for table
-      console.log('for filtered data');
-      console.log(data);
-    });
-   }
+  ngOnInit() { }
 
 }

@@ -19,7 +19,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { PrintLegendDirective } from './directives/print-legend.directive';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { ResizableModule  } from 'angular-resizable-element';
+// import { ResizableModule  } from 'angular-resizable-element';
 import { VirtualScrollComponent } from './virtual-scroll/virtual-scroll.component';
 import { ListComponent } from './list/list.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
@@ -52,7 +52,7 @@ import { CookieService } from 'ngx-cookie-service';
   imports: [
     TourMatMenuModule.forRoot(),
     RouterModule.forRoot([{ path: '', component: AppComponent}]),
-    MatSortModule, MatPaginatorModule, ResizableModule, MatDialogModule, BrowserModule, BrowserAnimationsModule,  NgbModule, MatTableModule, AngularDraggableModule, NgSelectModule,
+    MatSortModule, MatPaginatorModule, MatDialogModule, BrowserModule, BrowserAnimationsModule,  NgbModule, MatTableModule, AngularDraggableModule, NgSelectModule,
     HttpClientModule, MatSidenavModule, MatExpansionModule, AngularFontAwesomeModule, DragDropModule, MatProgressSpinnerModule, FormsModule,
     MatFormFieldModule, MatInputModule, MatSelectModule, MatTooltipModule, MatIconModule, MatToolbarModule, MatButtonModule, MatCheckboxModule
   ],

@@ -9,7 +9,3 @@ export class WindowService {
     return window;
   }
 }
-// interface MyWindow extends Window {
-//   myFunction(): void;
-// }
-// declare var win: MyWindow;

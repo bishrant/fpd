@@ -11,7 +11,6 @@ export class ListDataSource implements DataSource<any> {
        return this._data.getPagedData(sort, sortField, pageIndex, pageSize)
         .pipe()
         .subscribe(d => {this.listSubject.next(d);
-//         console.log(d);
         });
     }
 

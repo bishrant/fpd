@@ -18,7 +18,6 @@ export class PointincountyService {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }
     }).subscribe(data => {
-      console.log(data);
       const features = data['features'];
       const counties = [];
       if (features.length > 0) {
@@ -26,15 +25,7 @@ export class PointincountyService {
           counties.push(f['properties']['NAME']);
         });
       }
-      console.log(counties);
       this.pointInCountyDataService.next(counties);
-      //   outfields: 'NAME',
-      //   geometry: geom,
-      //   geometryType: 'esriGeometryMultipoint',
-      //  // inSRA: encodeURIComponent('{\'latestWkid\':3857,\'wkid\':102100}'),
-      //   spatialRel: 'esriSpatialRelIntersects',
-      //   returnGeometry: 'false',
-      //   f: 'geojson'
     });
   }
 

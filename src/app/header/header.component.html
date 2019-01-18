@@ -1,68 +1,68 @@
 <nav class="navbar navbar-expand-lg navbar-dark">
   <a class="navbar-brand" href="#">
-     <img src="assets/img/TFS_White.png" height="30" alt="" class="d-none d-sm-none d-md-inline" style='padding-right: 10px'/>
-      Directory of Forest Products Industries
+    <img src="assets/img/TFS_White.png" height="30" alt="" class="d-none d-sm-none d-md-inline" style='padding-right: 10px' />
+    Directory of Forest Products Industries
   </a>
 
-  <button type="button" aria-label="Toggle sidenav" mat-icon-button
-  
-  class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleCollapsed()">
-      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-    </button>
+  <button type="button" aria-label="Toggle sidenav" mat-icon-button class="navbar-toggler" type="button" data-toggle="collapse"
+    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+    (click)="toggleCollapsed()">
+    <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+  </button>
 
   <div id="navbarSupportedContent" [ngClass]="{'collapse': collapsed, 'navbar-collapse': true}" class="navbar-collapse collapse">
     <ul class="navbar-nav mr-auto"> </ul>
     <ul class="navbar-nav">
       <li class="nav-item">
-          <a class="nav-link" (click)="openDialogFn({page: 'aboutpage', evt: $event})">About</a>
-        </li>
+        <a class="nav-link" (click)="openDialogFn({page: 'aboutpage', evt: $event})">About</a>
+      </li>
       <li class="nav-item">
-      <a class="nav-link" (click)="openDialogFn({page: 'addupdatepage', evt: $event})">Add/Update Business</a>
+        <a class="nav-link" (click)="openDialogFn({page: 'addupdatepage', evt: $event})">Add/Update Business</a>
       </li>
 
       <li class="nav-item">
-        <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://tfsfrd.tamu.edu/ForestProductsDirectory" class="socialBtn" > 
+        <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://tfsfrd.tamu.edu/ForestProductsDirectory"
+          class="socialBtn">
           <i class="fa fa-facebook-square" style="font-size:20px"></i>
         </a>
-        <a target="_blank" href="https://twitter.com/intent/tweet?url=http://tfsfrd.tamu.edu/ForestProductsDirectory&amp;hashtags=ForestProductsDirectory, ForestProducts, Texas" class="socialBtn"> 
-          <i class="fa fa-twitter" style="font-size:20px"></i> 
+        <a target="_blank" href="https://twitter.com/intent/tweet?url=http://tfsfrd.tamu.edu/ForestProductsDirectory&amp;hashtags=ForestProductsDirectory, ForestProducts, Texas"
+          class="socialBtn">
+          <i class="fa fa-twitter" style="font-size:20px"></i>
         </a>
       </li>
-                <!-- <li><a target="_blank" href="https://twitter.com/intent/tweet?url=http://texasforestinfo.tamu.edu/MapMyProperty/&amp;hashtags=Maps,Landowner, Property" class="buttons"> <i class="fa fa-twitter" style="font-size:20px"></i> </a></li> -->
 
-<span *ngIf="!collapsed">
-    <li class="nav-item">
-        <a class="nav-link" (click)="openDialogFn({page: 'helppage', evt: $event})">Help</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" (click)="openDialogFn({page: 'contactus', evt: $event})">Contact Us</a>
-    </li>
+      <span *ngIf="!collapsed">
+        <li class="nav-item">
+          <a class="nav-link" (click)="openDialogFn({page: 'helppage', evt: $event})">Help</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="openDialogFn({page: 'contactus', evt: $event})">Contact Us</a>
+        </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="https://tfsweb.tamu.edu/" target="_blank">TFS Home</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="http://texasforestinfo.tamu.edu/" target="_blank">Texas Forest Info</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="https://tfsgis.maps.arcgis.com/apps/webappviewer/index.html?id=f4fe341ee68e403bb35c434711aad9a5"
-        target="_blank">Admin</a>
-    </li>
-</span>
+        <li class="nav-item">
+          <a class="nav-link" href="https://tfsweb.tamu.edu/" target="_blank">TFS Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="http://texasforestinfo.tamu.edu/" target="_blank">Texas Forest Info</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://tfsgis.maps.arcgis.com/apps/webappviewer/index.html?id=f4fe341ee68e403bb35c434711aad9a5"
+            target="_blank">Admin</a>
+        </li>
+      </span>
 
 
-      <li class="nav-item dropdown" tourAnchor= 'more-menu' *ngIf='collapsed'>
-        <div ngbDropdown class="d-inline-block" >
-          <a class="nav-link dropdown-toggle" id="dropdownBasic01" ngbDropdownToggle><span class="navbar-toggler-icon" ></span></a>
-          <div ngbDropdownMenu aria-labelledby="dropdownBasic01" class="dropdownSubmenu" >
+      <li class="nav-item dropdown" tourAnchor='more-menu' *ngIf='collapsed'>
+        <div ngbDropdown class="d-inline-block">
+          <a class="nav-link dropdown-toggle" id="dropdownBasic01" ngbDropdownToggle><span class="navbar-toggler-icon"></span></a>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic01" class="dropdownSubmenu">
             <button class="dropdown-item" (click)="openDialogFn({page: 'helppage', evt: $event})">Help</button>
             <button class="dropdown-item" (click)="openDialogFn({page: 'contactus', evt: $event})">Contact Us</button>
-            
+
             <a class="dropdown-item" href="https://tfsweb.tamu.edu/" target="_blank">TFS Home</a>
-              <a class="dropdown-item" href="http://texasforestinfo.tamu.edu/" target="_blank">Texas Forest Info</a>
-              <a class="dropdown-item" href="https://tfsgis.maps.arcgis.com/apps/webappviewer/index.html?id=f4fe341ee68e403bb35c434711aad9a5"
-            target="_blank">Admin</a>
+            <a class="dropdown-item" href="http://texasforestinfo.tamu.edu/" target="_blank">Texas Forest Info</a>
+            <a class="dropdown-item" href="https://tfsgis.maps.arcgis.com/apps/webappviewer/index.html?id=f4fe341ee68e403bb35c434711aad9a5"
+              target="_blank">Admin</a>
           </div>
         </div>
       </li>

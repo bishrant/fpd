@@ -1,26 +1,15 @@
-@import "../assets/css/resizable.css";
-@import '../../node_modules/angular2-draggable/css/resizable.min.css';
-
 html,
 body {
   height: 100%;
   overflow: hidden !important;
-
-}
-.esri-attribution__sources {
-  text-align: right !important;
-}
-.esri-ui .esri-attribution {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  text-align: right !important;
 }
 
 body {
   display: flex;
   flex-direction: column;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  overflow: hidden
 }
 
 .container,
@@ -60,14 +49,9 @@ body {
   flex-wrap: nowrap
 }
 
-#side1 {
-  background-color: purple;
-}
-
 .ng-draggable>.fill-remaining-space {
   cursor: move;
 }
-
 
 .container-fluid {
   padding-right: 0px;
@@ -94,7 +78,6 @@ body {
 .welcomeDialogBg {
   opacity: 0.5 !important;
 }
-
 
 .mat-paginator-page-size-label {
   margin: 0 4px;
@@ -140,70 +123,23 @@ body {
 }
 
 #staticLegend {
-    z-index: 5000;
-    right: 50px;
-    top: 70px;
-    position: absolute;
-    border: 1px solid black;
+  z-index: 5000;
+  right: 50px;
+  top: 70px;
+  position: absolute;
+  border: 1px solid black;
 }
 
 .nobottomMargin {
   margin-bottom: 0
 }
-#side1 {
-  background-color: purple;
-}
 
 .slideOut {
   transform: translateX(-100%);
-  //  -webkit-transition: all 1s;
-  /* Safari */
-  //   transition: all 1s;
 }
 
 .slideIn {
   transform: translate(0%);
-  //  -webkit-transition: all 1s;
-  /* Safari */
-  //  transition: all 1s;
-}
-
-#slideBtn {
-  //   transition: all 4s;
-  height: 1.25em;
-  position: absolute;
-  right: -1.45em;
-  z-index: 30;
-  font-size: 35px;
-  cursor: pointer;
-  background-color: #44993b;
-  width: 1.5em;
-  text-align: center;
-  line-height: 1.35em;
-  color: white;
-  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.16), 5px 5px 10px rgba(0, 0, 0, 0.12);
-  z-index: 10;
-  border: 0 0 5px 0;
-  border-radius: 0 0 5px 0;
-}
-
-#slideBtnActive {
-  height: 1.25em;
-  position: absolute;
-  right: -1.45em;
-  z-index: 30;
-  font-size: 35px;
-  cursor: pointer;
-  background-color: white;
-  width: 1.5em;
-  text-align: center;
-  line-height: 1.5em;
-  color: #44993b;
-  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.16), 5px 5px 10px rgba(0, 0, 0, 0.12);
-  top: 0;
-  z-index: 9;
-  border-radius: 0 0 5px 0;
-  border: none;
 }
 
 .sideNav {
@@ -222,16 +158,6 @@ body {
   }
 }
 
-#slide1 {
-  box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.16), 5px 0px 10px rgba(0, 0, 0, 0.12);
-  background-color: rgba(255, 255, 255, 0.9);
-  z-index: 20;
-  position: fixed;
-  left: 0;
-  margin-top: 64px;
-  padding-bottom: 64px;
-}
-
 .headerBar {
   width: 100%;
   height: 100%;
@@ -239,7 +165,6 @@ body {
 }
 
 .mainBody {
-  // background-color: red;
   display: flex;
   flex: 1;
 }
@@ -255,7 +180,7 @@ body {
   flex-direction: column;
 }
 
-.mat-drawer-container{
+.mat-drawer-container {
   overflow: auto !important;
   position: static;
 }
@@ -274,15 +199,11 @@ body {
   top: 62px;
   overflow: visible;
   min-width: auto !important;
-  // border: 1px 0 0 1px solid green;
-  // border-right: 1px solid gray;
-  // border-bottom: 1px solid gray;
   border-radius: 0 0 10px 0 !important;
   box-shadow: 5px 4px 5px rgba(0, 0, 0, 0.16), 5px 9px 10px rgba(0, 0, 0, 0.12) !important;
   z-index: 10;
 }
 
-.mat-drawer-content{
-    overflow: hidden;
+.mat-drawer-content {
+  overflow: hidden;
 }
-

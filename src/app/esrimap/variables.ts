@@ -12,34 +12,23 @@ export const lineSymbol = {
     width: 2,
     style: 'dash'
 };
-// export const masterLegend = [{'Biomass, wood pellet or landscape organic facility': {'type': 'Primary', 'color': 'red'},
-// 'Paper mill or chip mill': {'type': 'Primary', 'color': 'blue'},
-// 'Plywood, veneer, or oriented strandboard mill': {'type': 'Primary', 'color': 'orange'},
-// 'Post, pole, piling, preservative treating plant': {'type': 'Primary', 'color': 'green'},
-// 'Sawmill': {'type': 'Primary', 'color': 'purple'},
-// 'Other Primary Industry': {'type': 'Primary', 'color': 'black'},
-// 'Engineered wood product plant': {'type': 'Secondary', 'color': 'red'},
-// 'Millwork, cabinetry, furniture, or flooring plant': {'type': 'Secondary', 'color': 'blue'},
-// 'Pallet, container or remanufacture plant': {'type': 'Secondary', 'color': 'orange'},
-// 'Panel or wood pellet plant': {'type': 'Secondary', 'color': 'green'},
-// 'Preservative treating plant': {'type': 'Secondary', 'color': 'purple'},
-// 'Other Secondary Industry': {'type': 'Secondary', 'color': 'black'}];
+
 export const pointSymbol = {
-  type: 'simple-marker', // autocasts as new SimpleMarkerSymbol()
+  type: 'simple-marker',
   style: 'circle',
   color: '#8A2BE2',
   size: '4px',
 };
 
 export const emptypointSymbol = {
-  type: 'simple-marker', // autocasts as new SimpleMarkerSymbol()
+  type: 'simple-marker',
   style: 'circle',
   color: '#8A2BE2',
   size: '0px',
 };
 
 export const polylineSymbol = {
-  type: 'simple-line', // autocasts as new SimpleLineSymbol()
+  type: 'simple-line',
   color: '#8A2BE2',
   width: '2',
   style: 'solid',
@@ -47,7 +36,7 @@ export const polylineSymbol = {
 };
 
 export const polygonSymbol = {
-  type: 'simple-fill', // autocasts as new SimpleFillSymbol()
+  type: 'simple-fill',
   color: 'rgba(138,43,226, 0.05)',
   style: 'solid',
   outline: {
@@ -115,3 +104,44 @@ export const industriesPopupTemplate = { // autocasts as new PopupTemplate()
       visible: true,
     }]
   }]};
+
+
+  export const tourRoutes = [{
+    anchorId: 'sidebar-search',
+    content: 'Search by attributes allows users to find industries by their name, county that they are located in, along with their main category (i.e. Primary and Secondary) as well as specific industry type',
+    title: 'Search by Attributes',
+    enableBackdrop: true
+  }, {
+    anchorId: 'sidebar-mapsearch',
+    content: 'Industries could be selected directly on the map by drawing buffer(circle), polygon, rectangle as well as counties.',
+    title: 'Search on the map',
+    enableBackdrop: true
+  }, {
+    anchorId: 'sidebar-export',
+    content: 'Selected and/or complete list and map of industries could be exported as PDF as well as excel file formats.',
+    title: 'Export maps and tables',
+    enableBackdrop: true,
+    preventScrolling: false
+  }, {
+    anchorId: 'mainmap',
+    content: 'Use your mouse/keyboard to interact with the map. Click on the dots/squares for industires to view their detail information.',
+    title: 'Interacting with map',
+    enableBackdrop: true,
+  }, {
+    anchorId: 'basemap-tour',
+    content: 'Use layers button to select between different basemaps. Zoom icons and zoom to home eases map navigation.',
+    title: 'Map Controls',
+    enableBackdrop: true,
+  },
+  {
+    anchorId: 'industries-list',
+    content: 'Single click to select industries and double-click to zoom and center map on them. Navigate to different pages using buttons on top bar. Entries could be sorted by clicking on header row.',
+    title: 'List of industries',
+    enableBackdrop: true,
+  }, {
+    anchorId: 'more-menu',
+    content: 'More menu icons such as Help and links to  Texas A&M Forest Service are located here.',
+    title: 'More menu',
+    enableBackdrop: true,
+  },
+  ];

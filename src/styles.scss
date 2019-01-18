@@ -1,10 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
-html,
-body {
-  height: 100%;
-}
 .esri-attribution__sources {
   text-align: right !important;
 }
@@ -15,11 +11,23 @@ body {
   right: 0;
   text-align: right !important;
 }
-body {
-  margin: 0;
-  font-family: 'Roboto', sans-serif;
-  overflow: hidden
+
+.mat-expansion-panel-header {
+  cursor: pointer;
+  background: #f6f9f4;
+
 }
+.mat-expansion-panel{
+  overflow: visible !important;
+}
+
+.ui-select-choices {
+  position: fixed;
+  top: auto;
+  left: auto;
+  width: inherit;
+}
+
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
   // IE10+ CSS here
   .fullpageMap {
@@ -31,6 +39,9 @@ body {
   }
   .socialBtn {
     line-height: 50px !important;
+  }
+  #staticLegend {
+    position: fixed !important;
   }
 }
 
@@ -83,11 +94,11 @@ ui-select-choices.dropdown-menu {
 }
 
 .mat-menu-panel {
-  max-width: 450px !important;
+  max-width: 470px !important;
+  overflow: hidden;
 }
 
 // without global styles, material paginator's css could not be overidden
-
 @media (max-width: 768px) {
   .mat-paginator-page-size-label {
     margin: 0 4px;
@@ -164,7 +175,7 @@ ui-select-choices.dropdown-menu {
 
 // for extremely small screen
 @media (max-width: 315px) {
-  .navbar[_ngcontent-c1] {
+  .navbar {
     padding: 0.1em !important;
   }
 
@@ -208,7 +219,6 @@ ui-select-choices.dropdown-menu {
   padding: 0 !important;
 }
 
-
 .navbar-dark .navbar-nav .nav-link {
   color: white !important;
 }
@@ -216,7 +226,6 @@ ui-select-choices.dropdown-menu {
 .mat-toolbar {
   font-size: 18px !important;
 }
-
 
 .navbar-dark .navbar-toggler {
   color: white !important;
@@ -236,13 +245,3 @@ ui-select-choices.dropdown-menu {
 .navbar-dark .navbar-toggler {
   margin-right: 8px;
 }
-
-// .navbar-collapse {
-//   flex-basis: 100%;
-//   flex-grow: 1;
-//   align-items: center;
-//   overflow: auto;
-//   /* margin-bottom: 50px; */
-//   // padding-bottom: 25px;
-// }
-

@@ -1,8 +1,7 @@
 <button mat-raised-button (click)="toggleTable($event)" class="maximizeBtn" *ngIf="featureTableClass === 'featureTableMinimized animate'"
 matTooltip="Show the industries table."
 [matTooltipPosition]= "'above'"
-  aria-label="Show table button"
->
+  aria-label="Show table button" >
     <mat-icon class="maximizeIcon" >expand_less</mat-icon><br>
     Show Table
    </button>
@@ -13,8 +12,7 @@ matTooltip="Show the industries table."
       <button mat-button (click)="toggleTable()" class="minimizeBtn"
       matTooltip="Hide the industries table."
       [matTooltipPosition]= "'above'"
-        aria-label="Hide table button"
-      >
+        aria-label="Hide table button">
        <mat-icon class="minimizeIcon">expand_more</mat-icon>
       </button>
 
@@ -29,11 +27,7 @@ matTooltip="Show the industries table."
     <mat-table class="feature-table mat-elevation-z8 featureList" [ngClass]="(pageLength !== 0) ? 'visible': 'hidden'" 
     [dataSource]="dataSource" matSort matSortActive="Id" matSortDirection="asc">
       <ng-container matColumnDef="Id">
-        
-        <mat-header-cell *matHeaderCellDef mat-sort-header>SN
-
-        </mat-header-cell>
-
+        <mat-header-cell *matHeaderCellDef mat-sort-header>SN  </mat-header-cell>
         <mat-cell *matCellDef="let row">{{row.Id}}</mat-cell>
 
       </ng-container>
@@ -62,9 +56,5 @@ matTooltip="Show the industries table."
       <mat-row *matRowDef="let row; columns: displayedColumns" (click)="selectRow(row)" (dblclick)="doubleClick($event, row)" [ngClass]="{'highlight': selectedRowIndex == row.Id}"></mat-row>
 
     </mat-table>
-
-
-
-
   </div>
 </div>

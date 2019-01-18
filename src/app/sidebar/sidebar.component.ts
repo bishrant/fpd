@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, Output, EventEmitter, ElementRef, ViewChildren, ViewChild } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { IndustriesGeojson } from '../services/industries-geojson.service';
-// import { _CdkTextareaAutosize } from '@angular/material';
 import { ReplaySubject } from 'rxjs';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { HttpClient } from '@angular/common/http';
@@ -27,10 +26,7 @@ export class SidebarComponent implements OnInit {
   public _disabledV = '0';
   public disabled = false;
   public tableData;
-
-  // public printStatus = '';
   public selectedValues = {'Company': null, 'County': null, 'SpecificIndustryType': null, 'MainIndustryType': null};
-  // @Output() messageEvent = new EventEmitter<string>();
   @Output() exportButtonClicked = new EventEmitter<string>();
   @Output() spatialControlClicked = new EventEmitter<string>();
   @Output() performSpatialQuery = new EventEmitter<any>();
@@ -71,7 +67,12 @@ export class SidebarComponent implements OnInit {
 
   // function to apply filter to table data
   public applyFilter(attribute, selected) {
-    const reg = new RegExp(selected , 'i');
+    let reg;
+    if (attribute === 'SpecificIndustryType') {
+      reg = new RegExp(selected);
+    } else {
+      reg = new RegExp(selected , 'i');
+    }
     // this._data.allDataService.next(this.tableData.filter(f => reg.test(f.properties[attribute])));
     if (attribute === 'maj_spec') {
       this._data.orginalDataObservable.subscribe(d => {
@@ -93,41 +94,31 @@ export class SidebarComponent implements OnInit {
 
   public selected(value: any, attribute: string): void {
     this.selectedValues[attribute] = value;
-    console.log('Selected value is: ', value, ' of name: ', attribute);
     if (typeof attribute === 'undefined') {
       return;
     } else {
     switch (attribute) {
       case 'MainIndustryType':
-        console.log(this.ngSpecificIndustry);
         this.ngSpecificIndustry.items = this.specificIndustryType;
         this.ngSpecificIndustry.clearModel();
         this.ngCounty.clearModel();
         this._data.getDataForSpecificIndustry(value);
         break;
-      case 'SpecificIndustryType':
-        if (value.toLowerCase === 'sawmill') {
-          console.log('show filter by Sawmilltype');
-        }
-        break;
+      // case 'SpecificIndustryType':
+      //   if (value.toLowerCase === 'sawmill') {
+      //     console.log('show filter by Sawmilltype');
+      //   }
+      //   break;
     }
     this.selectedValues = {'Company': null, 'County': null, 'SpecificIndustryType': null, 'MainIndustryType': null};
     this.applyFilter(attribute, value);
   }
   }
 
-  public attributeSearch(): void {
-    console.log(this.selectedValues);
-  }
-
-
-  public refreshValue(value: any): void {
-    this.value = value;
-  }
-
   public resetData() {
-    console.log('reset from button', this.ccc, this.cc);
-    this.selectedValues = {'Company': null, 'County': null, 'SpecificIndustryType': null, 'MainIndustryType': null};
+    this.ngSpecificIndustry.clearAllText = 'S';
+    this.specificIndustryType = [];
+    this.selectedValues = {'Company': [], 'County': [], 'SpecificIndustryType': [], 'MainIndustryType': []};
     this._data.orginalDataObservable.subscribe(d => {
       // reset the data from original data source
       this._data.allDataService.next(d);
@@ -142,13 +133,11 @@ export class SidebarComponent implements OnInit {
   public activateSpatialControl(control: string) {
     this.activeControl = control;
     this.spatialControlClicked.emit(control);
-    console.log(control);
     this._data.activeSpataiControl.next(control);
   }
 
   public genetateReportPostData(): any {
     const _postdata: any = [];
-    console.log(this.tableData);
     this.tableData.forEach(_d => {
       const _partialArray: any = {};
       this._reportFields.forEach(_attr => {
@@ -158,7 +147,6 @@ export class SidebarComponent implements OnInit {
       });
       _postdata.push(_partialArray);
     });
-    console.log(_postdata);
     return _postdata;
   }
 
@@ -169,11 +157,10 @@ export class SidebarComponent implements OnInit {
     this.http.post('./report', _postdata).subscribe(data => {
       const e: any = data;
       this.linkToPDFReport = './report/' + e.fileName;
-      console.log(this.linkToPDFReport);
       this.printingPDFStatus = 'completed';
     }, err => {
-      console.log(err);
       this.printingPDFStatus = 'error';
+      console.log(err);
       this.linkToPDFReport = '';
     });
   }
@@ -211,7 +198,6 @@ export class SidebarComponent implements OnInit {
     });
 
     this.tourService.stepShow$.subscribe((res: any) => {
-      console.log(res.anchorId);
       switch (res.anchorId) {
         case ('sidebar-search'):
           this.sidebarSearchExpanded = true;
@@ -228,8 +214,5 @@ export class SidebarComponent implements OnInit {
       }
     });
 
-    this.tourService.initialize$.subscribe((r) => {
-      console.log(r);
-    });
   }
 }
