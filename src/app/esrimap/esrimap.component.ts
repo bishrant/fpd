@@ -64,6 +64,8 @@ export class EsrimapComponent implements OnInit {
   public drawInstructions = '';
   public _tempZoomPt;
   public mapBusy = false;
+  public basemapGallery;
+  public isLegendOpen = false;
   public Instructions = {
     point: 'Click on the map to add a buffer with your specified radius.',
     polygon: 'Click to add  points to the polygon. Double click to complete.',
@@ -82,6 +84,9 @@ export class EsrimapComponent implements OnInit {
   public toggleBasemaps() {
     this.basemapWidgetVisible = this.basemapWidgetVisible ? false : true;
     this.basemapWidgetClass = this.basemapWidgetVisible ? 'basemapToggleVisible' : 'basemapToggleHidden';
+    if (this.isLegendOpen) {
+      this.isLegendOpen = !this.isLegendOpen;
+      this.toggleLegendEvent.emit(); }
   }
 
   public onShowHideSideNav() {
@@ -114,7 +119,12 @@ export class EsrimapComponent implements OnInit {
   }
 
   public toggleLegend() {
+    this.isLegendOpen = !this.isLegendOpen;
     this.toggleLegendEvent.emit();
+    if (this.basemapWidgetVisible) {
+      this.basemapWidgetVisible = this.basemapWidgetVisible ? false : true;
+      this.basemapWidgetClass = this.basemapWidgetVisible ? 'basemapToggleVisible' : 'basemapToggleHidden';
+    }
   }
   public showHelp() {
     this.tourService.start();
@@ -313,11 +323,11 @@ export class EsrimapComponent implements OnInit {
             template: this.printTemplate
           });
 
-          const basemapGallery = new BasemapGallery({
+          this.basemapGallery = new BasemapGallery({
             view: this.mapView,
             container: 'basemapToggle'
           });
-          this.mapView.ui.add(basemapGallery);
+          this.mapView.ui.add(this.basemapGallery);
 
           const homeBtn = new Home({
             view: this.mapView

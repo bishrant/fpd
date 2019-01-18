@@ -6,6 +6,7 @@ import { merge } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ExcelService } from '../services/excel.service';
 import { WindowService } from '../services/window.service';
+import { TourService } from 'ngx-tour-core';
 
 @Component({
   selector: 'app-list',
@@ -23,7 +24,9 @@ export class ListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @Output() zoomIntoRow = new EventEmitter<any>();
   @ViewChild(MatSort) sort: MatSort;
-  constructor(private _data: IndustriesGeojson, private _excelService: ExcelService, private winRef: WindowService) { }
+  constructor(private _data: IndustriesGeojson, private _excelService: ExcelService,
+    public tourService: TourService,
+    private winRef: WindowService) { }
 
   ngOnInit() {
     this.dataSource = new ListDataSource(this._data);
@@ -75,6 +78,15 @@ export class ListComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe();
+
+      this.tourService.stepShow$.subscribe((res: any) => {
+        console.log(res.anchorId);
+        if (res.anchorId === 'industries-list') {
+          this.toggleTable();
+        } else if (res.anchorId === 'mainmap') {
+          this.toggleTable();
+        }
+      });
 
   }
 

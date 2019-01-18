@@ -5,11 +5,33 @@ html,
 body {
   height: 100%;
 }
-
+.esri-attribution__sources {
+  text-align: right !important;
+}
+.esri-ui .esri-attribution {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: right !important;
+}
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
   overflow: hidden
+}
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  // IE10+ CSS here
+  .fullpageMap {
+  position: -ms-page !important;
+  }
+  #mapViewNode {
+    position: -ms-page !important;
+    height: calc(100% - 56px) !important;
+  }
+  .socialBtn {
+    line-height: 50px !important;
+  }
 }
 
 .appRoot{
@@ -20,7 +42,19 @@ body {
 ui-select-choices.dropdown-menu {
   display: block;
 }
+.esri-widget__table tr th {
+  width: 30% !important;
+}
 
+.esri-popup__single-action-container{
+  display: none !important;
+}
+.esri-view-height-less-than-medium .esri-popup__main-container {
+  max-height: 300px !important;
+}
+.esri-view-height-xlarge .esri-popup__main-container {
+  max-height: 380px !important;
+}
 .mat-dialog-container {
   display: block;
   padding: 10px !important;

@@ -15,7 +15,7 @@
     </ng-select>
     <hr /> Search by County: <br>
     <ng-select #ngCounty [searchable]="true" [selectOnTab]="true" [virtualScroll]="true" [items]="counties" (change)="selected($event, 'County')"
-      placeholder="Select an county.." class="otherCls" [(ngModel)]="selectedValues.County">
+      placeholder="County name.." class="otherCls" [(ngModel)]="selectedValues.County">
     </ng-select>
     <hr> Search by Industry Type <br>
     <ng-select [selectOnTab]="true" [virtualScroll]="true" [items]="industrytype" (change)="selected($event, 'MainIndustryType')"

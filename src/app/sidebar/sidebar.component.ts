@@ -219,18 +219,15 @@ export class SidebarComponent implements OnInit {
         case ('sidebar-mapsearch'):
           this.sidebarMapSearchExpanded = true;
           break;
-      }
-    });
-    this.tourService.stepShow$.subscribe((res: any) => {
-      switch (res.anchorId) {
-        case('sidebar-search'):
-          this.sidebarMapSearchExpanded = true;
-          break;
-        case('sidebar-mapsearch'):
-          this.sidebarExportExpanded = true;
+        case ('sidebar-mapsearch'):
+        this.sidebarMapSearchExpanded = true;
+        break;
+        case ('mainmap'):
+          this.hideSidebarFn();
           break;
       }
     });
+
     this.tourService.initialize$.subscribe((r) => {
       console.log(r);
     });

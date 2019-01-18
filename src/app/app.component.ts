@@ -45,9 +45,15 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.deviceType = this.findSceenType(window.innerWidth);
 
     this.sliderBackdrop = (this.deviceType === 'mobile' || this.deviceType === 'mobile-xs') ? true : false;
+    this.openSideBarButtonVisible = (this.deviceType === 'mobile' || this.deviceType === 'mobile-xs') ? true : false;
     if (this.sliderBackdrop) {
       this.drawer.close();
+      // this.openSideBarButtonVisible = true;
     }
+    this.drawer.openedChange.subscribe((e) => {
+      console.log(e);
+      this.openSideBarButtonVisible = !e;
+    });
     this.tourService.initialize([{
       anchorId: 'sidebar-search',
       content: 'Search by attributes allows users to find industries by their name, county that they are located in, along with their main category (i.e. Primary and Secondary) as well as specific industry type',
@@ -68,7 +74,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       anchorId: 'mainmap',
       content: 'Use your mouse/keyboard to interact with the map. Click on the dots/squares for industires to view their detail information.',
       title: 'Interacting with map',
-      enableBackdrop: false,
+      enableBackdrop: true,
     }, {
       anchorId: 'basemap-tour',
       content: 'Use layers button to select between different basemaps. Zoom icons and zoom to home eases map navigation.',
@@ -96,8 +102,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       if (this.cookieService.get('disableHelp') !== 'true') {
         const dialogReference = this.dialog.open(WelcomepageComponent, {
-          maxHeight: '80vh',
-          minWidth: '250px',
+        //  maxHeight: '90vh',
+          minWidth: '320px',
           height: 'auto',
           maxWidth: '80vh',
           autoFocus: false,
@@ -116,6 +122,17 @@ export class AppComponent implements OnInit, AfterViewInit {
         });
       }
     }, 50);
+
+    this.tourService.stepShow$.subscribe((res: any) => {
+      console.log(res.anchorId);
+      if (['sidebar-export', 'sidebar-mapsearch', 'sidebar-search'].indexOf(res.anchorId) !== -1) {
+        this.openSidebar();
+      }
+    });
+
+    this.tourService.end$.subscribe(() => {
+      this.openSidebar();
+    });
   }
   @HostListener('window:resize', ['$event'])
   onresize() {
@@ -153,8 +170,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   openDialogs(evt) {
     console.log(evt);
     const dialogRef = this.dialog.open(this.pageList[evt], {
-      height: '70vh',
-      width: '80vh',
+      minWidth: '320px',
+          height: 'auto',
+          maxWidth: '80vh',
       autoFocus: false,
       hasBackdrop: true,
       backdropClass: 'welcomeDialogBg',
@@ -173,6 +191,12 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  openSidebar() {
+    this.drawer.open();
+    this.openSideBarButtonVisible = false;
+  }
+
 
   constructor(public dialog: MatDialog, public tourService: TourService, private cookieService: CookieService) { }
 }

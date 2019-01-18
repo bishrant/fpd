@@ -10,7 +10,16 @@
         width: 100%;
     }
 }
-
+.socialBtn{
+    color: white;
+    line-height: 35px;
+    vertical-align: text-top;
+    padding-right: 20px;
+    padding-left: 10px;
+}
+.socialBtn:hover{
+    color: gray;
+}
 .navbar-brand{
     font-weight: 400;
 }

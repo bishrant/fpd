@@ -7,6 +7,16 @@ body {
   overflow: hidden !important;
 
 }
+.esri-attribution__sources {
+  text-align: right !important;
+}
+.esri-ui .esri-attribution {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: right !important;
+}
 
 body {
   display: flex;
@@ -94,7 +104,7 @@ body {
 .fullpageMap {
   width: 100%;
   height: 100%;
-  position: fixed;
+  position: relative;
 }
 
 .slideFeatureTableActive {
@@ -131,7 +141,7 @@ body {
 
 #staticLegend {
     z-index: 5000;
-    right: 70px;
+    right: 50px;
     top: 70px;
     position: absolute;
     border: 1px solid black;
