@@ -505,11 +505,12 @@ export class EsrimapComponent implements OnInit {
               });
               this.tempGraphicsLayer.removeAll();
               this.tempGraphicsLayer.add(highlightGraphic);
+              console.log(response);
               this.mapView.popup.open({
                 location: mapPt,
                 features: [response.results[0].graphic]
               });
-
+              console.log(response.results[0].graphic);
             }
           };
 
