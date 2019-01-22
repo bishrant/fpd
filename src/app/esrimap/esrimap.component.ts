@@ -223,7 +223,8 @@ export class EsrimapComponent implements OnInit {
           SketchViewModel, SpatialReference, Extent, Graphic, GraphicsLayer,
           Point, Polygon, PrintTask, geometryEngine, PrintTemplate, PrintParameters, BasemapGallery]) => {
           // create a boilerplate graphics layer for adding industries points later on
-          this.industriesGraphicsLayer = new GraphicsLayer();
+          this.industriesGraphicsLayer = new GraphicsLayer({id: 'industriesGraphicsLayer'});
+          this.industriesGraphicsLayer.popupEnabled = false;
           this.graphicsLayer = new GraphicsLayer({ id: 'userGraphicsLayer' });
           this.tempGraphicsLayer = new GraphicsLayer({ id: 'tempGraphicsLayer' });
           this.selectedCountiesGraphicsLayer = new GraphicsLayer({ id: 'selectedCountiesGraphicsLayer' });
@@ -497,22 +498,105 @@ export class EsrimapComponent implements OnInit {
 
           const getGraphics = (response, mapPt) => {
             if (response.results.length > 0) {
-              const highlightGraphic = new Graphic({
-                geometry: response.results[0].graphic.geometry,
-                symbol: fn.getHighlightSymbol(response.results[0].graphic.attributes),
-                attributes: response.results[0].graphic.attributes,
-                popupTemplate: vars.industriesPopupTemplate
-              });
-              this.tempGraphicsLayer.removeAll();
-              this.tempGraphicsLayer.add(highlightGraphic);
-              console.log(response);
-              this.mapView.popup.open({
-                location: mapPt,
-                features: [response.results[0].graphic]
-              });
-              console.log(response.results[0].graphic);
+              const _industriesGraphic = response.results.filter(function(result) {
+                return result.graphic.layer.id === 'industriesGraphicsLayer';
+              })[0];
+              console.log('get graphics called', response);
+              if (typeof _industriesGraphic !== 'undefined') {
+                console.log(_industriesGraphic);
+                const _industryG = _industriesGraphic.graphic;
+
+                console.log();
+                const existing = this.tempGraphicsLayer.graphics.getItemAt(0);
+                if (typeof existing !== 'undefined') {
+                  if (existing.attributes.Id === _industryG.attributes.Id) {
+                    // don't do anything
+                    console.log('popup already open');
+                    console.log(this.mapView.popup);
+                    // this.mapView.popup.close();
+                  } else {
+                    const highlightGraphic = new Graphic({
+                      geometry: _industryG.geometry,
+                      symbol: fn.getHighlightSymbol(_industryG.attributes),
+                      attributes: _industryG.attributes,
+                      popupTemplate: vars.industriesPopupTemplate
+                    });
+                    this.tempGraphicsLayer.removeAll();
+                    console.log(response);
+                    highlightGraphic.popupTemplate.featureNavigationEnabled = false;
+                    this.mapView.popup.features = [highlightGraphic];
+
+                    this.mapView.popup.open({
+                      location: mapPt,
+                      updateLocationEnabled: true,
+                      featureMenuOpen: false
+                    });
+                    this.tempGraphicsLayer.add(highlightGraphic);
+                  }
+                } else {
+                  const highlightGraphic = new Graphic({
+                    geometry: _industryG.geometry,
+                    symbol: fn.getHighlightSymbol(_industryG.attributes),
+                    attributes: _industryG.attributes,
+                    popupTemplate: vars.industriesPopupTemplate
+                  });
+                  this.tempGraphicsLayer.removeAll();
+                  console.log(response);
+                  highlightGraphic.popupTemplate.featureNavigationEnabled = false;
+                  this.mapView.popup.open({
+                    location: mapPt,
+                    features: [highlightGraphic],
+                    updateLocationEnabled: false,
+                    featureMenuOpen: false
+                  });
+                  this.tempGraphicsLayer.add(highlightGraphic);
+                }
+              }
             }
           };
+
+          // const createPopupOnClick = (response, mapPt)  => {
+          //   if (response.results.length) {
+          //     const filteredResponse = response.results.filter(function(r) {
+          //       return r.graphic.layer.id === 'industriesGraphicsLayer';
+          //     })[0];
+          //     if (typeof filteredResponse !== 'undefined') {
+          //       const _existing = this.tempGraphicsLayer.graphics.getItemAt(0);
+          //       if (typeof _existing !== 'undefined') {
+          //         if (_existing.attributes.Id === filteredResponse.graphic.attributes.Id) {
+          //           if (this.mapView.popup.featureCount < 1) {
+          //             this.tempGraphicsLayer.removeAll();
+          //             this.mapView.popup.open({
+          //               location: mapPt,
+          //               features: [this.mapView.popup.features[0]],
+          //               updateLocationEnabled: true,
+          //               featureMenuOpen: true
+          //             });
+          //           }
+          //         } else {
+          //           const highlightGraphic = new Graphic({
+          //             geometry: filteredResponse.graphic.geometry,
+          //             symbol: fn.getHighlightSymbol(filteredResponse.graphic.attributes),
+          //             attributes: filteredResponse.graphic.attributes,
+          //             popupTemplate: vars.industriesPopupTemplate
+          //           });
+
+          //           highlightGraphic.popupTemplate.featureNavigationEnabled = false;
+          //           if (this.mapView.popup.featureCount < 1) {
+          //             this.tempGraphicsLayer.removeAll();
+          //             this.mapView.popup.open({
+          //               location: mapPt,
+          //               features: [highlightGraphic],
+          //               updateLocationEnabled: true,
+          //               featureMenuOpen: true
+          //             });
+          //             this.tempGraphicsLayer.add(highlightGraphic);
+          //           }
+          //         }
+          //       }
+          //     }
+          //   }
+          // };
 
           const removeTempGraphics = () => {
             this.tempGraphicsLayer.removeAll();
@@ -548,19 +632,21 @@ export class EsrimapComponent implements OnInit {
                       });
                   }
                 });
-                mapV.on('click', function (evt) {
-                  const screenPt = {
-                    x: evt.x,
-                    y: evt.y
-                  };
-                  const mapPt = mapV.toMap(screenPt);
-                  mapV.hitTest(screenPt)
-                    .then(function (response) {
-                      getGraphics(response, mapPt);
-                    }).catch(function (error) {
-                      console.log(error);
-                    });
-                });
+
+                // mapV.on('click', function (evt) {
+                //   const screenPt = {
+                //     x: evt.x,
+                //     y: evt.y
+                //   };
+                //   const mapPt = mapV.toMap(screenPt);
+                //   console.log('click fired');
+                //   mapV.hitTest(screenPt)
+                //     .then(function (response) {
+                //       createPopupOnClick(response, mapPt);
+                //     }).catch(function (error) {
+                //       console.log(error);
+                //     });
+                // });
               });
             }).catch(function (error) {
               console.log(error);
