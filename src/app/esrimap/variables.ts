@@ -105,6 +105,28 @@ export const industriesPopupTemplate = { // autocasts as new PopupTemplate()
     }]
   }]};
 
+  export const industriesPopupTemplate2 = { // autocasts as new PopupTemplate()
+    title: '{Company}',
+    content: [{
+      // It is also possible to set the fieldInfos outside of the content
+      // directly in the popupTemplate. If no fieldInfos is specifically set
+      // in the content, it defaults to whatever may be set within the popupTemplate.
+      type: 'fields',
+      fieldInfos: [{
+        fieldName: 'County',
+        label: 'County',
+        visible: true
+      }, {
+        fieldName: 'Address',
+        label: 'Address',
+        visible: true,
+      }, {
+        fieldName: 'Species',
+        label: 'Species',
+        visible: true,
+      }]
+    }]};
+
 
   export const tourRoutes = [{
     anchorId: 'sidebar-search',

@@ -224,7 +224,6 @@ export class EsrimapComponent implements OnInit {
           Point, Polygon, PrintTask, geometryEngine, PrintTemplate, PrintParameters, BasemapGallery]) => {
           // create a boilerplate graphics layer for adding industries points later on
           this.industriesGraphicsLayer = new GraphicsLayer({id: 'industriesGraphicsLayer'});
-          this.industriesGraphicsLayer.popupEnabled = false;
           this.graphicsLayer = new GraphicsLayer({ id: 'userGraphicsLayer' });
           this.tempGraphicsLayer = new GraphicsLayer({ id: 'tempGraphicsLayer' });
           this.selectedCountiesGraphicsLayer = new GraphicsLayer({ id: 'selectedCountiesGraphicsLayer' });
@@ -496,40 +495,34 @@ export class EsrimapComponent implements OnInit {
             }
           };
 
-          const getGraphics = (response, mapPt) => {
+          const getGraphics = (response, mapPt, clickType) => {
             if (response.results.length > 0) {
               const _industriesGraphic = response.results.filter(function(result) {
                 return result.graphic.layer.id === 'industriesGraphicsLayer';
               })[0];
               console.log('get graphics called', response);
               if (typeof _industriesGraphic !== 'undefined') {
-                console.log(_industriesGraphic);
                 const _industryG = _industriesGraphic.graphic;
-
-                console.log();
                 const existing = this.tempGraphicsLayer.graphics.getItemAt(0);
+                console.log(_industriesGraphic, existing);
                 if (typeof existing !== 'undefined') {
-                  if (existing.attributes.Id === _industryG.attributes.Id) {
+                  if (existing.attributes.Id === _industryG.attributes.Id && this.mapView.popup.id === 'click') {
                     // don't do anything
                     console.log('popup already open');
                     console.log(this.mapView.popup);
-                    // this.mapView.popup.close();
                   } else {
                     const highlightGraphic = new Graphic({
                       geometry: _industryG.geometry,
                       symbol: fn.getHighlightSymbol(_industryG.attributes),
                       attributes: _industryG.attributes,
-                      popupTemplate: vars.industriesPopupTemplate
+                      popupTemplate: vars.industriesPopupTemplate2
                     });
                     this.tempGraphicsLayer.removeAll();
                     console.log(response);
-                    highlightGraphic.popupTemplate.featureNavigationEnabled = false;
-                    this.mapView.popup.features = [highlightGraphic];
-
+                    this.mapView.popup.id = clickType;
                     this.mapView.popup.open({
+                      features: [highlightGraphic],
                       location: mapPt,
-                      updateLocationEnabled: true,
-                      featureMenuOpen: false
                     });
                     this.tempGraphicsLayer.add(highlightGraphic);
                   }
@@ -538,24 +531,24 @@ export class EsrimapComponent implements OnInit {
                     geometry: _industryG.geometry,
                     symbol: fn.getHighlightSymbol(_industryG.attributes),
                     attributes: _industryG.attributes,
-                    popupTemplate: vars.industriesPopupTemplate
+                    popupTemplate: vars.industriesPopupTemplate2
                   });
                   this.tempGraphicsLayer.removeAll();
                   console.log(response);
-                  highlightGraphic.popupTemplate.featureNavigationEnabled = false;
+                  this.mapView.popup.id = clickType;
                   this.mapView.popup.open({
                     location: mapPt,
                     features: [highlightGraphic],
-                    updateLocationEnabled: false,
-                    featureMenuOpen: false
                   });
                   this.tempGraphicsLayer.add(highlightGraphic);
                 }
               }
+            } else if (this.mapView.popup.id !== 'click') {
+              this.mapView.popup.close();
             }
           };
 
-          // const createPopupOnClick = (response, mapPt)  => {
+          // const createPopupOnClick = (response, mapPt, clickType)  => {
           //   if (response.results.length) {
           //     const filteredResponse = response.results.filter(function(r) {
           //       return r.graphic.layer.id === 'industriesGraphicsLayer';
@@ -580,8 +573,6 @@ export class EsrimapComponent implements OnInit {
           //             attributes: filteredResponse.graphic.attributes,
           //             popupTemplate: vars.industriesPopupTemplate
           //           });
-
-          //           highlightGraphic.popupTemplate.featureNavigationEnabled = false;
           //           if (this.mapView.popup.featureCount < 1) {
           //             this.tempGraphicsLayer.removeAll();
           //             this.mapView.popup.open({
@@ -617,6 +608,7 @@ export class EsrimapComponent implements OnInit {
             });
 
             const mapV = this.mapView;
+            const tempGLayer = this.tempGraphicsLayer;
             this.mapView.whenLayerView(this.industriesGraphicsLayer).then(function (lView) {
               watchUtils.whenFalseOnce(lView, 'updating', function () {
                 mapV.on('pointer-move', function (evt) {
@@ -624,29 +616,32 @@ export class EsrimapComponent implements OnInit {
                     x: evt.x,
                     y: evt.y
                   };
+                  mapV.popup.autoOpenEnabled = false;
                   if (mapV.scale < 1529770) {
                     const mapPt = mapV.toMap(screenPt);
                     mapV.hitTest(screenPt)
                       .then(function (response) {
-                        getGraphics(response, mapPt);
+                        getGraphics(response, mapPt, 'move');
                       });
                   }
                 });
 
-                // mapV.on('click', function (evt) {
-                //   const screenPt = {
-                //     x: evt.x,
-                //     y: evt.y
-                //   };
-                //   const mapPt = mapV.toMap(screenPt);
-                //   console.log('click fired');
-                //   mapV.hitTest(screenPt)
-                //     .then(function (response) {
-                //       createPopupOnClick(response, mapPt);
-                //     }).catch(function (error) {
-                //       console.log(error);
-                //     });
-                // });
+                mapV.on('click', function (evt) {
+                  const screenPt = {
+                    x: evt.x,
+                    y: evt.y
+                  };
+                  mapV.popup.autoOpenEnabled = false;
+                  const mapPt = mapV.toMap(screenPt);
+                  console.log('click fired');
+                  tempGLayer.removeAll();
+                  mapV.hitTest(screenPt)
+                    .then(function (response) {
+                      getGraphics(response, mapPt, 'click');
+                    }).catch(function (error) {
+                      console.log(error);
+                    });
+                });
               });
             }).catch(function (error) {
               console.log(error);

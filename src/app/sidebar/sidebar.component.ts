@@ -147,7 +147,9 @@ export class SidebarComponent implements OnInit {
       });
       _postdata.push(_partialArray);
     });
-    return _postdata;
+    const _p = this.sortByCompanyName(_postdata);
+    console.log(111);
+    return _p;
   }
 
   public exportDataPDF() {
@@ -164,10 +166,39 @@ export class SidebarComponent implements OnInit {
       this.linkToPDFReport = '';
     });
   }
+  public sortByName(a, b) {
+    if (a.Company < b.Company) {
+      return -1;
+    }
+    if (a.Company > b.Company) {
+      return 1;
+    }
+    return 0;
+  }
 
+  public sortByCompanyName(data) {
+    const _postdataxls1 = data.sort(function(a, b) {return (a.Company > b.Company) ? 1 : ((b.Company > a.Company) ? -1 : 0); } );
+    const _postdataxls = _postdataxls1.map(function(e, i) {console.log(e, i); e.Id = i + 1; return e; });
+    return _postdataxls;
+  }
   public exportDataXLS() {
-    const _postdataxls = this.genetateReportPostData();
-    this._excelService.exportAsExcelFile(_postdataxls, 'FPD');
+    const _postdataxls0 = this.sortByCompanyName(this.genetateReportPostData());
+    const _postdataxlsFinal = _postdataxls0.map(r => ({
+      SN: r.Id,
+      Company: r.Company,
+      County: r.County,
+      Address: r.Address,
+      Phone1: r.Phone1,
+      Phone2: r.Phone2,
+      Homepage: r.Homepage,
+      Email: r.Email,
+      MainIndustryType: r.MainIndustryType,
+      SpecificIndustryType: r.SpecificIndustryType,
+      SawMillType: r.SawMillType,
+      Products: r.Products,
+      Species: r.Species
+    }));
+    this._excelService.exportAsExcelFile(_postdataxlsFinal, 'FPD');
   }
   constructor(public _data: IndustriesGeojson, private http: HttpClient,
     private _excelService: ExcelService, public tourService: TourService

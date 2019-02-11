@@ -114,6 +114,16 @@ export class ListComponent implements OnInit, AfterViewInit {
     this._excelService.exportAsExcelFile(y, 'FPD');
   }
 
+  public sortByName(a, b) {
+    if (a.Company < b.Company) {
+      return -1;
+    }
+    if (a.Company > b.Company) {
+      return 1;
+    }
+    return 0;
+  }
+
   public genetateReportPostData(): any {
     const _postdata: any = [];
     const _reportFields: string[] = ['Id', 'Company', 'County', 'Address', 'Phone1', 'Phone2', 'Homepage', 'Email', 'MainIndustryType', 'SpecificIndustryType', 'SawMillType', 'Products', 'Species', 'Status', 'City', 'Lat', 'Lon'];
@@ -124,7 +134,10 @@ export class ListComponent implements OnInit, AfterViewInit {
       });
       _postdata.push(_partialArray);
     });
-    return _postdata;
+    
+    const newp = _postdata.map(this.sortByName);
+    console.log(newp);
+    return newp;
   }
 
 }
