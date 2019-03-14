@@ -7,14 +7,12 @@ import * as vars from '../esrimap/variables';
 export class PrintLegendDirective implements OnInit {
   element: ElementRef;
   constructor(private el: ElementRef, private _data: IndustriesGeojson) {
-    // console.log(el.nativeElement);
     this.element = this.el.nativeElement;
   }
   public convertCanvasToWhite(ctx, canvas) {
     // change non-opaque pixels to white
     const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const data = imgData.data;
-    // console.log(data);
     for (let i = 0; i < data.length; i += 4) {
       if (data[i + 3] === 0) {
         data[i] = 255;
@@ -51,7 +49,6 @@ export class PrintLegendDirective implements OnInit {
       const circleX = isSmall ? 20 : 30;
       const canvasWidth = isSmall ? 400 : 1000;
       const rowHeight = isSmall ? 30 : 80;
-      console.log(activeLegend);
       // const rowHeight = 80;
       let primaryLegendImg = null;
       let secondaryLegendImg = null;

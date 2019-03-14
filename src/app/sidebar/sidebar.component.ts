@@ -106,7 +106,6 @@ export class SidebarComponent implements OnInit {
         break;
       // case 'SpecificIndustryType':
       //   if (value.toLowerCase === 'sawmill') {
-      //     console.log('show filter by Sawmilltype');
       //   }
       //   break;
     }
@@ -148,7 +147,6 @@ export class SidebarComponent implements OnInit {
       _postdata.push(_partialArray);
     });
     const _p = this.sortByCompanyName(_postdata);
-    console.log(111);
     return _p;
   }
 
@@ -178,7 +176,7 @@ export class SidebarComponent implements OnInit {
 
   public sortByCompanyName(data) {
     const _postdataxls1 = data.sort(function(a, b) {return (a.Company > b.Company) ? 1 : ((b.Company > a.Company) ? -1 : 0); } );
-    const _postdataxls = _postdataxls1.map(function(e, i) {console.log(e, i); e.Id = i + 1; return e; });
+    const _postdataxls = _postdataxls1.map(function(e, i) {e.Id = i + 1; return e; });
     return _postdataxls;
   }
   public exportDataXLS() {

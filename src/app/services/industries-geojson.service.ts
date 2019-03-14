@@ -149,7 +149,6 @@ export class IndustriesGeojson implements OnInit {
       this.createMappingMaintoSpeicifcIndustryType(d);
       // similar for sawmill
       const sawmillMajorSpecies = this.getDataForComboBoxSawMill(d, 'Species', 'SpecificIndustryType', 'Sawmill');
-     // console.log(sawmillMajorSpecies);
       this.filteredSawmillSpecies.next(sawmillMajorSpecies.sort());
   }
   // function to get unique values for drop down boxes

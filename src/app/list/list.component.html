@@ -28,7 +28,7 @@ matTooltip="Show the industries table."
     [dataSource]="dataSource" matSort matSortActive="Id" matSortDirection="asc">
       <ng-container matColumnDef="Id">
         <mat-header-cell *matHeaderCellDef mat-sort-header>SN  </mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.Id}}</mat-cell>
+        <mat-cell *matCellDef="let row; let i = index">{{i+1 + (paginator.pageIndex ) *paginator.pageSize}}</mat-cell>
 
       </ng-container>
       <ng-container matColumnDef="Company">

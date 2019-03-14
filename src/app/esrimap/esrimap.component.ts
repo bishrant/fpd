@@ -66,11 +66,12 @@ export class EsrimapComponent implements OnInit {
   public mapBusy = false;
   public basemapGallery;
   public isLegendOpen = false;
+  public createScreenPt;
   public Instructions = {
     point: 'Click on the map to add a buffer with your specified radius.',
     polygon: 'Click/drag your mouse to add points to the polygon. Double click to complete.',
     rectangle: 'Click hold and drag to draw a rectangle.',
-    multipoint: 'Click to select one or more counties. Double click to complete.',
+    multipoint: 'Click to select one or more counties. Double click to complete. Use arrow keys (<- , ->) and mouse scroll wheel to pan and zoom (+ , -).',
     clear: ''
   };
   public nativeWindow: any;
@@ -107,7 +108,6 @@ export class EsrimapComponent implements OnInit {
         this._data.printStatus = 'running';
         printTaskExecuted.then((result) => {
           this._data.printStatus = 'completed';
-          console.log(result['url']);
           this._data.linkToPDFReport = result['url'];
 
         }, (error) => {
@@ -175,7 +175,6 @@ export class EsrimapComponent implements OnInit {
           } else {
             this.clearDrawGraphics(false);
             this.drawInstructions = this.Instructions[control];
-            console.log(this.drawInstructions);
             this.mapBusy = false;
           }
           this.__sketchStatus.subscribe(_sketchStatus => {
@@ -211,7 +210,7 @@ export class EsrimapComponent implements OnInit {
     setTimeout(() => {
       return loadModules([
         'esri/Map', 'esri/views/MapView', 'esri/core/watchUtils',
-        'esri/layers/MapImageLayer',
+        'esri/layers/MapImageLayer', 'esri/Basemap', 'esri/geometry/ScreenPoint',
         'esri/views/2d/draw/Draw', 'esri/widgets/Home',
         'esri/widgets/Sketch/SketchViewModel', 'esri/geometry/SpatialReference', 'esri/geometry/Extent',
         'esri/Graphic', 'esri/layers/GraphicsLayer', 'esri/geometry/Point', 'esri/geometry/Polygon',
@@ -219,7 +218,7 @@ export class EsrimapComponent implements OnInit {
         'esri/tasks/support/PrintTemplate', 'esri/tasks/support/PrintParameters', 'esri/widgets/BasemapGallery',
         'dojo/domReady!'
       ])
-        .then(([EsriMap, EsriMapView, watchUtils, MapImageLayer, Draw, Home,
+        .then(([EsriMap, EsriMapView, watchUtils, MapImageLayer, Basemap, ScreenPoint, Draw, Home,
           SketchViewModel, SpatialReference, Extent, Graphic, GraphicsLayer,
           Point, Polygon, PrintTask, geometryEngine, PrintTemplate, PrintParameters, BasemapGallery]) => {
           // create a boilerplate graphics layer for adding industries points later on
@@ -259,6 +258,9 @@ export class EsrimapComponent implements OnInit {
                 position: 'top-center'
               }
             },
+          };
+          this.createScreenPt  = (x, y) => {
+            return new ScreenPoint({x: x, y: y});
           };
           this.addGraphicsToMap = () => {
             this._data.currentData.subscribe(d => {
@@ -314,9 +316,22 @@ export class EsrimapComponent implements OnInit {
 
           this.basemapGallery = new BasemapGallery({
             view: this.mapView,
-            container: 'basemapToggle'
+            container: 'basemapToggle',
+            source: [Basemap.fromId('topo'), Basemap.fromId('satellite'), Basemap.fromId('hybrid'), Basemap.fromId('streets')]
           });
           this.mapView.ui.add(this.basemapGallery);
+          // watchUtils.once(this.basemapGallery.source.basemaps, 'length', () => {
+          //   setTimeout(() => {
+          //     this.basemapGallery.source.basemaps.removeAt(3);
+              
+          //     this.basemapGallery.source.basemaps.removeAt(4);
+          //     this.basemapGallery.source.basemaps.removeAt(5);
+          //     this.basemapGallery.source.basemaps.removeAt(6);
+          //     this.basemapGallery.source.basemaps.removeAt(7);
+          //     this.basemapGallery.source.basemaps.removeAt(8);
+          //     this.basemapGallery.source.basemaps.removeAt(9);
+          //   }, 200);
+          // });
 
           const homeBtn = new Home({
             view: this.mapView
@@ -427,6 +442,7 @@ export class EsrimapComponent implements OnInit {
             });
             mapView.map.addMany([this.graphicsLayer, this.tempGraphicsLayer]);
             this.sketchViewModel.on('create', function (event) {
+
               if (event.state === 'complete') {
                 if (event.tool === 'point') {
                   const bufferedPt = geometryEngine.geodesicBuffer(event.graphic.geometry, parseInt((<HTMLInputElement>document.getElementById('bufferDistance')).value, 10), 'miles');
@@ -486,7 +502,6 @@ export class EsrimapComponent implements OnInit {
                   });
                 }
               } else if (control === 'rectangle' || control === 'polygon') {
-                console.log(this.graphicsLayer.graphics.getItemAt(0).geometry);
                 this.selectFeaturesByGeom(this.graphicsLayer.graphics.getItemAt(0).geometry, this.industriesGraphicsLayer);
                 this.drawToolActive = false;
               } else if (control === 'point') {
@@ -500,25 +515,20 @@ export class EsrimapComponent implements OnInit {
               const _industriesGraphic = response.results.filter(function(result) {
                 return result.graphic.layer.id === 'industriesGraphicsLayer';
               })[0];
-              console.log('get graphics called', response);
               if (typeof _industriesGraphic !== 'undefined') {
                 const _industryG = _industriesGraphic.graphic;
                 const existing = this.tempGraphicsLayer.graphics.getItemAt(0);
-                console.log(_industriesGraphic, existing);
                 if (typeof existing !== 'undefined') {
                   if (existing.attributes.Id === _industryG.attributes.Id && this.mapView.popup.id === 'click') {
                     // don't do anything
-                    console.log('popup already open');
-                    console.log(this.mapView.popup);
                   } else {
                     const highlightGraphic = new Graphic({
                       geometry: _industryG.geometry,
                       symbol: fn.getHighlightSymbol(_industryG.attributes),
                       attributes: _industryG.attributes,
-                      popupTemplate: vars.industriesPopupTemplate2
+                      popupTemplate: vars.industriesPopupTemplate
                     });
                     this.tempGraphicsLayer.removeAll();
-                    console.log(response);
                     this.mapView.popup.id = clickType;
                     this.mapView.popup.open({
                       features: [highlightGraphic],
@@ -531,10 +541,9 @@ export class EsrimapComponent implements OnInit {
                     geometry: _industryG.geometry,
                     symbol: fn.getHighlightSymbol(_industryG.attributes),
                     attributes: _industryG.attributes,
-                    popupTemplate: vars.industriesPopupTemplate2
+                    popupTemplate: vars.industriesPopupTemplate
                   });
                   this.tempGraphicsLayer.removeAll();
-                  console.log(response);
                   this.mapView.popup.id = clickType;
                   this.mapView.popup.open({
                     location: mapPt,
@@ -547,47 +556,6 @@ export class EsrimapComponent implements OnInit {
               this.mapView.popup.close();
             }
           };
-
-          // const createPopupOnClick = (response, mapPt, clickType)  => {
-          //   if (response.results.length) {
-          //     const filteredResponse = response.results.filter(function(r) {
-          //       return r.graphic.layer.id === 'industriesGraphicsLayer';
-          //     })[0];
-          //     if (typeof filteredResponse !== 'undefined') {
-          //       const _existing = this.tempGraphicsLayer.graphics.getItemAt(0);
-          //       if (typeof _existing !== 'undefined') {
-          //         if (_existing.attributes.Id === filteredResponse.graphic.attributes.Id) {
-          //           if (this.mapView.popup.featureCount < 1) {
-          //             this.tempGraphicsLayer.removeAll();
-          //             this.mapView.popup.open({
-          //               location: mapPt,
-          //               features: [this.mapView.popup.features[0]],
-          //               updateLocationEnabled: true,
-          //               featureMenuOpen: true
-          //             });
-          //           }
-          //         } else {
-          //           const highlightGraphic = new Graphic({
-          //             geometry: filteredResponse.graphic.geometry,
-          //             symbol: fn.getHighlightSymbol(filteredResponse.graphic.attributes),
-          //             attributes: filteredResponse.graphic.attributes,
-          //             popupTemplate: vars.industriesPopupTemplate
-          //           });
-          //           if (this.mapView.popup.featureCount < 1) {
-          //             this.tempGraphicsLayer.removeAll();
-          //             this.mapView.popup.open({
-          //               location: mapPt,
-          //               features: [highlightGraphic],
-          //               updateLocationEnabled: true,
-          //               featureMenuOpen: true
-          //             });
-          //             this.tempGraphicsLayer.add(highlightGraphic);
-          //           }
-          //         }
-          //       }
-          //     }
-          //   }
-          // };
 
           const removeTempGraphics = () => {
             this.tempGraphicsLayer.removeAll();
@@ -633,7 +601,6 @@ export class EsrimapComponent implements OnInit {
                   };
                   mapV.popup.autoOpenEnabled = false;
                   const mapPt = mapV.toMap(screenPt);
-                  console.log('click fired');
                   tempGLayer.removeAll();
                   mapV.hitTest(screenPt)
                     .then(function (response) {

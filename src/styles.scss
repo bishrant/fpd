@@ -21,6 +21,9 @@
   overflow: visible !important;
 }
 
+.navbar-collapse {
+  text-align: right;
+}
 .ui-select-choices {
   position: fixed;
   top: auto;
@@ -60,8 +63,11 @@ ui-select-choices.dropdown-menu {
 .esri-popup__single-action-container{
   display: none !important;
 }
+.esri-view-height-large .esri-popup__main-container {
+  max-height: 380px !important;
+}
 .esri-view-height-less-than-medium .esri-popup__main-container {
-  max-height: 300px !important;
+  max-height: 380px !important;
 }
 .esri-view-height-xlarge .esri-popup__main-container {
   max-height: 380px !important;
@@ -78,6 +84,7 @@ ui-select-choices.dropdown-menu {
 .mat-dialog-content{
   text-align: justify;
   margin-right: -24px !important;
+  overflow: visible !important;
 }
 
 .cdk-overlay-backdrop {
@@ -217,6 +224,7 @@ ui-select-choices.dropdown-menu {
   min-width: unset;
   width: auto;
   padding: 0 !important;
+  line-height: inherit !important;
 }
 
 .navbar-dark .navbar-nav .nav-link {

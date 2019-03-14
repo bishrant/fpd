@@ -2,15 +2,15 @@ export const _basemap = 'topo';
 export const _center: Array<number> = [-100, 31];
 export const _zoom = 7;
 export const ptSymbol = {
-    type: 'simple-marker',
-    color: [10, 10, 10],
-    size: 5
+  type: 'simple-marker',
+  color: [10, 10, 10],
+  size: 5
 };
 export const lineSymbol = {
-    type: 'simple-line',
-    color: '#660404',
-    width: 2,
-    style: 'dash'
+  type: 'simple-line',
+  color: '#660404',
+  width: 2,
+  style: 'dash'
 };
 
 export const pointSymbol = {
@@ -45,7 +45,6 @@ export const polygonSymbol = {
   }
 };
 
-
 export const masterLegend = [{ name: 'Biomass, wood pellet or landscape organic facility', type: 'Primary', color: '#04f704', order: 1 },
 { name: 'Paper mill or chip mill', type: 'Primary', color: '#6909ed', order: 2 },
 { name: 'Plywood, veneer, or oriented strandboard mill', type: 'Primary', color: '#f97c04', order: 3 },
@@ -59,111 +58,58 @@ export const masterLegend = [{ name: 'Biomass, wood pellet or landscape organic 
 { name: 'Preservative treating plant', type: 'Secondary', color: '#680944', order: 5 },
 { name: 'Other Secondary Industry', type: 'Secondary', color: '#bbbdc1', order: 6 }];
 
-export const industriesPopupTemplate = { // autocasts as new PopupTemplate()
+export const industriesPopupTemplate = {
   title: '{Company}',
-  content: [{
-    // It is also possible to set the fieldInfos outside of the content
-    // directly in the popupTemplate. If no fieldInfos is specifically set
-    // in the content, it defaults to whatever may be set within the popupTemplate.
-    type: 'fields',
-    fieldInfos: [{
-      fieldName: 'County',
-      label: 'County',
-      visible: true
-    }, {
-      fieldName: 'Address',
-      label: 'Address',
-      visible: true,
-    }, {
-      fieldName: 'Phone1',
-      label: 'Phone',
-      visible: true,
-    }, {
-      fieldName: 'Homepage',
-      label: 'Website',
-      visible: true,
-    }, {
-      fieldName: 'Email',
-      label: 'Email',
-      visible: true,
-    }, {
-      fieldName: 'MainIndustryType',
-      label: 'Main Industry Type',
-      visible: true,
-    }, {
-      fieldName: 'SpecificIndustryType',
-      label: 'Industry Type',
-      visible: true,
-    }, {
-      fieldName: 'Products',
-      label: 'Products',
-      visible: true,
-    }, {
-      fieldName: 'Species',
-      label: 'Species',
-      visible: true,
-    }]
-  }]};
+  content: '<table class="esri-widget__table" summary="List of attributes and values"><tbody>' +
+    '<tr><th>County</th><td>{County}</td></tr>' +
+    '<tr><th>Address</th><td>{Address}</td></tr>' +
+    '<tr><th>Phone</th><td>{Phone}</td></tr>' +
+    '<tr><th>Website</th><td><a href="http://{Homepage}" target="blank" style="color:blue">{Homepage} </a></td></tr>' +
+    '<tr><th>Email</th><td>{Email}</td></tr>' +
+    '<tr><th>Main Industry Type</th><td>{MainIndustryType}</td></tr>' +
+    '<tr><th>Industry Type</th><td>{SpecificIndustryType}</td></tr>' +
+    '<tr><th>Products</th><td>{Products}</td></tr>' +
+    '<tr><th>Species</th><td>{Species}</td></tr>' +
+    '</tbody></table>'
+};
 
-  export const industriesPopupTemplate2 = { // autocasts as new PopupTemplate()
-    title: '{Company}',
-    content: [{
-      // It is also possible to set the fieldInfos outside of the content
-      // directly in the popupTemplate. If no fieldInfos is specifically set
-      // in the content, it defaults to whatever may be set within the popupTemplate.
-      type: 'fields',
-      fieldInfos: [{
-        fieldName: 'County',
-        label: 'County',
-        visible: true
-      }, {
-        fieldName: 'Address',
-        label: 'Address',
-        visible: true,
-      }, {
-        fieldName: 'Species',
-        label: 'Species',
-        visible: true,
-      }]
-    }]};
-
-
-  export const tourRoutes = [{
-    anchorId: 'sidebar-search',
-    content: 'Search by attributes allows users to find industries by their name, county that they are located in, along with their main category (i.e. Primary and Secondary) as well as specific industry type',
-    title: 'Search by Attributes',
-    enableBackdrop: true
-  }, {
-    anchorId: 'sidebar-mapsearch',
-    content: 'Industries could be selected directly on the map by drawing buffer(circle), polygon, rectangle as well as counties.',
-    title: 'Search on the map',
-    enableBackdrop: true
-  }, {
-    anchorId: 'sidebar-export',
-    content: 'Selected and/or complete list and map of industries could be exported as PDF as well as excel file formats.',
-    title: 'Export maps and tables',
-    enableBackdrop: true,
-    preventScrolling: false
-  }, {
-    anchorId: 'mainmap',
-    content: 'Use your mouse/keyboard to interact with the map. Click on the dots/squares for industires to view their detail information.',
-    title: 'Interacting with map',
-    enableBackdrop: true,
-  }, {
-    anchorId: 'basemap-tour',
-    content: 'Use layers button to select between different basemaps. Zoom icons and zoom to home eases map navigation.',
-    title: 'Map Controls',
-    enableBackdrop: true,
-  },
-  {
-    anchorId: 'industries-list',
-    content: 'Single click to select industries and double-click to zoom and center map on them. Navigate to different pages using buttons on top bar. Entries could be sorted by clicking on header row.',
-    title: 'List of industries',
-    enableBackdrop: true,
-  }, {
-    anchorId: 'more-menu',
-    content: 'More menu icons such as Help and links to  Texas A&M Forest Service are located here.',
-    title: 'More menu',
-    enableBackdrop: true,
-  },
-  ];
+export const tourRoutes = [{
+  anchorId: 'sidebar-search',
+  content: 'Search by attributes allows users to find industries by their name, county that they are located in, along with their main category (i.e. Primary and Secondary) as well as specific industry type',
+  title: 'Search by Attributes',
+  enableBackdrop: true
+}, {
+  anchorId: 'sidebar-mapsearch',
+  content: 'Industries could be selected directly on the map by drawing buffer(circle), polygon, rectangle as well as counties.',
+  title: 'Search on the map',
+  enableBackdrop: true
+}, {
+  anchorId: 'sidebar-export',
+  content: 'Selected and/or complete list and map of industries could be exported as PDF as well as excel file formats.',
+  title: 'Export maps and tables',
+  enableBackdrop: true,
+  preventScrolling: false
+}, {
+  anchorId: 'mainmap',
+  content: 'Use your mouse/keyboard to interact with the map. Click on the dots/squares for industires to view their detail information.',
+  title: 'Interacting with map',
+  enableBackdrop: true,
+  preventScrolling: true
+}, {
+  anchorId: 'basemap-tour',
+  content: 'Use layers button to select between different basemaps. Zoom icons and zoom to home eases map navigation.',
+  title: 'Map Controls',
+  enableBackdrop: true,
+},
+{
+  anchorId: 'industries-list',
+  content: 'Single click to select industries and double-click to zoom and center map on them. Navigate to different pages using buttons on top bar. Entries could be sorted by clicking on header row.',
+  title: 'List of industries',
+  enableBackdrop: true,
+}, {
+  anchorId: 'more-menu',
+  content: 'More menu icons such as Help and links to  Texas A&M Forest Service are located here.',
+  title: 'More menu',
+  enableBackdrop: true,
+},
+];

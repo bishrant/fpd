@@ -1,8 +1,7 @@
 <button mat-button class="sidebarCloseBtn" (click)="hideSidebarFn()" fa-border matTooltip="Hide the sidebar."
   [matTooltipPosition]="'right'" aria-label="Hide table button">
-  <i class="fa fa-chevron-left"></i>
+          <img src="./assets/img/chevron-left.svg" class='blackChevronLeft'/>
 </button>
-<!-- <mat-accordion> -->
   <mat-expansion-panel [expanded]="sidebarSearchExpanded" tourAnchor="sidebar-search" #sidebarSearch>
     <mat-expansion-panel-header>
       <mat-panel-title>Search by Attributes</mat-panel-title>
@@ -17,7 +16,7 @@
     <ng-select #ngCounty [searchable]="true" [selectOnTab]="true" [virtualScroll]="true" [items]="counties" (change)="selected($event, 'County')"
       placeholder="County name.." class="otherCls" [(ngModel)]="selectedValues.County">
     </ng-select>
-    <hr> Search by Industry Type <br>
+    <hr> Search by Industry Type: <br>
     <ng-select [selectOnTab]="true" [virtualScroll]="true" [items]="industrytype" (change)="selected($event, 'MainIndustryType')"
       placeholder="Main industry type.." class="otherCls" [(ngModel)]="selectedValues.MainIndustryType">
     </ng-select>
@@ -68,8 +67,8 @@
         Export
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <button (click)="printMapPDF()" #exportmap class="btn btnLg" [disabled]="_data.printStatus === 'running'"><span class="fa fa-map-o">
-      </span>&nbsp;&nbsp;Export Map as PDF </button><br>
+    <button (click)="printMapPDF()" #exportmap class="btn btnLg" [disabled]="_data.printStatus === 'running'">
+      <img src="./assets/img/file-map.svg" class='blackFileIcon'/>&nbsp;&nbsp;Export Map as PDF </button><br>
     <p *ngIf="_data.printStatus === 'running'"><br>
       <mat-spinner [diameter]=35 color="green" class='progresSpinner'></mat-spinner>Exporting map... <br>
       <i> After the export complete, link to your PDF map will appear here.</i>
@@ -77,8 +76,8 @@
     <p class="text-danger italics" *ngIf="_data.printStatus === 'error'">Error while printing. Please try again</p><br>
     <p *ngIf="_data.linkToPDFReport !== ''"><a href="{{_data.linkToPDFReport}}" target="_blank">Exported Map.pdf</a></p>
 
-    <button (click)="exportDataPDF()" #exportDataPdf class="btn btnLg" [disabled]="printingPDFStatus === 'running'"><span
-        class="fa fa-file-pdf-o"> </span>
+    <button (click)="exportDataPDF()" #exportDataPdf class="btn btnLg" [disabled]="printingPDFStatus === 'running'">
+      <img src="./assets/img/file-pdf.svg" class='blackFileIcon'/>
       &nbsp;&nbsp;Export Table as PDF</button>
     <p *ngIf="printingPDFStatus === 'running'"><br>
       <mat-spinner [diameter]=35 color="green" class='progresSpinner'></mat-spinner>Exporting table... <br>
@@ -89,7 +88,7 @@
 
     <br>
     <button (click)="exportDataXLS()" #exportDataExcel class='btn btnLg'>
-      <span class="fa fa-file-excel-o"> </span>
+      <img src="./assets/img/file-excel.svg" class='blackFileIcon'/>
       &nbsp;&nbsp;Download Table as XLS</button>
 
   </mat-expansion-panel>

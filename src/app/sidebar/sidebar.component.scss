@@ -25,12 +25,20 @@
   border-radius: 2px;
   border: 1px solid lightgray;
 }
+.blackChevronLeft {
+  height: 40px;
+  width: 30px;
+  padding-right: 8px;
+}
 
 .bufferDistanceDiv {
   padding-left: 20px;
   line-height: 38px;
 }
-
+.blackFileIcon {
+  height: 30px;
+  width: 30px;
+}
 .btn {
   width: 170px;
   text-align: left;
