@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild, AfterViewInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Output, EventEmitter, Input } from '@angular/core';
 import { ListDataSource } from './list.datasource';
 import { MatPaginator, MatSort } from '@angular/material';
 import { IndustriesGeojson } from '../services/industries-geojson.service';
 import { merge } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { ExcelService } from '../services/excel.service';
 import { WindowService } from '../services/window.service';
 import { TourService } from 'ngx-tour-core';
 
@@ -15,7 +14,7 @@ import { TourService } from 'ngx-tour-core';
 })
 export class ListComponent implements OnInit, AfterViewInit {
   public isSingleClick = true;
-  public selectedRowIndex;
+  @Input() public selectedRowIndex = -9999;
   dataSource: ListDataSource;
   public pageLength = 10;
   public pageSizeOptions = [10, 20, 50];
@@ -24,7 +23,7 @@ export class ListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @Output() zoomIntoRow = new EventEmitter<any>();
   @ViewChild(MatSort) sort: MatSort;
-  constructor(private _data: IndustriesGeojson, private _excelService: ExcelService,
+  constructor(private _data: IndustriesGeojson,
     public tourService: TourService,
     private winRef: WindowService) { }
 
@@ -54,12 +53,14 @@ export class ListComponent implements OnInit, AfterViewInit {
       }
     }, 250);
   }
+
   public doubleClick(evt, row) {
     this.isSingleClick = false;
     this.selectedRowIndex = row.Id;
     this.zoomIntoRow.emit({industryId: this.selectedRowIndex, isSingleClick: false});
     evt.stopPropagation();
   }
+
   public openUrl(url: any) {
     const _x = this.winRef.getNativeWindow();
     _x.open(url);
@@ -101,6 +102,7 @@ export class ListComponent implements OnInit, AfterViewInit {
       }
     }, 1000);
   }
+
   loadTable() {
     this.dataSource.loadTable(
       this.sort.direction,
@@ -108,36 +110,6 @@ export class ListComponent implements OnInit, AfterViewInit {
       this.paginator.pageIndex,
       this.paginator.pageSize);
       this.selectedRowIndex = -9999;
-  }
-  public exportAsExcel() {
-    const y = this.genetateReportPostData();
-    this._excelService.exportAsExcelFile(y, 'FPD');
-  }
-
-  public sortByName(a, b) {
-    if (a.Company < b.Company) {
-      return -1;
-    }
-    if (a.Company > b.Company) {
-      return 1;
-    }
-    return 0;
-  }
-
-  public genetateReportPostData(): any {
-    const _postdata: any = [];
-    const _reportFields: string[] = ['Id', 'Company', 'County', 'Address', 'Phone1', 'Phone2', 'Homepage', 'Email', 'MainIndustryType', 'SpecificIndustryType', 'SawMillType', 'Products', 'Species', 'Status', 'City', 'Lat', 'Lon'];
-    this._data.currentTableData.forEach(_d => {
-      const _partialArray: any = {};
-      _reportFields.forEach(_attr => {
-        _partialArray[_attr] = _d[_attr];
-      });
-      _postdata.push(_partialArray);
-    });
-    
-    const newp = _postdata.map(this.sortByName);
-    console.log(newp);
-    return newp;
   }
 
 }

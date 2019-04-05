@@ -1,6 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+html,
+body {
+  height: 100% !important;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden !important;
+}
 .esri-attribution__sources {
   text-align: right !important;
 }
@@ -21,18 +29,46 @@
   overflow: visible !important;
 }
 
+.navbar-collapse {
+  text-align: right;
+}
 .ui-select-choices {
   position: fixed;
   top: auto;
   left: auto;
   width: inherit;
 }
-
+.dijitPopup {
+  background: white;
+  max-width: 200px !important;
+  position: absolute !important;
+  cursor: pointer !important;
+  color: black;
+  font-size: 14px;
+  font-weight: bold;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+.dijitMenuItem {
+  padding: 0px;
+  height: 35px;
+  font-size: 14px;
+  margin-left: 10px;
+}
+.dijitMenuItem:hover {
+  background: lightblue;
+}
+.dijitMenuSeparator {
+  background: grey !important;
+}
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
   // IE10+ CSS here
-  .fullpageMap {
-  position: -ms-page !important;
-  }
+  // .fullpageMap {
+  // position: -ms-page !important;
+  // }
+  html, body {
+  height: auto !important;
+}
   #mapViewNode {
     position: -ms-page !important;
     height: calc(100% - 56px) !important;
@@ -43,11 +79,17 @@
   #staticLegend {
     position: fixed !important;
   }
+  .navbar{
+    padding: 0em 1em !important;
+  }
+  .mat-button-wrapper{
+    line-height: 38px;
+  }
 }
 
 .appRoot{
   display: flex;
-  min-height: 100vh
+  height: 100%;
 }
 
 ui-select-choices.dropdown-menu {
@@ -60,8 +102,11 @@ ui-select-choices.dropdown-menu {
 .esri-popup__single-action-container{
   display: none !important;
 }
+.esri-view-height-large .esri-popup__main-container {
+  max-height: 380px !important;
+}
 .esri-view-height-less-than-medium .esri-popup__main-container {
-  max-height: 300px !important;
+  max-height: 380px !important;
 }
 .esri-view-height-xlarge .esri-popup__main-container {
   max-height: 380px !important;
@@ -78,6 +123,7 @@ ui-select-choices.dropdown-menu {
 .mat-dialog-content{
   text-align: justify;
   margin-right: -24px !important;
+  overflow: visible !important;
 }
 
 .cdk-overlay-backdrop {
@@ -217,6 +263,7 @@ ui-select-choices.dropdown-menu {
   min-width: unset;
   width: auto;
   padding: 0 !important;
+  line-height: inherit !important;
 }
 
 .navbar-dark .navbar-nav .nav-link {

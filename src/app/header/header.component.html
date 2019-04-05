@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark">
-  <a class="navbar-brand" href="#">
+  <a class="navbar-brand" href="https://tfsweb.tamu.edu/">
     <img src="assets/img/TFS_White.png" height="30" alt="" class="d-none d-sm-none d-md-inline" style='padding-right: 10px' />
     Directory of Forest Products Industries
   </a>
@@ -19,15 +19,18 @@
       <li class="nav-item">
         <a class="nav-link" (click)="openDialogFn({page: 'addupdatepage', evt: $event})">Add/Update Business</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="openDialogFn({page: 'contactus', evt: $event})">Contact Us</a>
+      </li>
 
       <li class="nav-item">
         <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://tfsfrd.tamu.edu/ForestProductsDirectory"
           class="socialBtn">
-          <i class="fa fa-facebook-square" style="font-size:20px"></i>
+          <img src="./assets/img/facebook.svg" class='whiteFontIcon'/>
         </a>
         <a target="_blank" href="https://twitter.com/intent/tweet?url=http://tfsfrd.tamu.edu/ForestProductsDirectory&amp;hashtags=ForestProductsDirectory, ForestProducts, Texas"
           class="socialBtn">
-          <i class="fa fa-twitter" style="font-size:20px"></i>
+          <img src="./assets/img/twitter.svg" class='whiteFontIcon'/>
         </a>
       </li>
 
@@ -35,10 +38,6 @@
         <li class="nav-item">
           <a class="nav-link" (click)="openDialogFn({page: 'helppage', evt: $event})">Help</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" (click)="openDialogFn({page: 'contactus', evt: $event})">Contact Us</a>
-        </li>
-
         <li class="nav-item">
           <a class="nav-link" href="https://tfsweb.tamu.edu/" target="_blank">TFS Home</a>
         </li>
@@ -57,7 +56,7 @@
           <a class="nav-link dropdown-toggle" id="dropdownBasic01" ngbDropdownToggle><span class="navbar-toggler-icon"></span></a>
           <div ngbDropdownMenu aria-labelledby="dropdownBasic01" class="dropdownSubmenu">
             <button class="dropdown-item" (click)="openDialogFn({page: 'helppage', evt: $event})">Help</button>
-            <button class="dropdown-item" (click)="openDialogFn({page: 'contactus', evt: $event})">Contact Us</button>
+            <!-- <button class="dropdown-item" (click)="openDialogFn({page: 'contactus', evt: $event})">Contact Us</button> -->
 
             <a class="dropdown-item" href="https://tfsweb.tamu.edu/" target="_blank">TFS Home</a>
             <a class="dropdown-item" href="http://texasforestinfo.tamu.edu/" target="_blank">Texas Forest Info</a>

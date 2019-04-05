@@ -55,7 +55,7 @@ mat-header-row {
 }
 
 .mat-column-Id {
-  flex: 0 0 45px; 
+  flex: 0 0 37px; 
 }
 
 .mat-column-County {
@@ -243,6 +243,9 @@ span.ui-column-resizer {
 }
 .highlight {
   background: green !important;
+}
+.highlight>mat-cell{
+  color: white !important;
 }
 
 .mat-paginator {

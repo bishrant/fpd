@@ -18,6 +18,7 @@ export class IndustriesGeojson implements OnInit {
   currentTableData = [];
   public printStatus;
   public linkToPDFReport = '';
+  public specificIndustryTypeList;
   // private allDataService = new BehaviorSubject<any>(null);
   allDataService = new ReplaySubject<FeatureTemplate[]>(1);
   originalData = new ReplaySubject<FeatureTemplate[]>(1);
@@ -89,6 +90,10 @@ export class IndustriesGeojson implements OnInit {
     this.filteredSpecificIndustryType.next(_filtered.sort());
   }
 
+  public getSpecificIndustryList() {
+    this.filteredSpecificIndustryType.next(this.specificIndustryTypeList.sort());
+  }
+
   // function to generate specific and main industry mapping
   public createMappingMaintoSpeicifcIndustryType(d) {
     const lookup = {};
@@ -143,13 +148,12 @@ export class IndustriesGeojson implements OnInit {
       // const industryType = this.getDataForComboBox(d, 'MainIndustryType');
       this.filteredIndustryType.next(industryType.sort());
       // for specific industry type n
-      const specificIndustryType = this.getDataForComboBox(d, 'SpecificIndustryType');
-      this.filteredSpecificIndustryType.next(specificIndustryType.sort());
+      this.specificIndustryTypeList = this.getDataForComboBox(d, 'SpecificIndustryType');
+      this.filteredSpecificIndustryType.next(this.specificIndustryTypeList.sort());
 
       this.createMappingMaintoSpeicifcIndustryType(d);
       // similar for sawmill
       const sawmillMajorSpecies = this.getDataForComboBoxSawMill(d, 'Species', 'SpecificIndustryType', 'Sawmill');
-     // console.log(sawmillMajorSpecies);
       this.filteredSawmillSpecies.next(sawmillMajorSpecies.sort());
   }
   // function to get unique values for drop down boxes

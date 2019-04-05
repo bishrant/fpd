@@ -8,7 +8,6 @@ import { MatTableModule, MatFormFieldModule, MatInputModule, MatSelectModule, Ma
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { AngularDraggableModule } from 'angular2-draggable';
 import { HttpClient, HttpClientModule} from '@angular/common/http';
-import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 
@@ -19,8 +18,6 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { PrintLegendDirective } from './directives/print-legend.directive';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-// import { ResizableModule  } from 'angular-resizable-element';
-import { VirtualScrollComponent } from './virtual-scroll/virtual-scroll.component';
 import { ListComponent } from './list/list.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatExpansionModule} from '@angular/material/expansion';
@@ -41,7 +38,6 @@ import { CookieService } from 'ngx-cookie-service';
     HeaderComponent,
     SidebarComponent,
     PrintLegendDirective,
-    VirtualScrollComponent,
     ListComponent,
     AboutpageComponent,
     AddupdatepageComponent,
@@ -53,7 +49,7 @@ import { CookieService } from 'ngx-cookie-service';
     TourMatMenuModule.forRoot(),
     RouterModule.forRoot([{ path: '', component: AppComponent}]),
     MatSortModule, MatPaginatorModule, MatDialogModule, BrowserModule, BrowserAnimationsModule,  NgbModule, MatTableModule, AngularDraggableModule, NgSelectModule,
-    HttpClientModule, MatSidenavModule, MatExpansionModule, AngularFontAwesomeModule, DragDropModule, MatProgressSpinnerModule, FormsModule,
+    HttpClientModule, MatSidenavModule, MatExpansionModule, DragDropModule, MatProgressSpinnerModule, FormsModule,
     MatFormFieldModule, MatInputModule, MatSelectModule, MatTooltipModule, MatIconModule, MatToolbarModule, MatButtonModule, MatCheckboxModule
   ],
   providers: [HttpClient, CookieService ],

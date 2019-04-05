@@ -93,32 +93,39 @@ export class SidebarComponent implements OnInit {
 
 
   public selected(value: any, attribute: string): void {
+    console.log(value, attribute);
     this.selectedValues[attribute] = value;
     if (typeof attribute === 'undefined') {
       return;
-    } else {
-    switch (attribute) {
-      case 'MainIndustryType':
+    } else if (attribute === 'MainIndustryType') {
         this.ngSpecificIndustry.items = this.specificIndustryType;
-        this.ngSpecificIndustry.clearModel();
-        this.ngCounty.clearModel();
-        this._data.getDataForSpecificIndustry(value);
-        break;
-      // case 'SpecificIndustryType':
-      //   if (value.toLowerCase === 'sawmill') {
-      //     console.log('show filter by Sawmilltype');
-      //   }
-      //   break;
+        // this.ngSpecificIndustry.clearModel();
+        // this.ngCounty.clearModel();
+        if (typeof value === 'undefined') {
+          this._data.getSpecificIndustryList();
+        } else {
+          this._data.getDataForSpecificIndustry(value);
+        }
+        this.selectedValues.Company = null;
+        this.selectedValues.County = null;
+    } else if (attribute === 'SpecificIndustryType') {
+      this.selectedValues.Company = null;
+      this.selectedValues.County = null;
+      this.selectedValues[attribute] = value;
+    } else {
+      this.selectedValues = {'Company': null, 'County': null, 'SpecificIndustryType': null, 'MainIndustryType': null};
+      this.selectedValues[attribute] = value;
+      this._data.getSpecificIndustryList();
     }
-    this.selectedValues = {'Company': null, 'County': null, 'SpecificIndustryType': null, 'MainIndustryType': null};
+
     this.applyFilter(attribute, value);
-  }
   }
 
   public resetData() {
     this.ngSpecificIndustry.clearAllText = 'S';
     this.specificIndustryType = [];
-    this.selectedValues = {'Company': [], 'County': [], 'SpecificIndustryType': [], 'MainIndustryType': []};
+    this.selectedValues = {'Company': null, 'County': null, 'SpecificIndustryType': null, 'MainIndustryType': null};
+    this.selectedValues.MainIndustryType = undefined;
     this._data.orginalDataObservable.subscribe(d => {
       // reset the data from original data source
       this._data.allDataService.next(d);
@@ -148,7 +155,6 @@ export class SidebarComponent implements OnInit {
       _postdata.push(_partialArray);
     });
     const _p = this.sortByCompanyName(_postdata);
-    console.log(111);
     return _p;
   }
 
@@ -178,7 +184,7 @@ export class SidebarComponent implements OnInit {
 
   public sortByCompanyName(data) {
     const _postdataxls1 = data.sort(function(a, b) {return (a.Company > b.Company) ? 1 : ((b.Company > a.Company) ? -1 : 0); } );
-    const _postdataxls = _postdataxls1.map(function(e, i) {console.log(e, i); e.Id = i + 1; return e; });
+    const _postdataxls = _postdataxls1.map(function(e, i) {e.Id = i + 1; return e; });
     return _postdataxls;
   }
   public exportDataXLS() {

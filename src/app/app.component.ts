@@ -58,7 +58,6 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   }
   ngAfterViewInit() {
-    this.tourService.events$.subscribe(x => console.log(x));
     setTimeout(() => {
       if (this.cookieService.get('disableHelp') !== 'true') {
         const dialogReference = this.dialog.open(WelcomepageComponent, {
