@@ -1,4 +1,4 @@
-<button mat-raised-button (click)="toggleTable($event)" class="maximizeBtn" *ngIf="featureTableClass === 'featureTableMinimized animate'"
+<button mat-raised-button (click)="showTable($event)" class="maximizeBtn" *ngIf="featureTableClass === 'featureTableMinimized animate'"
 matTooltip="Show the industries table."
 [matTooltipPosition]= "'above'"
   aria-label="Show table button" >
@@ -9,7 +9,7 @@ matTooltip="Show the industries table."
 <div cdkDrag #featureTable [ngClass]='featureTableClass'>
   <mat-toolbar class="table-toolbar" cdkDragHandle>
     <mat-toolbar-row>
-      <button mat-button (click)="toggleTable()" class="minimizeBtn"
+      <button mat-button (click)="hideTable()" class="minimizeBtn"
       matTooltip="Hide the industries table."
       [matTooltipPosition]= "'above'"
         aria-label="Hide table button">
@@ -17,15 +17,15 @@ matTooltip="Show the industries table."
       </button>
 
 
-      <span class="fill-remaining-space" style="cursor:move">&nbsp;{{selectedRowIndex}}</span>
-      <mat-paginator [disabled]="pageLength === 0" [length]="getPageLength()" [pageSize]="10" [pageSizeOptions]="[10, 20, 30]" id='paginator'></mat-paginator>
+      <span class="fill-remaining-space" style="cursor:move">&nbsp;</span>
+      <mat-paginator [disabled]="pageLength === 0" [length]="pageLength" [pageSize]="rowsPerPage" [pageSizeOptions]="pageSizeOptions" id='paginator'></mat-paginator>
     </mat-toolbar-row>
   </mat-toolbar>
-  <div class="featureTableContainer">
+  <div class="featureTableContainer" #featureTableContainer>
     <span *ngIf="pageLength === 0" class="noIndustries">No industries found. Please search from the left sidebar or try a different search criteria.</span>
     
     <mat-table class="feature-table mat-elevation-z8 featureList" [ngClass]="(pageLength !== 0) ? 'visible': 'hidden'" 
-    [dataSource]="dataSource" matSort matSortActive="Id" matSortDirection="asc">
+    [dataSource]="dataSource" matSort matSortActive="Company" matSortDirection="asc">
       <ng-container matColumnDef="Id">
         <mat-header-cell *matHeaderCellDef >  </mat-header-cell>
         <mat-cell *matCellDef="let row; let i = index">{{i+1 + (paginator.pageIndex ) *paginator.pageSize}}</mat-cell>

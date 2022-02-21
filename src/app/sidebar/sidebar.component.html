@@ -1,99 +1,119 @@
 <button mat-button class="sidebarCloseBtn" (click)="hideSidebarFn()" fa-border matTooltip="Hide the sidebar."
   [matTooltipPosition]="'right'" aria-label="Hide table button">
-          <img src="./assets/img/chevron-left.svg" class='blackChevronLeft'/>
+  <img src="./assets/img/chevron-left.svg" class='blackChevronLeft' />
 </button>
-  <mat-expansion-panel [expanded]="sidebarSearchExpanded" tourAnchor="sidebar-search" #sidebarSearch>
-    <mat-expansion-panel-header>
-      <mat-panel-title>Search by Attributes</mat-panel-title>
-    </mat-expansion-panel-header>
+<mat-expansion-panel [expanded]="sidebarSearchExpanded" tourAnchor="sidebar-search" #sidebarSearch>
+  <mat-expansion-panel-header>
+    <mat-panel-title>Search by Attributes</mat-panel-title>
+  </mat-expansion-panel-header>
 
-    Company: <br />
-    <ng-select #companiess id='companiess' [searchable]="true" [selectOnTab]="true" [virtualScroll]="true" [items]="companies"
-      class="otherCls" placeholder="Company name.." notFoundText="No companies found.." (change)="selected($event, 'Company')"
-      [(ngModel)]="selectedValues.Company"  >
-    </ng-select>
-    <hr /> County: <br>
-    <ng-select #ngCounty [searchable]="true" [selectOnTab]="true" [virtualScroll]="true" [items]="counties" (change)="selected($event, 'County')"
-      placeholder="County name.." class="otherCls" [(ngModel)]="selectedValues.County">
-    </ng-select>
-    <hr> Industry Type <br>
-    <ng-select [selectOnTab]="true" [virtualScroll]="true" [items]="industrytype" (change)="selected($event, 'MainIndustryType')"
-      placeholder="Main industry type.." class="otherCls" [(ngModel)]="selectedValues.MainIndustryType">
-    </ng-select>
-    <ng-select #ngSpecificIndustry [selectOnTab]="true" [virtualScroll]="true" [items]="specificIndustryType" (change)="selected($event, 'SpecificIndustryType')"
-      placeholder="Specific industry type.." class="otherCls" [(ngModel)]="selectedValues.SpecificIndustryType" style="margin-top: 15px"
-      
-      >
-    </ng-select>
-    <hr>
-    <div class="fullWidth">
-      <button (click)="resetData()" class="btn">
-        <i class="esri-icon-trash"></i>&nbsp;Clear Search</button>
-    </div>
+  Company: <br />
+  <ng-select #companiess id='companiess' [searchable]="true" [selectOnTab]="true" [virtualScroll]="true"
+    [items]="companies" class="otherCls" placeholder="Company name.." notFoundText="No companies found.."
+    (change)="selected($event, 'Company')" [(ngModel)]="selectedValues.Company">
+  </ng-select>
+  <hr /> County: <br>
+  <ng-select #ngCounty [searchable]="true" [selectOnTab]="true" [virtualScroll]="true" [items]="counties"
+    (change)="selected($event, 'County')" placeholder="County name.." class="otherCls"
+    [(ngModel)]="selectedValues.County">
+  </ng-select>
+  <hr> Industry Type: <br>
+  <ng-select [selectOnTab]="true" [virtualScroll]="true" [items]="industrytype"
+    (change)="selected($event, 'MainIndustryType')" placeholder="Main industry type.." class="otherCls"
+    [(ngModel)]="selectedValues.MainIndustryType">
+  </ng-select>
+  <ng-select #ngSpecificIndustry [selectOnTab]="true" [virtualScroll]="true" [items]="specificIndustryType"
+    (change)="selected($event, 'SpecificIndustryType')" placeholder="Specific industry type.." class="otherCls"
+    [(ngModel)]="selectedValues.SpecificIndustryType" style="margin-top: 15px">
+  </ng-select>
+  <hr>
+  <div class="fullWidth">
+    <button (click)="resetData()" class="btn btnLg">
+      <i class="esri-icon-trash "></i>&nbsp;&nbsp;&nbsp;Clear</button>
+  </div>
 
-  </mat-expansion-panel>
+</mat-expansion-panel>
 
-  <mat-expansion-panel tourAnchor="sidebar-mapsearch" #sidebarMaps [expanded]="sidebarMapSearchExpanded"> 
-    <mat-expansion-panel-header >
-      <mat-panel-title>
-        Search on Maps
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <div class="fullWidth">
-    <button (click)="activateSpatialControl('point')" class="btn" > <i class="esri-icon-radio-unchecked"></i>&nbsp;
+<mat-expansion-panel tourAnchor="sidebar-mapsearch" #sidebarMaps [expanded]="sidebarMapSearchExpanded">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Search on Maps
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="fullWidth">
+    <button (click)="activateSpatialControl('point')"
+      [ngClass]="{'selectedControlBtn': getBtnStyle('point'), 'btn': true}">
+      <i class="esri-icon-radio-unchecked floatLeft"></i>
       Buffer</button>
-    </div>
+  </div>
 
-      <div class="bufferDistanceDiv" *ngIf="activeControl === 'point'">
-       Radius: <input id='bufferDistance' type="text" value="50"/> Miles
-      </div>
-      <div class="fullWidth">
-    <button (click)="activateSpatialControl('polygon')" class="btn" > <i class="esri-icon-polygon"></i>&nbsp;
+  <div class="bufferDistanceDiv centerText" *ngIf="activeControl === 'point'">
+    Radius: <input id='bufferDistance' type="text" value="50" /> Miles
+  </div>
+  <div class="fullWidth">
+    <button (click)="activateSpatialControl('polygon')"
+      [ngClass]="{'selectedControlBtn': getBtnStyle('polygon'), 'btn': true}">
+      <i class="esri-icon-polygon floatLeft"></i>
       Polygon</button></div>
-      <div class="fullWidth">
-    <button (click)="activateSpatialControl('rectangle')" class="btn" > <i class="esri-icon-checkbox-unchecked"></i>&nbsp;
+  <div class="fullWidth">
+    <button (click)="activateSpatialControl('rectangle')"
+      [ngClass]="{'selectedControlBtn': getBtnStyle('rectangle'), 'btn': true}">
+      <i class="esri-icon-checkbox-unchecked floatLeft"></i>
       Rectangle</button></div>
-      <div class="fullWidth">
-    <button (click)="activateSpatialControl('multipoint')" class="btn" > <i class="esri-icon-map-pin"></i>&nbsp;
-      Select by counties</button></div>
-    <hr>
-    <div class="fullWidth">
-    <button (click)="activateSpatialControl('clear')" class="btn">
-      <i class="esri-icon-trash"></i>&nbsp;Clear Spatial Search</button></div>
+  <div class="fullWidth">
+    <button (click)="activateSpatialControl('multipoint')"
+      [ngClass]="{'selectedControlBtn': getBtnStyle('multipoint'), 'btn': true}">
+      <i class="esri-icon-map-pin floatLeft"></i>
+      Counties</button></div>
+  <hr>
+  <div class="fullWidth">
+    <button (click)="activateSpatialControl('clear')" class="btn btnLg">
+      <i class="esri-icon-trash"></i>&nbsp;&nbsp;&nbsp;Clear</button></div>
 
-  </mat-expansion-panel>
+</mat-expansion-panel>
 
-  <mat-expansion-panel tourAnchor="sidebar-export" #sidebarExport [expanded]="sidebarExportExpanded">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Export
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <div class="fullWidth">
+<mat-expansion-panel tourAnchor="sidebar-export" #sidebarExport [expanded]="sidebarExportExpanded">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Export
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="fullWidth">
     <button (click)="printMapPDF()" #exportmap class="btn" [disabled]="_data.printStatus === 'running'">
-      <img src="./assets/img/file-map.svg" class='blackFileIcon'/>&nbsp; Map as PDF </button></div>
-    
-      <span *ngIf="_data.printStatus === 'running'"><br>
+      <img src="./assets/img/file-map.svg" class='blackFileIcon floatLeft' />Map as PDF </button>
+  </div>
+
+  <div class="progressViewer">
+    <div *ngIf="_data.printStatus === 'running'"><br>
       <mat-spinner [diameter]=35 color="green" class='progresSpinner'></mat-spinner>Exporting map... <br>
-      <i> After the export complete, link to your PDF map will appear here.</i>
-      </span>
-    <span class="text-danger italics" *ngIf="_data.printStatus === 'error'">Error while printing. Please try again</span>
-    <span *ngIf="_data.linkToPDFReport !== ''"><br><a href="{{_data.linkToPDFReport}}" target="_blank">Exported Map.pdf</a></span>
+      <i> After the export completes, link to your PDF map will appear here.</i>
+    </div>
+    <div class="text-danger italics centerText" *ngIf="_data.printStatus === 'error'">Error while printing. Please try
+      again.</div>
+    <div *ngIf="_data.linkToPDFReport !== ''" class="centerText">
+      <a href="{{_data.linkToPDFReport}}" target="_blank">Forest Products Industries Map.pdf</a>
+    </div>
+  </div>
 
-    <div class="fullWidth">
+
+  <div class="fullWidth">
     <button (click)="exportDataPDF()" #exportDataPdf class="btn" [disabled]="printingPDFStatus === 'running'">
-      <img src="./assets/img/file-pdf.svg" class='blackFileIcon'/>&nbsp; Table as PDF</button>
-      </div>
-    <span *ngIf="printingPDFStatus === 'running'"><br>
+      <img src="./assets/img/file-pdf.svg" class='blackFileIcon floatLeft' />Table as PDF</button>
+  </div>
+  <div class="progressViewer">
+    <div *ngIf="printingPDFStatus === 'running'"><br>
       <mat-spinner [diameter]=35 color="green" class='progresSpinner'></mat-spinner>Exporting table... <br>
-      <i> After the export complete, link to your PDF table will appear here.</i>
-    </span>
-    <span class="text-danger italics" *ngIf="printingPDFStatus === 'error'">Error while exporting. Please try again</span>
-    <span *ngIf="linkToPDFReport !== ''"><a href="{{linkToPDFReport}}" target="_blank">Exported Table.pdf</a></span>
+      <i> After the export completes, link to your PDF table will appear here.</i>
+    </div>
+    <div class="text-danger italics centerText" *ngIf="printingPDFStatus === 'error'">Error while exporting. Please try
+      again.</div>
+    <div *ngIf="linkToPDFReport !== ''" class="centerText">
+      <a href="{{linkToPDFReport}}" target="_blank">Forest Products Industries Table.pdf</a>
+    </div>
+  </div>
 
-    <div class="fullWidth">
+  <div class="fullWidth">
     <button (click)="exportDataXLS()" #exportDataExcel class='btn'>
-      <img src="./assets/img/file-excel.svg" class='blackFileIcon'/>
-      &nbsp;Table as XLS</button>
-</div>
-  </mat-expansion-panel>
+      <img src="./assets/img/file-excel.svg" class='blackFileIcon floatLeft' />Table as XLS</button>
+  </div>
+</mat-expansion-panel>

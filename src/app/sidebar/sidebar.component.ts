@@ -28,7 +28,6 @@ export class SidebarComponent implements OnInit {
   public tableData;
   public selectedValues = {'Company': null, 'County': null, 'SpecificIndustryType': null, 'MainIndustryType': null};
   @Output() exportButtonClicked = new EventEmitter<string>();
-  @Output() spatialControlClicked = new EventEmitter<string>();
   @Output() performSpatialQuery = new EventEmitter<any>();
   @Output() hideSidebarEvent = new EventEmitter<any>();
   public _exportPDFSubject = new ReplaySubject<any>(1);
@@ -38,7 +37,6 @@ export class SidebarComponent implements OnInit {
   public linkToPDFReport = '';
   public activeAttributeFilter: string;
 
-  // @ViewChild('companies') public cc: SelectComponent;
   @ViewChildren('companiess') public cc: ElementRef;
   @ViewChild('companiess') public ccc: NgSelectComponent;
   @ViewChild('ngSpecificIndustry') public ngSpecificIndustry: NgSelectComponent;
@@ -73,7 +71,6 @@ export class SidebarComponent implements OnInit {
     } else {
       reg = new RegExp(selected , 'i');
     }
-    // this._data.allDataService.next(this.tableData.filter(f => reg.test(f.properties[attribute])));
     if (attribute === 'maj_spec') {
       this._data.orginalDataObservable.subscribe(d => {
         // reset the data from original data source
@@ -90,17 +87,12 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-
-
   public selected(value: any, attribute: string): void {
-    console.log(value, attribute);
     this.selectedValues[attribute] = value;
     if (typeof attribute === 'undefined') {
       return;
     } else if (attribute === 'MainIndustryType') {
         this.ngSpecificIndustry.items = this.specificIndustryType;
-        // this.ngSpecificIndustry.clearModel();
-        // this.ngCounty.clearModel();
         if (typeof value === 'undefined') {
           this._data.getSpecificIndustryList();
         } else {
@@ -117,15 +109,17 @@ export class SidebarComponent implements OnInit {
       this.selectedValues[attribute] = value;
       this._data.getSpecificIndustryList();
     }
-
     this.applyFilter(attribute, value);
   }
 
-  public resetData() {
-    this.ngSpecificIndustry.clearAllText = 'S';
+  public clearAttributeFilters() {
     this.specificIndustryType = [];
     this.selectedValues = {'Company': null, 'County': null, 'SpecificIndustryType': null, 'MainIndustryType': null};
     this.selectedValues.MainIndustryType = undefined;
+    this._data.totalRowsInTable.next(10);
+  }
+  public resetData() {
+    this.clearAttributeFilters();
     this._data.orginalDataObservable.subscribe(d => {
       // reset the data from original data source
       this._data.allDataService.next(d);
@@ -137,10 +131,18 @@ export class SidebarComponent implements OnInit {
     this.exportButtonClicked.emit('clickedExport');
     this._data.printMapSubject.next('clicked');
   }
+  public getBtnStyle(btn) {
+    return btn === this.activeControl;
+  }
   public activateSpatialControl(control: string) {
+    if (this.activeControl === control || control === 'clear') {
+      this.activeControl = 'clear';
+      this._data.activeSpatialControl.next('clear');
+      this.clearAttributeFilters();
+    } else {
     this.activeControl = control;
-    this.spatialControlClicked.emit(control);
-    this._data.activeSpataiControl.next(control);
+    this._data.activeSpatialControl.next(control);
+    }
   }
 
   public genetateReportPostData(): any {
@@ -190,7 +192,7 @@ export class SidebarComponent implements OnInit {
   public exportDataXLS() {
     const _postdataxls0 = this.sortByCompanyName(this.genetateReportPostData());
     const _postdataxlsFinal = _postdataxls0.map(r => ({
-      SN: r.Id,
+      '': r.Id,
       Company: r.Company,
       County: r.County,
       Address: r.Address,
@@ -204,7 +206,7 @@ export class SidebarComponent implements OnInit {
       Products: r.Products,
       Species: r.Species
     }));
-    this._excelService.exportAsExcelFile(_postdataxlsFinal, 'FPD');
+    this._excelService.exportAsExcelFile(_postdataxlsFinal, 'Forest Products Industries List');
   }
   constructor(public _data: IndustriesGeojson, private http: HttpClient,
     private _excelService: ExcelService, public tourService: TourService
