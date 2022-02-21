@@ -52,10 +52,13 @@ mat-header-row {
   color: black;
   height: 36px;
   min-height: 36px;
+  position: sticky;
+  top: 0;
 }
 
 .mat-column-Id {
   flex: 0 0 37px; 
+  user-select: none;
 }
 
 .mat-column-County {

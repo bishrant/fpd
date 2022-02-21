@@ -1,0 +1,14 @@
+{
+    "css.lint.duplicateProperties": "error",
+    "less.lint.duplicateProperties": "error",
+    "scss.lint.duplicateProperties": "error",
+    "css.lint.zeroUnits": "error",
+    "less.lint.zeroUnits": "error",
+    "scss.lint.zeroUnits": "error",
+    "css.lint.compatibleVendorPrefixes": "error",
+    "less.lint.compatibleVendorPrefixes": "error",
+    "scss.lint.compatibleVendorPrefixes": "error",
+    "css.lint.vendorPrefix": "error",
+    "less.lint.vendorPrefix": "error",
+    "scss.lint.vendorPrefix": "error"
+}

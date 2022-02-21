@@ -10,7 +10,7 @@ export class ExcelService {
   }
 
   static toExportFileName(excelFileName: string): string {
-    return `${excelFileName}_export_${new Date().getTime()}.xlsx`;
+    return `${excelFileName}.xlsx`;
   }
 
   public exportAsExcelFile(json: any[], excelFileName: string): void {

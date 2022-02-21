@@ -47,11 +47,16 @@ export class IndustriesGeojson implements OnInit {
   // create a mapping between specific and main industry
   public mappingMainSpecificIndustryType: any = {};
 
-  public activeSpataiControl = new ReplaySubject<string>(1);
-  public activeSpatialControlObservable = this.activeSpataiControl.asObservable();
+  public activeSpatialControl = new ReplaySubject<string>(1);
+  public activeSpatialControlObservable = this.activeSpatialControl.asObservable();
 
   public printMapSubject = new ReplaySubject<string>(1);
   public printMapObservable = this.printMapSubject.asObservable();
+
+  public totalRowsInTable = new ReplaySubject<number>(1);
+  public totalRowsInTableObservable = this.totalRowsInTable.asObservable();
+
+  public totalRows = 0;
 
   // filter only by the sawmill to get a second list of major species
   private filteredSawmillSpecies = new ReplaySubject<object>(1);
@@ -162,6 +167,8 @@ export class IndustriesGeojson implements OnInit {
     this.http.get(urls).subscribe(data => {
       this.allDataService.next(data['features']);
       this.originalData.next(data['features']);
+      // this.totalRowsInTable.next(data['features'].length);
+      this.totalRows = data['features'].length;
       this.featureLoaded(data['features']);
       this.getTableData(data['features']);
     });

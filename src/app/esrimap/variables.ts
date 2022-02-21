@@ -1,4 +1,4 @@
-export const _basemap = 'topo';
+export const _basemap = 'topo-vector';
 export const _center: Array<number> = [-100, 31];
 export const _zoom = 7;
 export const ptSymbol = {
@@ -23,8 +23,9 @@ export const pointSymbol = {
 export const emptypointSymbol = {
   type: 'simple-marker',
   style: 'circle',
-  color: '#8A2BE2',
-  size: '0px',
+  color: [138, 43, 226, 0],
+  size: '7px',
+  outline: null
 };
 
 export const polylineSymbol = {
@@ -63,7 +64,7 @@ export const industriesPopupTemplate = {
   content: '<table class="esri-widget__table" summary="List of attributes and values"><tbody>' +
     '<tr><th>County</th><td>{County}</td></tr>' +
     '<tr><th>Address</th><td>{Address}</td></tr>' +
-    '<tr><th>Phone</th><td>{Phone}</td></tr>' +
+    '<tr><th>Phone</th><td>{Phone1}</td></tr>' +
     '<tr><th>Website</th><td><a href="http://{Homepage}" target="blank" style="color:blue">{Homepage} </a></td></tr>' +
     '<tr><th>Email</th><td>{Email}</td></tr>' +
     '<tr><th>Main Industry Type</th><td>{MainIndustryType}</td></tr>' +

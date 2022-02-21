@@ -1,10 +1,17 @@
 import { BrowserModule } from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { MatSortModule, MatPaginatorModule, MatDialogModule} from '@angular/material';
+import { MatSortModule} from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDialogModule} from '@angular/material/dialog';
+import { MatTableModule} from '@angular/material/table';
+import { MatFormFieldModule} from '@angular/material/form-field';
+import { MatInputModule} from '@angular/material/input';
+import { MatSelectModule} from '@angular/material/select';
+import { MatIconModule} from '@angular/material/icon';
+import { MatToolbarModule} from '@angular/material/toolbar';
+import { MatButtonModule} from '@angular/material/button';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-
-import { MatTableModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatIconModule, MatToolbarModule, MatButtonModule  } from '@angular/material';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { AngularDraggableModule } from 'angular2-draggable';
 import { HttpClient, HttpClientModule} from '@angular/common/http';
