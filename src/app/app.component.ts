@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener, ViewChild, AfterViewInit, ContentChild, TemplateRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { AboutpageComponent } from './aboutpage/aboutpage.component';
 import { AddupdatepageComponent } from './addupdatepage/addupdatepage.component';
 import { ContactuspageComponent } from './contactuspage/contactuspage.component';
@@ -26,8 +26,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   public openSideBarButtonVisible = false;
   public isLegendVisible = false;
   pageList = { aboutpage: AboutpageComponent, addupdatepage: AddupdatepageComponent, contactus: ContactuspageComponent, helppage: HelppageComponent };
-  @ViewChild('drawer') drawer: any;
-  @ContentChild('welcomeMsg') welcomeMsg: TemplateRef<any>;
+  @ViewChild('drawer') drawer!: any;
+  @ContentChild('welcomeMsg') welcomeMsg!: TemplateRef<any>;
 
   public showHideFeatureTable(evt) {
     this.featureTableStatus = this.featureTableStatus === 'featureTableMaximized' ? 'featureTableMinimized' : 'featureTableMaximized';
@@ -41,6 +41,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isLegendVisible = !this.isLegendVisible;
   }
   ngOnInit() {
+
+  }
+  ngAfterViewInit() {
     this.innerWidth = window.innerWidth;
     this.deviceType = this.findSceenType(window.innerWidth);
 
@@ -53,11 +56,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.openSideBarButtonVisible = !e;
     });
     this.tourService.initialize(vars.tourRoutes);
-
-
-
-  }
-  ngAfterViewInit() {
     setTimeout(() => {
       if (this.cookieService.get('disableHelp') !== 'true') {
         const dialogReference = this.dialog.open(WelcomepageComponent, {

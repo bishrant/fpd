@@ -4,15 +4,15 @@
     Directory of Forest Products Industries
   </a>
 
-  <button type="button" aria-label="Toggle sidenav" mat-icon-button class="navbar-toggler" type="button" data-toggle="collapse"
+  <button type="button" aria-label="Toggle sidenav" mat-icon-button class="navbar-toggler pe-2" type="button" data-toggle="collapse"
     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
     (click)="toggleCollapsed()">
     <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
   </button>
 
   <div id="navbarSupportedContent" [ngClass]="{'collapse': collapsed, 'navbar-collapse': true}" class="navbar-collapse collapse">
-    <ul class="navbar-nav mr-auto"> </ul>
-    <ul class="navbar-nav">
+    <ul class="navbar-nav me-auto"> </ul>
+    <ul class="navbar-nav pe-10">
       <li class="nav-item">
         <a class="nav-link" (click)="openDialogFn({page: 'aboutpage', evt: $event})">About</a>
       </li>
@@ -20,7 +20,7 @@
         <a class="nav-link" (click)="openDialogFn({page: 'addupdatepage', evt: $event})">Add/Update Business</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" (click)="openDialogFn({page: 'contactus', evt: $event})">Contact Us</a>
+        <a class="nav-link" (click)="openDialogFn({page: 'contactus', evt: $event})">Contact</a>
       </li>
 
       <li class="nav-item">

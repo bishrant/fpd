@@ -17,11 +17,9 @@
 
 #bufferDistance {
   width: 40px;
-  height: 36px;
+  height: 34px;
   margin-top: 7px;
-  padding: 7px;
-  line-height: 48px;
-  vertical-align: bottom;
+  text-align: center;
   border-radius: 2px;
   border: 1px solid lightgray;
 }
@@ -33,24 +31,31 @@
 
 .bufferDistanceDiv {
   padding-left: 20px;
-  line-height: 38px;
+  line-height: 34px;
 }
 .blackFileIcon {
   height: 20px;
   width: 20px;
 }
 .btn {
-  width: 190px;
-  text-align: left;
+  width: 150px;
+  text-align: center;
   margin-top: 10px;
+  background-color: lightgray;
 }
 .fullWidth {
   width: 100%;
   text-align: center;
 }
 .btnLg {
-  width: 230px;
-  text-align: left;
+  width: 190px;
+  text-align: center;
+  margin-top: 0;
+  
+}
+.floatLeft {
+  float: left;
+  line-height: inherit !important;
 }
 
 #sidebar {
@@ -66,6 +71,7 @@
 
 .progresSpinner {
   float: left;
+  margin-right: 10px;
 }
 
 .italics {
@@ -83,10 +89,18 @@ ngb-accordion .card-header>a {
   min-width: 320px;
 }
 
+.selectedControlBtn{
+  border: 2px solid orange;
+}
+
 ngb-accordion .card-header {
   padding: 0;
 }
-
+.centerText{
+  text-align: center;
+  width: 100%;
+  margin: 10px 0;
+}
 .mat-expansion-panel-header {
   border-radius: 0 !important;
 }
@@ -124,6 +138,11 @@ mat-expansion-panel.mat-expansion-panel.mat-expanded.mat-expansion-panel-spacing
   color: black !important;
 }
 
+.progressViewer{
+  width: 100%;
+  margin: auto;
+}
+
 .sidebarCloseBtn {
   position: absolute !important;
   right: -49px;
@@ -131,7 +150,6 @@ mat-expansion-panel.mat-expansion-panel.mat-expanded.mat-expansion-panel-spacing
   height: 49px;
   background-color: white;
   font-size: 25pt;
-  vertical-align: center;
   margin: auto;
   vertical-align: middle;
   text-align: center;

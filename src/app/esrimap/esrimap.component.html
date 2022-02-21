@@ -1,24 +1,26 @@
 <div #mapViewNode id="mapViewNode">
-  <app-list class="appList" #listTable (zoomIntoRow)="zoomIntoRowMap($event)" [selectedRowIndex]= '80' tourAnchor="industries-list" *ngIf="!drawToolActive"></app-list>
+  <app-list class="appList" #listTable (zoomIntoRow)="zoomIntoRowMap($event)" [selectedRowIndex]='80'
+    tourAnchor="industries-list" *ngIf="!drawToolActive"></app-list>
   <div id='tooltipContainer' *ngIf="drawToolActive">
-    <div id='tooltip' #tooltip *ngIf="drawInstructions != ''">
-        {{ drawInstructions}}
-      <button *ngIf='completeDrawBtnVisible1' (click)='finishCountySelection()' class="finishCountySelectionBtn">Finish</button> 
-
+    <div id='tooltip' #tooltip > 
+        <!-- *ngIf="drawInstructions != ''" -->
+      {{ drawInstructions}}
+      <button *ngIf='completeDrawBtnVisible1' (click)='finishCountySelection()'
+        class="finishCountySelectionBtn">Finish</button>
     </div>
   </div>
   <div id="basemapToggle" [ngClass]='basemapWidgetClass'></div>
-  <div id='basemapToggleBtn' (click)='toggleBasemaps()' matTooltip="Show/Hide basemap gallery" mat-button aria-label="Button shows/hides basemap gallery">
-    <i class='esri-icon-layers'></i>
+  <div id='basemapToggleBtn' (click)='toggleBasemaps()' matTooltip="Show/Hide basemap gallery" mat-button
+    aria-label="Button shows/hides basemap gallery">
+    <i class='esri-icon-basemap'></i>
   </div>
   <div tourAnchor="basemap-tour" class="basemapTourRect"></div>
-  <div id='legendToggleBtn' (click)='toggleLegend()' matTooltip="Show/Hide Legend" mat-button aria-label="Button shows/hides legend">
-    <!-- <i class='esri-icon-documentation'></i> -->
-    <img src="./assets/img/legend.png" class="legendIcon"/>
+  <div id='legendToggleBtn' (click)='toggleLegend()' matTooltip="Show/Hide Legend" mat-button
+    aria-label="Button shows/hides legend">
+    <img src="./assets/img/legend.png" class="legendIcon" />
   </div>
   <div *ngIf="mapBusy">
     <mat-spinner [diameter]=45 color="green" class='mapbusySpinner'></mat-spinner>
   </div>
-  <div id='menuNode' style="background: white; z-index: 111111111111111111; color: black">
-    </div>
+  <div class="mapFilterWarning" *ngIf="isMapDataFiltered"> Data is filtered </div>
 </div>

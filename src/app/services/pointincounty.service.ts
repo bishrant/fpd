@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ReplaySubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PointincountyService {
   pointInCountyDataService = new ReplaySubject<object>(1);
@@ -31,9 +31,9 @@ export class PointincountyService {
 
   public getCountiesGeometry(geom) {
     // function to return geometry of counties given a list of points
-    const body = `f=geojson&where=1=1&outfields=*&geometry=${geom}&spatialRel=esriSpatialRelIntersects&geometryType=esriGeometryPoint&returnGeometry=true`;
+    const body = `f=geojson&where=1=1&outSR=3857&outfields=*&geometry=${geom}&spatialRel=esriSpatialRelIntersects&geometryType=esriGeometryPoint&returnGeometry=true&geometryPrecision=0`;
 
-   return this.http.post('https://services5.arcgis.com/ELI1iJkCzTIagHkp/ArcGIS/rest/services/TXCounties/FeatureServer/0/query', body, {
+   return this.http.post('https://services5.arcgis.com/ELI1iJkCzTIagHkp/ArcGIS/rest/services/counties4/FeatureServer/0/query', body, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }
